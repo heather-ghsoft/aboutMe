@@ -1,0 +1,22 @@
+page-login {
+  .div_content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .div_content h2 {color: map-get($colors, primary);}
+  .div_input {
+    width: 80%;
+  }
+  .div_etc {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .btn_start {width:80%;}
+  .btn_facebook {width:80%; background-color: #3b5998; }
+}

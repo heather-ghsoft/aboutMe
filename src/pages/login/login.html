@@ -1,0 +1,30 @@
+<ion-content>
+  <div class="div_content">
+    <h2>Login</h2>
+    <div class="space_h-50"></div>  
+    <div class="div_input">
+      <form [formGroup]="myForm" (ngSubmit)="login(myForm.value,myForm.valid)">
+        <ion-item>
+          <ion-label color="primary" floating> email </ion-label>
+          <ion-input type="email" formControlName="email" [class.submitted]="submitted" ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label color="primary" floating> password </ion-label>
+          <ion-input type="password" formControlName="password" [class.submitted]="submitted" ></ion-input>
+        </ion-item>
+      </form>
+      <div class="div_etc">
+        <button ion-button color="primary" clear >forget password?</button>
+        <button ion-button color="primary" clear (click)="goToRegister()">register!</button>
+      </div>
+    </div>
+    <div class="space_h-50"></div>
+    <button class="btn_start" color="primary" ion-button block (click)="login(myForm.value,myForm.valid)" >
+      Login 
+    </button>
+    <button class="btn_facebook" color="primary" ion-button block (click)="registerUserWithFacebook()">
+      <ion-icon name="logo-facebook"></ion-icon>
+      FaceBook 
+    </button>
+  </div>
+</ion-content>

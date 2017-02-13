@@ -1,0 +1,70 @@
+page-dashboard {
+  .div_content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .div_content h2 {color: white;}
+  .btn_start {position: absolute; width:80%; bottom: 100px;}
+
+
+
+  .top_wrap {box-shadow: 0px 1px 5px rgba(92,92,92,0.22);position: relative;z-index: 99;}
+  .main-statusbar {position: absolute;}
+  .main-navbar {height: 35px;padding: 20px 20px 0;}
+  .main-navbar .left {float: left;}
+  .main-navbar .right {float: right;}
+  .icon.icon-bar {background-image:url('../assets/img/sidemenu_off.png');background-repeat: no-repeat;background-size: contain; height: 22px; width: 22px; display: inline-block;}
+  .icon.icon-bar.on {background-image:url('../assets/img/sidemenu_off.png')}
+  .icon.icon-search {background-image:url('../assets/img/icon_serch_off.png');background-repeat: no-repeat;background-size: contain; height: 22px; width: 22px; display: inline-block;}
+  .icon.icon-search.on {background-image:url('../assets/img/icon_serch_on.png');}
+
+  .main-profile {height: auto; padding-top: 34px; display: flex; align-items: center; justify-content: center;}
+  .img-profile {width: 68px;height: 68px;border: 4px solid rgba(185,185,185,0.6);border-radius: 50%;}
+
+  .main-top {width: 100%; height: 130px; max-height: 300px; position: relative;}
+  .main-panel {width: 90%; margin: 0px auto;padding-top: 20px; display: flex; flex-direction: row; align-items: center; justify-content: center;}
+  .main-panel-info {width: 33%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+  .main-panel-info .small-title {font-size: 35%; color:#3ab795;}
+  .main-panel-info .big-title {font-size: 60%; font-weight: bold; color:#3ab795;}
+
+  .main-panel-info .small-text {font-size: 40%;color: #4D4D4D;padding-top: 4px;}
+  .main-panel-info .middle-text {font-size: 50%;color: #4e4e4e;}
+  .main-panel-side-border {border-left: 1.5px solid #ddd; border-right: 1.5px solid #ddd;}
+
+  .main-panel-tab {position: absolute;bottom:0.3rem;width: 100%;height:45px;text-align: center;margin: 0 auto;clear: both;}
+  .main-panel-tab .img {display: block;width:14px;height: 14px;margin:0 auto 10px;border: 0;background-repeat: no-repeat;}
+  .main-panel-tab .img.timeline.on {background-image: url(../assets/img/timeline_on.png);background-size: contain;}
+  .main-panel-tab .img.timeline {background-image: url(../assets/img/timeline_off.png);background-size: contain;background-position: center center;background-repeat: no-repeat;}
+  .main-panel-tab .img.chart.on {background-image: url(../assets/img/chart_on.png);background-size: contain;}
+  .main-panel-tab .img.chart {background-image: url(../assets/img/chart_off.png);background-size: contain;background-position: center center;background-repeat: no-repeat;}
+  .main-panel-tab .img.note.on {background-image: url(../assets/img/note_on.png);background-size: contain;}
+  .main-panel-tab .img.note {background-image: url(../assets/img/note_off.png);background-size: contain;background-position: center center;background-repeat: no-repeat;}
+
+  .main-panel-tab .btn_tab {font-size: 43%;width: 22%;display: inline-block;color: #686868;margin: 0 0.5rem;}
+  .main-panel-tab .btn_tab.on {/*border-bottom: 0.3rem solid #3ab795;position: relative;*/}
+  .main-panel-tab .btn_tab.on:before {content: '';display: block;width: 22%;height: 0.3rem;background-color: #3ab795;border-radius: 4px;position: absolute;bottom: -0.3rem;margin: 0 auto;}
+  .main-panel-tab .btn_tab.on:before {
+      -webkit-animation: cd-bounce-1 0.6s;
+    -moz-animation: cd-bounce-1 0.6s;
+    animation: cd-bounce-1 0.6s;
+  }
+
+
+
+
+  .main-bottom {width: auto; height: auto; overflow-x: hidden; display: table-row-group; position: relative;}
+  .tab-panel {width: 100%;}
+
+
+  #cd-timeline {position: absolute;}
+  #tab-mychart {position: absolute; width: 100%; height: 300px; background-color: red;}
+  #tab-note {position: absolute; width: 100%; height: 300px; background-color: blue;}
+
+  .tab-panel.hidden {
+    display: none !important;
+  }
+
+}

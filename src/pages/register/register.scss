@@ -1,0 +1,14 @@
+page-register {
+  .div_content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .div_content h2 {color: map-get($colors, primary);}
+  .div_input {
+    width: 80%;
+  }
+  .btn_start {width:80%;}
+}
