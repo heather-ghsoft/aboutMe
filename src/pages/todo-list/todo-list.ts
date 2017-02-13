@@ -11,7 +11,7 @@ import { TodoAddModal } from './todo-add';
 
 export class TodoListPage {
   
-  todos: Array<{title: string, desc: string}>;
+  todos: Array<{title: string, desc: string}> = [];
 
   constructor(
     private modalCtrl: ModalController,
@@ -51,4 +51,8 @@ export class TodoListPage {
     });
     todoAddModal.present();
   }  
+
+  completeTodo(data, completed) {
+    console.log('data: ', data, completed);
+  }
 }

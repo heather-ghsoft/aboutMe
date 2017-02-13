@@ -17,7 +17,9 @@ export class TodoAddModal {
 
     this.todo = {
       title: '',
-      desc: ''
+      desc: '',
+      completed: false,
+      deleted: false,
     }
   }
 

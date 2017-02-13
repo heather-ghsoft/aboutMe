@@ -5,7 +5,7 @@
     </button>
     <ion-title color="primary">Todo List</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="addTodo()">
+      <button ion-button icon-only (click)=" addTodo() ">
         <ion-icon name="create"></ion-icon>
       </button>
     </ion-buttons>
@@ -14,10 +14,22 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let todo of todos; let i = index" >
-      <ion-icon name="leaf" item-left></ion-icon>
-      <h2>{{todo.title}}</h2>
-      <p>{{todo.desc}}</p>
+    <ion-item>
+      <ion-label>Jon Snow</ion-label>
+      <ion-checkbox checked="true"></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Daenerys Targaryen</ion-label>
+      <ion-checkbox color="dark" checked="true"></ion-checkbox>
+    </ion-item>
+    <ion-item *ngFor=" let todo of todos; let i = index ">
+      <ion-label>{{todo.title}}</ion-label>
+      <!-- <p>{{todo.desc}}</p> -->
+      <ion-checkbox [(ngModel)]="todo.completed" (ionChange)=" completeTodo(todo.key,todo.completed) "></ion-checkbox>
     </ion-item>
   </ion-list>
+  <div class="div_content">
+    <p *ngIf="!todos.length">할일이 없네요 :)</p>
+  </div>
 </ion-content>

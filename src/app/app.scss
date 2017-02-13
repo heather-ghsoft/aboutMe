@@ -18,5 +18,6 @@
 .space_h-30 {width: 100%; height: 30px;}
 .space_h-50 {width: 100%; height: 50px;}
 
-ion-nav .header .toolbar .toolbar-background {background: transparent; border-width: 0; border-style: none;};
-ion-menu .header .toolbar .toolbar-background {background: map-get($colors, primary); border-width: 0; border-style: none;};
+.bar_btn_padding {margin: 2px 7px 2px 7px;}
+/*ion-nav .header .toolbar .toolbar-background {background: transparent; border-width: 0; border-style: none;};*/
+/*ion-menu .header .toolbar .toolbar-background {background: map-get($colors, primary); border-width: 0; border-style: none;};*/
