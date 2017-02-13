@@ -1,0 +1,10 @@
+page-todo-add {
+  .div_content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .item_desc {height: calc(100% - 100px); }
+  .item_desc textarea {height: 100% }
+}
