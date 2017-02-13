@@ -14,15 +14,10 @@
 
 <ion-content>
   <ion-list>
-    <ion-item>
+    <ion-item *ngFor="let todo of todos; let i = index" >
       <ion-icon name="leaf" item-left></ion-icon>
-      <h2>제주도</h2>
-      <p>오빠랑 여행!</p>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="leaf" item-left></ion-icon>
-      <h2>사이판</h2>
-      <p>다이빙 여행!</p>
+      <h2>{{todo.title}}</h2>
+      <p>{{todo.desc}}</p>
     </ion-item>
   </ion-list>
 </ion-content>

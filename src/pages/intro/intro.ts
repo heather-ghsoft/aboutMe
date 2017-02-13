@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { LoginPage } from '../login/login';
+import { TodoListPage } from '../todo-list/todo-list';
 
 import { ViewService } from '../../services/view/view.service';
 
@@ -39,6 +40,7 @@ export class IntroPage {
 
   onClick() {
     // 로그인 화면으로 이동하기
-    this.navCtrl.setRoot(LoginPage);
+    // this.navCtrl.setRoot(LoginPage);
+    this.navCtrl.setRoot(TodoListPage);
   }
 }

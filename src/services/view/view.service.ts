@@ -20,7 +20,7 @@ export class ViewService {
 
     return () => {
       setTimeout(() => {
-        loading.dismiss();
+        loading.dismiss().catch(() => {});
       }, 200);
     };
   }

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { ModalController, ViewController, NavParams } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { ModalController, NavParams } from 'ionic-angular';
+import { DbService } from '../../services/firebase/firebase.db.service';
 import { ViewService } from '../../services/view/view.service';
+import { TodoAddModal } from './todo-add';
 
 @Component({
   selector: 'page-todo-list',
@@ -8,34 +10,45 @@ import { ViewService } from '../../services/view/view.service';
 })
 
 export class TodoListPage {
+  
+  todos: Array<{title: string, desc: string}>;
+
   constructor(
-    private modalCtrl: ModalController
-    // private viewService: ViewService
-  ) {}
+    private modalCtrl: ModalController,
+    private zone: NgZone,
+    private db: DbService
+  ) {
+    console.log('TodoListPage: constructor');
+    this.getTodo();
+  };
+
+  ngOnInit() {
+    console.log('TodoListPage: ngOnInit');
+  }
+
+  getTodo() {
+    this.db.getTodo((todos) => {
+      this.zone.run(() => this.todos = todos);
+      console.log('TodoListPage:: getTodo: ', this.todos);
+    });
+  }
+
+  // getTodo() {
+  //   this.db.getTodo().then((todos) => {
+      
+  //     console.log(todos);
+  //     this.todos = todos;
+  //     console.log('TodoListPage:: getTodo: ', this.todos);
+  //   });
+  // }
 
   addTodo() {
-    console.log('addTodo');
-    let todoAddModal = this.modalCtrl.create(TodoAdd);
+    let todoAddModal = this.modalCtrl.create(TodoAddModal);
     todoAddModal.onDidDismiss(data => {
-      console.log(data);
+      // firebase save
+      if (data === null) return;
+      this.db.addTodo(data);
     });
     todoAddModal.present();
   }  
-}
-
-@Component({
-  selector: 'page-todo-add',
-  templateUrl: 'todo-add.html'
-})
-class TodoAdd {
-
-  constructor(private viewCtrl: ViewController) {
-
-  }
-
-  dismiss() {
-   let data = { 'foo': 'bar' };
-   this.viewCtrl.dismiss(data);
- }
-
 }

@@ -11,6 +11,8 @@ import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { ListPage } from '../pages/list/list';
 
+import { TodoAddModal } from '../pages/todo-list/todo-add';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -22,7 +24,8 @@ import { ListPage } from '../pages/list/list';
     ChartMainPage,
     HelloIonicPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    TodoAddModal
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -38,7 +41,8 @@ import { ListPage } from '../pages/list/list';
     ChartMainPage,
     HelloIonicPage,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    TodoAddModal
   ],
   providers: [{
     provide: ErrorHandler, 

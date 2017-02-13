@@ -6,21 +6,24 @@ import firebase from 'firebase';
 @Injectable()
 export class AuthService {
 
-  constructor() { }
+  auth: any;
+
+  constructor() {
+    this.auth = firebase.auth();
+  }
 
   getCurrentUser() {
-    return firebase.auth().currentUser;
+    return this.auth.currentUser;
   }
 
   registerUserWithEmail(inputData) {
     const { email, password } = inputData;
-    return firebase.auth().createUserWithEmailAndPassword(email, password);
+    return this.auth.createUserWithEmailAndPassword(email, password);
   }
 
   loginWithEmail(inputData) {
-    const auth = firebase.auth();
     const { email, password } = inputData;
-    return auth.signInWithEmailAndPassword(email, password);
+    return this.auth.signInWithEmailAndPassword(email, password);
   }
 
   /**
@@ -28,7 +31,6 @@ export class AuthService {
    * @return Promise<any>
    */
   loginWithFacebookPlugin() {
-    const auth = firebase.auth();
     let user, profile;
     // check if app has permission already
     return Facebook.getLoginStatus().then(res => {
@@ -45,7 +47,7 @@ export class AuthService {
         // get creds with accessToken
         const credential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
         // sign in with credential
-        return auth.signInWithCredential(credential);
+        return this.auth.signInWithCredential(credential);
       }).then(_user => {
         user = _user;
         // get facebook profile info
@@ -62,7 +64,6 @@ export class AuthService {
   }
 
   loginWithFacebookPopup() {
-    const auth = firebase.auth();
     let user;
     // Creates the provider object.
     var provider = new firebase.auth.FacebookAuthProvider();
@@ -72,7 +73,7 @@ export class AuthService {
     // provider.addScope('user_friends');
 
     // Sign in with popup:
-    return auth.signInWithPopup(provider).then(result => {
+    return this.auth.signInWithPopup(provider).then(result => {
       // The Facebook firebase.auth.AuthCredential containing the Facebook
       // access token:
       // var credential = result.credential;
@@ -99,8 +100,8 @@ export class AuthService {
   loginWithGoogleUsingPopupFirebase() {
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    firebase.auth().signInWithRedirect(provider);
-    return firebase.auth().getRedirectResult().then(result => {
+    this.auth.signInWithRedirect(provider);
+    return this.auth.getRedirectResult().then(result => {
       console.log('Google Sign in success', result);
     });
   }
@@ -116,7 +117,7 @@ export class AuthService {
       console.log('got google auth data:', JSON.stringify(authData, null, 2));
       const credential = firebase.auth.GoogleAuthProvider.credential(authData.idToken, authData.accessToken);
 
-      firebase.auth().signInWithCredential(credential).then((success) => {
+      this.auth.signInWithCredential(credential).then((success) => {
         console.log('loginWithGoogleUsingPlugin success!', JSON.stringify(success, null, 2));
       });
     });
@@ -129,7 +130,7 @@ export class AuthService {
         // note the underscore_here vs camelCase for google plus oauth plugin
         const credential = firebase.auth.GoogleAuthProvider.credential(tokenData.id_token, tokenData.access_toekn);
 
-        firebase.auth().signInWithCredential(credential)
+        this.auth.signInWithCredential(credential)
           .then((success) => {
             console.log('success!', JSON.stringify(success, null, 2));
             resolve(success);
@@ -198,7 +199,7 @@ export class AuthService {
   }
 
   logout() {
-    firebase.auth().signOut();
+    this.auth.signOut();
   }
 
 }
