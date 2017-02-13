@@ -36,7 +36,7 @@ export class LoginPage {
     this.submitted = false;
     // the short way
     this.myForm = this._fb.group({
-      email: ['eyajiya@gmail.com', [Validators.required, CustomValidators.email]],
+      email: ['zuhern@naver.com', [Validators.required, CustomValidators.email]],
       password: ['gwgd8d', [Validators.required, Validators.minLength(4)]]
     });
   }

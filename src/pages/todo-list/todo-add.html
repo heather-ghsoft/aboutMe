@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <button menuToggle *ngIf="!selectedItem">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>add Todo</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="addTodo()">
+        <ion-icon name="add"></ion-icon>
+        SAVE
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label color="primary" floating>title</ion-label>
+    <ion-input [(ngModel)]="todo.title"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" floating>description</ion-label>
+    <ion-textarea [(ngModel)]="todo.description" name="description"></ion-textarea>
+  </ion-item>
+
+
+</ion-content>
