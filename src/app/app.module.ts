@@ -6,10 +6,6 @@ import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
 import { RegisterPage } from '../pages/register/register';
 import { DashboardPage } from '../pages/dashboard/dashboard';
-import { ChartMainPage } from '../pages/chart-main/chart-main';
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ItemDetailsPage } from '../pages/item-details/item-details';
-import { ListPage } from '../pages/list/list';
 
 import { TodoAddModal } from '../pages/todo-list/todo-add';
 
@@ -21,10 +17,6 @@ import { TodoAddModal } from '../pages/todo-list/todo-add';
     TodoListPage,
     RegisterPage,
     DashboardPage,
-    ChartMainPage,
-    HelloIonicPage,
-    ItemDetailsPage,
-    ListPage,
     TodoAddModal
   ],
   imports: [
@@ -38,10 +30,6 @@ import { TodoAddModal } from '../pages/todo-list/todo-add';
     TodoListPage,
     RegisterPage,
     DashboardPage,
-    ChartMainPage,
-    HelloIonicPage,
-    ItemDetailsPage,
-    ListPage,
     TodoAddModal
   ],
   providers: [{

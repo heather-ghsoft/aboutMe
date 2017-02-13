@@ -7,8 +7,6 @@ import { IntroPage } from '../pages/intro/intro';
 import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
 import { DashboardPage } from '../pages/dashboard/dashboard';
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ListPage } from '../pages/list/list';
 
 import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
@@ -38,9 +36,7 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'to do', component: TodoListPage },
-      { title: 'dashboard', component: DashboardPage },
-      { title: 'Hello Ionic', component: HelloIonicPage },
-      { title: 'My First List', component: ListPage }
+      { title: 'dashboard', component: DashboardPage }
     ];
   }
 
