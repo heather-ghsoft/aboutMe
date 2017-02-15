@@ -1,0 +1,9 @@
+page-weight {
+  .div_content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .div_content p {color: map-get($colors, primary);}  
+}

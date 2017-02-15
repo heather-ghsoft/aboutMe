@@ -78,6 +78,26 @@ export class DbService {
   //     return snap.val();
   //   });
   // }
+
+  getWeights(callback) {
+
+  }
+
+  addWeight(value, callback) {
+    console.log('DB:: addWeight: ', value);
+    value = pruneObj(value);
+    value.createdAt = {
+      ".sv": "timestamp"
+    };
+    value.lastModifiedAt = value.createdAt;
+    return this.rootRef.child(`${this.uid()}/weights`).push(value).then(callback);
+  }
+
+  deleteWeight(key) {
+    console.log('DB:: deleteWeight: key: ', key);
+    const ref = this.rootRef.child(`${this.uid()}/weights/${key}`);
+    ref.remove();
+  }
 }
 
 const pruneObj = (obj) => {
