@@ -21,7 +21,7 @@ zm-calendar {
     display: flex; 
     flex-flow: row wrap; 
     border-bottom: 1px solid;
-    border-bottom-color: map-get($colors, dark);
+    border-bottom-color: #888;
   }
 
   .div_day_labels .day_label {

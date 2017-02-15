@@ -23,7 +23,7 @@ export class MyApp {
 
   initialized: boolean;
   authInfo: any;
-  rootPage: any = DiaryPage;
+  rootPage: any = IntroPage;
   pages: Array<{title: string, component: any}>;
 
   constructor(

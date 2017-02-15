@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, Input, Output, NgZone, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'zm-calendar',
@@ -6,6 +6,10 @@ import { Component, NgZone } from '@angular/core';
 })
 
 export class ZmCalendar {
+
+  @Input() data: any;
+  @Input() types: any;
+  @Output() dayClickEvent: EventEmitter<any> = new EventEmitter();
 
   todayDate;
   currDate;
@@ -73,12 +77,24 @@ export class ZmCalendar {
 
       let _day = {
         date: _date,
-        weight: 0,
-        foods: [],
-        score: 0
+        data: this.getDateData()
       }
       this.days.push(_day);
     }
+  }
+
+  getDateData() {
+    console.log(this.data);
+    return [
+      {type: 'weight', value: 45},
+      {type: 'food', value: '안녕하세요안녕하세요'},
+      {type: 'food', value: '카레'},
+      {type: 'score', value: 8}
+    ];
+  }
+
+  selectDate(data) {
+    this.dayClickEvent.next(data);
   }
 
   monthDec() {

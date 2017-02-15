@@ -73,11 +73,11 @@ export class TodoListPage {
       deleted: false
     }
 
-    this.db.addTodo(todo, () => {
-      // .then(() => {
-        this.newTodo = "";
-        this.editMode = false;
-      });
+    this.db.addTodo(todo, () => {});
+
+    this.newTodo = "";
+    this.editMode = false;
+    
     // let todoAddModal = this.modalCtrl.create(TodoAddModal);
     // todoAddModal.onDidDismiss(data => {
     //   // firebase save

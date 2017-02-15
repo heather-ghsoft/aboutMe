@@ -5,13 +5,13 @@
     </button>
     <ion-title color="primary">Diary</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)=" writeDiary() ">
-        <ion-icon name="create"></ion-icon>
-      </button>
+      <!-- <button ion-button icon-only (click)=" writeDiary() "> -->
+        <!-- <ion-icon name="create"></ion-icon> -->
+      <!-- </button> -->
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <zm-calendar></zm-calendar>
+  <zm-calendar [data]="data" [types]="types" (dayClickEvent)=" selectDate($event) "></zm-calendar>
 </ion-content>

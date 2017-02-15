@@ -10,37 +10,40 @@ import { Component, NgZone, Input, Output, EventEmitter } from '@angular/core';
 export class ZmCalendarDay {
 
   @Input() data: any;
+  @Input() date: Date;
+  @Input() types: any;
   @Output() dayClickEvent: EventEmitter<any> = new EventEmitter();
 
   dateStr;
-  date;
   isHoliday;
+  rows: any[] = [];
 
   constructor() {
   }
 
   ngOnInit() {
-    console.log('ngOnInit: ', this.data);
-    if (this.data.date) {
-      this.date = this.data.date;
+    if (this.date) {
       this.dateStr = this.date.getDate();
       let day = this.date.getDay();
       this.isHoliday = ([0, 6].indexOf(day) >= 0);
     }
+
+    if (this.data) {
+      this.setData();
+    }
   }
 
-  // getDayColor() {
-  //   if (!this.date) return;
+  setData() {
+    for(let _data of this.data) {
+      let row = {
+        'background': this.types[_data.type].background,
+        value: _data.value + this.types[_data.type].tailStr
+      };
+      this.rows.push(row);
+    }
+  }
 
-  //   let day = this.date.getDay();
-  //   switch(day) {
-  //     case 6 : 
-  //     case 0 : return '#bbb';
-  //     default: return '#444';
-  //   }
-  // }
-
-  click(event) {
-    this.dayClickEvent.next(event);
+  onClick() {
+    this.dayClickEvent.next(this.dateStr);
   }
 }
