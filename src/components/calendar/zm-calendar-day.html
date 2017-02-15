@@ -1,6 +1,6 @@
 <div class="day-box">
   <div class="row center">
-    <span class="date">{{dateStr}}</span>
+    <span class="date" [ngClass]="{'holiday': isHoliday}">{{dateStr}}</span>
   </div>
   <div class="row left">
     <span class="date">{{dateLabel}}</span>

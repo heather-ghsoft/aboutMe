@@ -13,6 +13,8 @@ export class ZmCalendarDay {
   @Output() dayClickEvent: EventEmitter<any> = new EventEmitter();
 
   dateStr;
+  date;
+  isHoliday;
 
   constructor() {
   }
@@ -20,9 +22,23 @@ export class ZmCalendarDay {
   ngOnInit() {
     console.log('ngOnInit: ', this.data);
     if (this.data.date) {
-      this.dateStr = this.data.date.getDate();
+      this.date = this.data.date;
+      this.dateStr = this.date.getDate();
+      let day = this.date.getDay();
+      this.isHoliday = ([0, 6].indexOf(day) >= 0);
     }
   }
+
+  // getDayColor() {
+  //   if (!this.date) return;
+
+  //   let day = this.date.getDay();
+  //   switch(day) {
+  //     case 6 : 
+  //     case 0 : return '#bbb';
+  //     default: return '#444';
+  //   }
+  // }
 
   click(event) {
     this.dayClickEvent.next(event);

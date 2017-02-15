@@ -33,4 +33,7 @@ zm-calendar-day {
   .date {
     color: map-get($colors, text);
   }
+  .date.holiday {
+    color: #bbb;
+  }
 }
