@@ -3,10 +3,10 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title color="primary">Todo List</ion-title>
+    <ion-title color="primary">TO DO</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)=" addTodo() ">
-        <ion-icon name="create"></ion-icon>
+      <button ion-button icon-only (click)=" openAddTodo() ">
+        <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -15,19 +15,29 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-label>Jon Snow</ion-label>
-      <ion-checkbox checked="true"></ion-checkbox>
+      <ion-label></ion-label>
+      <ion-select [(ngModel)]="filter" end>
+        <ion-option value="TODO">TO DO</ion-option>
+        <ion-option value="DONE">COMPLETED</ion-option>
+        <ion-option value="ALL">ALL</ion-option>
+      </ion-select>
     </ion-item>
-
-    <ion-item>
-      <ion-label>Daenerys Targaryen</ion-label>
-      <ion-checkbox color="dark" checked="true"></ion-checkbox>
+    <ion-item *ngIf="editMode">
+      <ion-input type="text" placeholder="TO DO" [(ngModel)]="newTodo" (keypress)="keypressNewTodo($event)"></ion-input>
+      <!-- <button ion-button color="primary" clear item-right (click)="addTodo()">SAVE</button> -->
     </ion-item>
-    <ion-item *ngFor=" let todo of todos; let i = index ">
-      <ion-label>{{todo.title}}</ion-label>
-      <!-- <p>{{todo.desc}}</p> -->
-      <ion-checkbox [(ngModel)]="todo.completed" (ionChange)=" completeTodo(todo.key,todo.completed) "></ion-checkbox>
-    </ion-item>
+    <ion-item-sliding *ngFor=" let todo of todos | todoFilter:filter; let i = index ">
+      <ion-item>
+        <ion-label>{{todo.title}}</ion-label>
+        <!-- <p>{{todo.desc}}</p> -->
+        <ion-checkbox [(ngModel)]="todo.completed" (click)=" completeTodo(todo.key,todo.completed) "></ion-checkbox>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button item-left color="danger" (click)=" deleteTodo(todo.key) ">
+          Delete
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   <div class="div_content">
     <p *ngIf="!todos.length">할일이 없네요 :)</p>

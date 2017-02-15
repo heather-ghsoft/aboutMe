@@ -16,8 +16,8 @@ export class DbService {
   rootRef;
 
   constructor() {
-    console.log('DbService constructor');
     setTimeout(() => {
+      console.log('DbService constructor');
       this.rootRef = firebase.database().ref();
     });
   }
@@ -26,14 +26,14 @@ export class DbService {
     return firebase.auth().currentUser.uid;
   }
 
-  addTodo(value) {
+  addTodo(value, callback) {
     console.log('DB:: addTodo: ', value);
     value = pruneObj(value);
     value.createdAt = {
       ".sv": "timestamp"
     };
     value.lastModifiedAt = value.createdAt;
-    return this.rootRef.child(`${this.uid()}/todos`).push(value);
+    return this.rootRef.child(`${this.uid()}/todos`).push(value).then(callback);
   }
 
   getTodo(callback){
@@ -55,6 +55,19 @@ export class DbService {
       });
       callback(todos);
     });
+  }
+
+  updateTodo(data) {
+    console.log('DB:: updateTodo: data: ', data);
+    const ref = this.rootRef.child(`${this.uid()}/todos/${data.key}`);
+    delete data.key;
+    ref.update(data);
+  }
+
+  deleteTodo(key) {
+    console.log('DB:: updateTodo: key: ', key);
+    const ref = this.rootRef.child(`${this.uid()}/todos/${key}`);
+    ref.remove();
   }
 
   // getTodo(): Promise<any> {
