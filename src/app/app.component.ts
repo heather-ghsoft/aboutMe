@@ -7,6 +7,7 @@ import { IntroPage } from '../pages/intro/intro';
 import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
 import { DashboardPage } from '../pages/dashboard/dashboard';
+import { DiaryPage } from '../pages/diary/diary';
 
 import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
@@ -22,7 +23,7 @@ export class MyApp {
 
   initialized: boolean;
   authInfo: any;
-  rootPage: any = IntroPage;
+  rootPage: any = DiaryPage;
   pages: Array<{title: string, component: any}>;
 
   constructor(
@@ -35,7 +36,8 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'to do', component: TodoListPage },
+      { title: 'Diary', component: DiaryPage},
+      { title: 'TO DO', component: TodoListPage },
       { title: 'dashboard', component: DashboardPage }
     ];
   }

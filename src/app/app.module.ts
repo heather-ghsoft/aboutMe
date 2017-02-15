@@ -6,8 +6,15 @@ import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
 import { RegisterPage } from '../pages/register/register';
 import { DashboardPage } from '../pages/dashboard/dashboard';
+import { DiaryPage } from '../pages/diary/diary';
 
 import { TodoAddModal } from '../pages/todo-list/todo-add';
+
+import { ZmCalendar } from '../components/calendar/zm-calendar';
+import { ZmCalendarDay } from '../components/calendar/zm-calendar-day';
+
+import { MapFilter } from '../components/filters/MapFilter';
+import { TodoFilter } from '../pages/todo-list/todoFilter';
 
 @NgModule({
   declarations: [
@@ -17,7 +24,12 @@ import { TodoAddModal } from '../pages/todo-list/todo-add';
     TodoListPage,
     RegisterPage,
     DashboardPage,
-    TodoAddModal
+    DiaryPage,
+    TodoAddModal,
+    ZmCalendar,
+    ZmCalendarDay,
+    MapFilter,
+    TodoFilter
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -30,6 +42,7 @@ import { TodoAddModal } from '../pages/todo-list/todo-add';
     TodoListPage,
     RegisterPage,
     DashboardPage,
+    DiaryPage,
     TodoAddModal
   ],
   providers: [{

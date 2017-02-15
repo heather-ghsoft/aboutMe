@@ -1,0 +1,21 @@
+<div class="div_content">
+  <div class="header">
+    <button ion-button icon-only clear (click)="monthDec()">
+      <ion-icon name="arrow-dropleft-circle"></ion-icon>
+    </button>
+    <p class="p_date">{{year + '.' + ((month + 1) < 10 ? '0' : '') + (month + 1)}}</p>
+    <button ion-button icon-only clear (click)="monthInc()">
+      <ion-icon name="arrow-dropright-circle"></ion-icon>
+    </button>
+  </div>
+  <div class="div_day_labels">
+    <div class="day_label" *ngFor=" let label of dayLabels">
+      <span>{{label}}</span>
+    </div>
+  </div>
+  <div class="calendar">
+    <zm-calendar-day class="calendar-box empty" [data]="day" *ngFor=" let day of startEmptyDay "> </zm-calendar-day>
+    <zm-calendar-day class="calendar-box" [data]="day" (dayClickEvent)=" selectDate($event) " *ngFor=" let day of days "></zm-calendar-day>
+    <zm-calendar-day class="calendar-box empty" [data]="day" *ngFor=" let day of endEmptyDay "> </zm-calendar-day>
+  </div>
+</div>

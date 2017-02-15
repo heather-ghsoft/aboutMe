@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title color="primary">Diary</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)=" writeDiary() ">
+        <ion-icon name="create"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <zm-calendar></zm-calendar>
+</ion-content>
