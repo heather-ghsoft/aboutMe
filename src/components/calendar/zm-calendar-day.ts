@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'zm-calendar-day',
@@ -44,6 +44,6 @@ export class ZmCalendarDay {
   }
 
   onClick() {
-    this.dayClickEvent.next(this.dateStr);
+    this.dayClickEvent.next(this.date);
   }
 }

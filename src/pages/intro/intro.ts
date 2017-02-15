@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { DiaryPage } from '../diary/diary';
 
-import { ViewService } from '../../services/view/view.service';
+// import { ViewService } from '../../services/view/view.service';
 
 @Component({
   selector: 'page-intro',
@@ -34,8 +34,7 @@ export class IntroPage {
   //   private viewService: ViewService
   // ) {}
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams
+    public navCtrl: NavController
   ) { }
 
   onClick() {

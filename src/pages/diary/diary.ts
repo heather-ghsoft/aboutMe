@@ -1,7 +1,8 @@
-import { Component, NgZone } from '@angular/core';
-import { NavParams } from 'ionic-angular';
-import { DbService } from '../../services/firebase/firebase.db.service';
-import { ViewService } from '../../services/view/view.service';
+import { Component } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
+// import { DbService } from '../../services/firebase/firebase.db.service';
+// import { ViewService } from '../../services/view/view.service';
+import { DiaryDayPage } from './diary-day';
 
 @Component({
   selector: 'page-diary',
@@ -10,7 +11,7 @@ import { ViewService } from '../../services/view/view.service';
 
 export class DiaryPage {
 
-  data;
+  data = [];
   types: any = { 
     'weight': { background: 'rgb(255, 232, 245)', tailStr: ' kg' },  //'#ffc9e6'
     'food': { background: 'rgb(224, 255, 252)', tailStr:'' },  //'#ccfdf9'
@@ -18,14 +19,21 @@ export class DiaryPage {
   }
 
   constructor(
-    private db: DbService
+    private navCtrl: NavController
+    // private db: DbService
   ) {}
 
   ngOnInit() {
 
   }
   
-  selectDate(data) {
-    console.log('selectDate: ', data);
+  selectDate(dayDate) {
+    console.log('selectDate: ', dayDate);
+    let index = dayDate.getDate();
+    let params = {
+      date: dayDate,
+      data: this.data[index] || {}
+    }
+    this.navCtrl.push(DiaryDayPage, params);
   }
 }

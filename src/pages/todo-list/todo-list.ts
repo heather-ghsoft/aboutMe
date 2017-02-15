@@ -1,9 +1,8 @@
 import { Component, NgZone } from '@angular/core';
-import { NavParams } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
 import { ViewService } from '../../services/view/view.service';
-import { TodoAddModal } from './todo-add';
-import { TodoFilter } from './todoFilter';
+// import { TodoAddModal } from './todo-add';
+// import { TodoFilter } from './todoFilter';
 
 @Component({
   selector: 'page-todo-list',
@@ -69,8 +68,7 @@ export class TodoListPage {
 
     let todo = {
       title: this.newTodo,
-      completed: false,
-      deleted: false
+      completed: false
     }
 
     this.db.addTodo(todo, () => {});

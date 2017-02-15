@@ -1,4 +1,4 @@
-import { Component, Input, Output, NgZone, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'zm-calendar',
@@ -86,10 +86,10 @@ export class ZmCalendar {
   getDateData() {
     console.log(this.data);
     return [
-      {type: 'weight', value: 45},
-      {type: 'food', value: '안녕하세요안녕하세요'},
-      {type: 'food', value: '카레'},
-      {type: 'score', value: 8}
+      // {type: 'weight', value: 45},
+      // {type: 'food', value: '안녕하세요안녕하세요'},
+      // {type: 'food', value: '카레'},
+      // {type: 'score', value: 8}
     ];
   }
 

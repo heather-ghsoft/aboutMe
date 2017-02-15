@@ -7,6 +7,8 @@ import { TodoListPage } from '../pages/todo-list/todo-list';
 import { RegisterPage } from '../pages/register/register';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { DiaryPage } from '../pages/diary/diary';
+import { DiaryDayPage } from '../pages/diary/diary-day';
+import { WeightPage } from '../pages/weight/weight';
 
 import { TodoAddModal } from '../pages/todo-list/todo-add';
 
@@ -25,6 +27,8 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     RegisterPage,
     DashboardPage,
     DiaryPage,
+    DiaryDayPage,
+    WeightPage,
     TodoAddModal,
     ZmCalendar,
     ZmCalendarDay,
@@ -43,6 +47,8 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     RegisterPage,
     DashboardPage,
     DiaryPage,
+    DiaryDayPage,
+    WeightPage,
     TodoAddModal
   ],
   providers: [{
