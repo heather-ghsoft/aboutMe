@@ -6,9 +6,11 @@ import firebase from 'firebase';
 import { IntroPage } from '../pages/intro/intro';
 import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
-import { DashboardPage } from '../pages/dashboard/dashboard';
-import { DiaryPage } from '../pages/diary/diary';
+// import { DashboardPage } from '../pages/dashboard/dashboard';
+// import { DiaryPage } from '../pages/diary/diary';
+import { CalendarPage } from '../pages/calendar/calendar';
 import { WeightPage } from '../pages/weight/weight';
+import { WeightChartPage } from '../pages/weight-chart/weight-chart';
 
 import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
@@ -39,8 +41,9 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'Calendar', component: DiaryPage },
+      { title: 'Calendar', component: CalendarPage },
       { title: 'Weight', component: WeightPage },
+      { title: 'Trend', component: WeightChartPage },
       { title: 'TO DO', component: TodoListPage }
     ];
   }
@@ -82,7 +85,7 @@ export class MyApp {
         let targetPage;
         if (user && !user.isAnonymous) {
           console.log('logged in ');
-          targetPage = WeightPage;
+          targetPage = WeightChartPage;
         } else {
           console.log('not logged in ');
           targetPage = LoginPage;
