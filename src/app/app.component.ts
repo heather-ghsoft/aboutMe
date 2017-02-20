@@ -39,10 +39,9 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'Diary', component: DiaryPage },
+      { title: 'Calendar', component: DiaryPage },
       { title: 'Weight', component: WeightPage },
-      { title: 'TO DO', component: TodoListPage },
-      { title: 'dashboard', component: DashboardPage }
+      { title: 'TO DO', component: TodoListPage }
     ];
   }
 

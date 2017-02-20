@@ -1,6 +1,9 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+
 import { IntroPage } from '../pages/intro/intro';
 import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
@@ -45,7 +48,8 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     TodoFilter
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
