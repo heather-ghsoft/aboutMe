@@ -5,7 +5,7 @@
     </button>
     <ion-title color="primary">TO DO</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)=" openAddTodo() ">
+      <button ion-button icon-only (click)=" openAddData() ">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
@@ -23,23 +23,23 @@
       </ion-select>
     </ion-item>
     <ion-item *ngIf="editMode">
-      <ion-input type="text" placeholder="TO DO" [(ngModel)]="newTodo" (keypress)="keypressNewTodo($event)"></ion-input>
-      <!-- <button ion-button color="primary" clear item-right (click)="addTodo()">SAVE</button> -->
+      <ion-input type="text" placeholder="할일을 기록하세요 !" [(ngModel)]="newValue" (keypress)="keypressNewData($event)"></ion-input>
+      <!-- <button ion-button color="primary" clear item-right (click)="addData()">SAVE</button> -->
     </ion-item>
-    <ion-item-sliding *ngFor=" let todo of todos | todoFilter:filter; let i = index ">
+    <ion-item-sliding *ngFor=" let data of dataArr | todoFilter:filter; let i = index ">
       <ion-item>
-        <ion-label>{{todo.title}}</ion-label>
-        <!-- <p>{{todo.desc}}</p> -->
-        <ion-checkbox [(ngModel)]="todo.completed" (click)=" completeTodo(todo.key,todo.completed) "></ion-checkbox>
+        <ion-label>{{data.value}}</ion-label>
+        <!-- <p>{{data.desc}}</p> -->
+        <ion-checkbox [(ngModel)]="data.completed" (click)=" completeData(data.key,data.completed) "></ion-checkbox>
       </ion-item>
       <ion-item-options>
-        <button ion-button item-left color="danger" (click)=" deleteTodo(todo.key) ">
+        <button ion-button item-left color="danger" (click)=" deleteData(data.key) ">
           Delete
         </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
   <div class="div_content">
-    <p *ngIf="!todos.length">할일이 없네요 :)</p>
+    <p *ngIf="!dataArr.length">할일이 없네요 :)</p>
   </div>
 </ion-content>

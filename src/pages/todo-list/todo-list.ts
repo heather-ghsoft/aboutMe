@@ -11,10 +11,10 @@ import { ViewService } from '../../services/view/view.service';
 
 export class TodoListPage {
   
-  todos: Array<{title: string, desc: string}> = [];
+  dataArr: Array<{title: string, desc: string}> = [];
   editMode: boolean;
   filter: string;
-  newTodo: string;
+  newValue: string;
 
   constructor(
     private zone: NgZone,
@@ -25,55 +25,55 @@ export class TodoListPage {
 
     this.filter = 'ALL';
 
-    this.getTodo();
+    this.getData();
   };
 
   ngOnInit() {
     console.log('TodoListPage: ngOnInit');
   }
 
-  keypressNewTodo (event) {
+  keypressNewData (event) {
     var code = event.keyCode || event.which;
     if( code === 13 )
     {
       if( event.srcElement.tagName === "INPUT" )
       {
         event.preventDefault();
-        this.addTodo();
+        this.addData();
       }
     }
   }
 
-  getTodo() {
-    this.db.getTodo((todos) => {
-      this.zone.run(() => this.todos = todos);
-      console.log('TodoListPage:: getTodo: ', this.todos);
+  getData() {
+    this.db.getTodo((dataArr) => {
+      this.zone.run(() => this.dataArr = dataArr);
+      console.log('TodoListPage:: getTodo: ', this.dataArr);
     });
   }
 
   // getTodo() {
-  //   this.db.getTodo().then((todos) => {
+  //   this.db.getTodo().then((dataArr) => {
       
-  //     console.log(todos);
-  //     this.todos = todos;
-  //     console.log('TodoListPage:: getTodo: ', this.todos);
+  //     console.log(dataArr);
+  //     this.dataArr = dataArr;
+  //     console.log('TodoListPage:: getTodo: ', this.dataArr);
   //   });
   // }
-  openAddTodo() {
+  openAddData() {
     this.editMode = true;
   }
 
-  addTodo() {
-    if(this.newTodo === '') return;
+  addData() {
+    if(this.newValue === '') return;
 
-    let todo = {
-      title: this.newTodo,
+    let data = {
+      value: this.newValue,
       completed: false
     }
 
-    this.db.addTodo(todo, () => {});
+    this.db.addTodo(data, () => {});
 
-    this.newTodo = "";
+    this.newValue = "";
     this.editMode = false;
     
     // let todoAddModal = this.modalCtrl.create(TodoAddModal);
@@ -85,11 +85,11 @@ export class TodoListPage {
     // todoAddModal.present();
   }  
 
-  completeTodo(key, completed) {
+  completeData(key, completed) {
     this.db.updateTodo({key, completed});
   }
 
-  deleteTodo(key) {
+  deleteData(key) {
     this.db.deleteTodo(key);
   }
 }
