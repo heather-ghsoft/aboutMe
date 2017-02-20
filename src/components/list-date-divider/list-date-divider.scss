@@ -1,0 +1,8 @@
+list-date-divider {
+  .date_divider {
+    background: map-get($colors, coral);
+    color: #ffffff;
+    font-size: 12px;
+    padding: 4px 10px 4px 10px;
+  }
+}

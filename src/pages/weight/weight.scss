@@ -5,5 +5,7 @@ page-weight {
     flex-direction: column;
     align-items: center;
   }
-  .div_content p {color: map-get($colors, primary);}  
+  .div_content p { color: map-get($colors, primary); }  
+  ion-list .item { padding-left: 0px; }
+  ion-list .item .label { margin: 0px; }
 }

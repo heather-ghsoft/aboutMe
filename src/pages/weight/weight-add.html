@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button class="bar_btn_padding" ion-button icon-only (click)="dismiss(null)">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>체중기</ion-title>
+    <ion-buttons end>
+      <button class="bar_btn_padding" ion-button icon-only (click)="saveData()">
+        SAVE
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="div_content">
+    <ion-item>
+      <ion-label color="primary">날짜</ion-label>
+      <ion-datetime color="text" displayFormat="YYYY년 M월 D일" pickerFormat="YYYY-MM-DD" [(ngModel)]="data.date"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">시간</ion-label>
+      <ion-datetime color="text" displayFormat="H시 m분" pickerFormat="HH:mm" [(ngModel)]="data.time"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">몸무게(Kg)</ion-label>
+      <ion-input 
+        color="text" 
+        type="number" 
+        text-right 
+        placeholder="오늘의 몸무게는 ?" 
+        [(ngModel)]="data.value" 
+        (keypress)="keypressNewData($event)">
+      </ion-input>
+      kg
+    </ion-item>
+  </div>
+</ion-content>

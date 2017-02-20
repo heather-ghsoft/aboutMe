@@ -1,6 +1,7 @@
 import { Component, NgZone } from '@angular/core';
+import { ModalController, NavParams } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
-import { ViewService } from '../../services/view/view.service';
+import { WeightAddModal } from './weight-add';
 
 @Component({
   selector: 'page-weight',
@@ -9,41 +10,42 @@ import { ViewService } from '../../services/view/view.service';
 
 export class WeightPage {
   
-  weights: Array<{title: string, desc: string}> = [];
+  dataArr: Array<any> = [];
   editMode: boolean;
-  newWeight: string = "";
+  newValue: string = "";
   newDate: Date = new Date();
 
   constructor(
     private zone: NgZone,
-    private db: DbService
+    private db: DbService,
+    private modalCtrl: ModalController
   ) {
     
     console.log('WeightListPage: constructor');
 
-    this.getWeight();
+    this.getData();
   };
 
   ngOnInit() {
     console.log('WeightListPage: ngOnInit');
   }
 
-  keypressNewWeight (event) {
-    var code = event.keyCode || event.which;
-    if( code === 13 )
-    {
-      if( event.srcElement.tagName === "INPUT" )
-      {
-        event.preventDefault();
-        this.addWeight();
-      }
-    }
-  }
+  // keypressNewData (event) {
+  //   var code = event.keyCode || event.which;
+  //   if( code === 13 )
+  //   {
+  //     if( event.srcElement.tagName === "INPUT" )
+  //     {
+  //       event.preventDefault();
+  //       this.addData();
+  //     }
+  //   }
+  // }
 
-  getWeight() {
-    this.db.getWeights((weights) => {
-      this.zone.run(() => this.weights = weights);
-      console.log('WeightListPage:: getWeight: ', this.weights);
+  getData() {
+    this.db.getWeights((dataArr) => {
+      this.zone.run(() => this.dataArr = dataArr);
+      console.log('WeightListPage:: getWeight: ', this.dataArr);
     });
   }
 
@@ -55,34 +57,39 @@ export class WeightPage {
   //     console.log('WeightListPage:: getWeight: ', this.weights);
   //   });
   // }
-  openAddWeight() {
-    this.editMode = true;
+  openAddData() {
+    let weightAddModal = this.modalCtrl.create(WeightAddModal);
+    weightAddModal.onDidDismiss(data => {
+      // firebase save
+      if (data === null) return;
+      this.addData(data);
+    });
+    weightAddModal.present();
   }
 
-  addWeight() {
-    if(this.newWeight === '') return;
-
-    let value = {
-      weight: this.newWeight,
-      date: this.newDate
-    }
-
-    this.db.addWeight(value, () => {});
-
-    this.newWeight = "";
-    this.newDate = new Date();
-    this.editMode = false;
-    
-    // let weightAddModal = this.modalCtrl.create(WeightAddModal);
-    // weightAddModal.onDidDismiss(data => {
-    //   // firebase save
-    //   if (data === null) return;
-    //   this.db.addWeight(data);
-    // });
-    // weightAddModal.present();
+  addData(data) {
+    console.log('addData: data', data);
+    if(data.value === '') return;
+    this.db.addWeight(data, () => {});
   }  
 
-  deleteWeight(key) {
+  deleteData(key) {
     this.db.deleteWeight(key);
   }
+
+  editData(data) {
+    let weightAddModal = this.modalCtrl.create(WeightAddModal, data);
+    weightAddModal.onDidDismiss(data => {
+      // firebase save
+      if (data === null) return;
+      this.updateData(data);
+    });
+    weightAddModal.present();
+  }
+
+  updateData(data) {
+    console.log('updateData: data', data);
+    if(data.value === '') return;
+    this.db.updateWeight(data);
+  }  
 }

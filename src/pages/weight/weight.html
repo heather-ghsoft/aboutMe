@@ -3,9 +3,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title color="primary">TO DO</ion-title>
+    <ion-title color="primary">나의 체중</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)=" openAddTodo() ">
+      <button ion-button icon-only (click)=" openAddData() ">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
@@ -14,24 +14,12 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngIf="editMode">
-      <ion-input type="text" placeholder="TO DO" [(ngModel)]="newTodo" (keypress)="keypressNewTodo($event)"></ion-input>
-      <!-- <button ion-button color="primary" clear item-right (click)="addTodo()">SAVE</button> -->
-    </ion-item>
-    <ion-item-sliding *ngFor=" let todo of todos | todoFilter:filter; let i = index ">
-      <ion-item>
-        <ion-label>{{todo.title}}</ion-label>
-        <!-- <p>{{todo.desc}}</p> -->
-        <ion-checkbox [(ngModel)]="todo.completed" (click)=" completeTodo(todo.key,todo.completed) "></ion-checkbox>
-      </ion-item>
-      <ion-item-options>
-        <button ion-button item-left color="danger" (click)=" deleteTodo(todo.key) ">
-          Delete
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
+    <div *ngFor=" let data of dataArr; let i = index ">
+      <list-date-divider [data]="data" *ngIf="i === 0 || dataArr[i].date.substr(0, 7) !== dataArr[i-1].date.substr(0, 7)"></list-date-divider>
+      <weight-item [data]="data" (onDelete)="deleteData($event)" (onEdit)="editData($event)"></weight-item>
+    </div>
   </ion-list>
   <div class="div_content">
-    <p *ngIf="!todos.length">몸무게를 기록하세요 :)</p>
+    <p *ngIf="!dataArr.length">몸무게를 기록하세요 :)</p>
   </div>
 </ion-content>
