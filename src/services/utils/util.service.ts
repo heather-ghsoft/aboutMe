@@ -43,7 +43,6 @@ export class UtilService {
   }
 
   getOrderTimeDesc(date) {
-    console.log(date.getMonth(), '-', date.getDate());
     return 9999999999999 - date.getTime();
   }
 }
