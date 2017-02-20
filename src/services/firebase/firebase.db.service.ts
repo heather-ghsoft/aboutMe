@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import _ from "lodash";
+// import _ from "lodash";
 import { UtilService } from '../utils/util.service';
 // import { Http } from '@angular/http';
 // import { Observable, Subscriber } from 'rxjs';
 // import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import firebase from 'firebase';
+import { Weight } from '../../vo/weight';
 // import { User } from './vo/user';
 // import { Log } from './vo/log';
 // import { Info } from './vo/info';
@@ -21,7 +22,7 @@ export class DbService {
     private util: UtilService
   ) {
     setTimeout(() => {
-      console.log('DbService constructor');
+      console.log('DbService:: constructor');
       this.rootRef = firebase.database().ref();
     });
   }
@@ -31,49 +32,46 @@ export class DbService {
   }
 
   addTodo(value, callback) {
-    console.log('DB:: addTodo: ', value);
+    console.log('DbService:: addTodo: ', value);
     let d = new Date();
 
-    value = pruneObj(value);
-    value.createdAt = {
-      ".sv": "timestamp"
-    };
+    value.createdAt = { ".sv": "timestamp" };
     value.order = this.util.getOrderTimeDesc(d);
     value.lastModifiedAt = value.createdAt;
+
+    value = pruneObj(value);
     return this.rootRef.child(`${this.uid()}/todos`).push(value).then(callback);
   }
 
   getTodo(callback){
 
-    console.log('DB: getTodo');
+    console.log('DbService: getTodo');
     const ref = this.rootRef.child(`${this.uid()}/todos`);
     
     ref.orderByChild('order').on('value', (snap) => {
       
-      var data = snap.val();
-      var todos = [];
-
-      console.log('DB: getTodo: onValue');
-
+      let todos = [];
       snap.forEach((child) => {
         let todo = child.val();
-        todo.key = child.key;
+        todo._id = child.key;
         todos.push(todo);
       });
       callback(todos);
     });
   }
 
-  updateTodo(data) {
-    console.log('DB:: updateTodo: data: ', data);
-    const ref = this.rootRef.child(`${this.uid()}/todos/${data.key}`);
-    delete data.key;
-    ref.update(data);
+  updateTodo(value) {
+    console.log('DbService:: updateTodo: value: ', value);
+    const ref = this.rootRef.child(`${this.uid()}/todos/${value._id}`);
+    delete value._id;
+
+    value = pruneObj(value);
+    ref.update(value);
   }
 
-  deleteTodo(key) {
-    console.log('DB:: updateTodo: key: ', key);
-    const ref = this.rootRef.child(`${this.uid()}/todos/${key}`);
+  deleteTodo(id) {
+    console.log('DbService:: updateTodo: id: ', id);
+    const ref = this.rootRef.child(`${this.uid()}/todos/${id}`);
     ref.remove();
   }
 
@@ -87,18 +85,18 @@ export class DbService {
   // }
 
   getWeights(callback) {
-    console.log('DB: getWeights');
+    console.log('DbService: getWeights');
     const ref = this.rootRef.child(`${this.uid()}/weights`);
     
     ref.orderByChild('order').on('value', (snap) => {
       
       let dataArr = [];
 
-      console.log('DB: getWeights: onValue');
+      console.log('DbService: getWeights: onValue');
 
       snap.forEach((child) => {
         let data = child.val();
-        data.key = child.key;
+        data._id = child.key;
         dataArr.push(data);
       });
       callback(dataArr);
@@ -106,29 +104,29 @@ export class DbService {
   }
 
   addWeight(value, callback) {
-    console.log('DB:: addWeight: ', value);
-    value = pruneObj(value);
-    value.createdAt = {
-      ".sv": "timestamp"
-    };
+    console.log('DbService:: addWeight: value: ', value);
+    value.createdAt = { ".sv": "timestamp" };
     value.lastModifiedAt = value.createdAt;
+    delete value._id;
+    
+    value = pruneObj(value);
     return this.rootRef.child(`${this.uid()}/weights`).push(value).then(callback);
   }
 
   updateWeight(value) {
-    console.log('DB:: updateWeight: ', value);
+    console.log('DbService:: updateWeight: value: ', value);
+    const ref = this.rootRef.child(`${this.uid()}/weights/${value._id}`);
+
+    value.lastModifiedAt = { ".sv": "timestamp" };
+    delete value._id;
+
     value = pruneObj(value);
-    value.lastModifiedAt = {
-      ".sv": "timestamp"
-    };
-    let key = value.key;
-    delete value.key;
-    return this.rootRef.child(`${this.uid()}/weights/${key}`).update(value);
+    return ref.update(value);
   }
 
-  deleteWeight(key) {
-    console.log('DB:: deleteWeight: key: ', key);
-    const ref = this.rootRef.child(`${this.uid()}/weights/${key}`);
+  deleteWeight(id) {
+    console.log('DbService:: deleteWeight: id: ', id);
+    const ref = this.rootRef.child(`${this.uid()}/weights/${id}`);
     ref.remove();
   }
 }

@@ -30,10 +30,10 @@
       <ion-item>
         <ion-label>{{data.value}}</ion-label>
         <!-- <p>{{data.desc}}</p> -->
-        <ion-checkbox [(ngModel)]="data.completed" (click)=" completeData(data.key,data.completed) "></ion-checkbox>
+        <ion-checkbox [(ngModel)]="data.completed" (click)=" completeData(data._id,data.completed) "></ion-checkbox>
       </ion-item>
       <ion-item-options>
-        <button ion-button item-left color="danger" (click)=" deleteData(data.key) ">
+        <button ion-button item-left color="danger" (click)=" deleteData(data._id) ">
           Delete
         </button>
       </ion-item-options>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 // import { DbService } from '../../services/firebase/firebase.db.service';
 // import { ViewService } from '../../services/view/view.service';
 // import { CalendarDayPage } from './calendar-day';
@@ -28,12 +28,12 @@ export class CalendarPage {
   }
   
   selectDate(dayDate) {
-    console.log('selectDate: ', dayDate);
-    let index = dayDate.getDate();
-    let params = {
-      date: dayDate,
-      data: this.data[index] || {}
-    }
+    // console.log('selectDate: ', dayDate);
+    // let index = dayDate.getDate();
+    // let params = {
+    //   date: dayDate,
+    //   data: this.data[index] || {}
+    // }
     // this.navCtrl.push(CalendarDayPage, params);
   }
 }

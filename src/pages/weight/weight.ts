@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { ModalController, NavParams } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
 import { WeightAddModal } from './weight-add';
 
@@ -45,7 +45,7 @@ export class WeightPage {
   getData() {
     this.db.getWeights((dataArr) => {
       this.zone.run(() => this.dataArr = dataArr);
-      console.log('WeightListPage:: getWeight: ', this.dataArr);
+      console.log('WeightListPage:: getWeight');
     });
   }
 
@@ -68,13 +68,13 @@ export class WeightPage {
   }
 
   addData(data) {
-    console.log('addData: data', data);
+    console.log('WeightListPage:: addData: data', data);
     if(data.value === '') return;
     this.db.addWeight(data, () => {});
   }  
 
-  deleteData(key) {
-    this.db.deleteWeight(key);
+  deleteData(id) {
+    this.db.deleteWeight(id);
   }
 
   editData(data) {
@@ -88,7 +88,7 @@ export class WeightPage {
   }
 
   updateData(data) {
-    console.log('updateData: data', data);
+    console.log('WeightListPage:: updateData: data', data);
     if(data.value === '') return;
     this.db.updateWeight(data);
   }  

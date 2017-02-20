@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
-import { ViewService } from '../../services/view/view.service';
 
 @Component({
   selector: 'page-todo-add',

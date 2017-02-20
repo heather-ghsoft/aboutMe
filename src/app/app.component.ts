@@ -3,7 +3,7 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import firebase from 'firebase';
 
-import { IntroPage } from '../pages/intro/intro';
+// import { IntroPage } from '../pages/intro/intro';
 import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
 // import { DashboardPage } from '../pages/dashboard/dashboard';

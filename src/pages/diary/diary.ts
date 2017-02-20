@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 // import { DbService } from '../../services/firebase/firebase.db.service';
 // import { ViewService } from '../../services/view/view.service';
 import { DiaryDayPage } from './diary-day';

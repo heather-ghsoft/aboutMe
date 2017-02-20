@@ -1,8 +1,5 @@
 import { Component, NgZone } from '@angular/core';
 import { DbService } from '../../services/firebase/firebase.db.service';
-import { ViewService } from '../../services/view/view.service';
-// import { TodoAddModal } from './todo-add';
-// import { TodoFilter } from './todoFilter';
 
 @Component({
   selector: 'page-todo-list',
@@ -85,11 +82,11 @@ export class TodoListPage {
     // todoAddModal.present();
   }  
 
-  completeData(key, completed) {
-    this.db.updateTodo({key, completed});
+  completeData(_id, completed) {
+    this.db.updateTodo({_id, completed});
   }
 
-  deleteData(key) {
-    this.db.deleteTodo(key);
+  deleteData(id) {
+    this.db.deleteTodo(id);
   }
 }

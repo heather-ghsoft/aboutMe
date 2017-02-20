@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Platform } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DashboardPage } from '../dashboard/dashboard';
-import { DiaryPage } from '../diary/diary';
 import { WeightPage } from '../weight/weight';
 import { RegisterPage } from '../register/register';
 import { ViewService } from '../../services/view/view.service';

@@ -22,7 +22,7 @@ import { UtilService } from '../../services/utils/util.service';
         <button ion-button item-left color="sea" (click)=" this.editData(data) ">
           Edit
         </button>
-        <button ion-button item-left color="danger" (click)=" this.deleteData(data.key) ">
+        <button ion-button item-left color="danger" (click)=" this.deleteData(data._id) ">
           Delete
         </button>
       </ion-item-options>
@@ -56,8 +56,8 @@ export class WeightItem {
     this.date = this.util.changeDataFormat(data.date, data.time);
   }
 
-  deleteData(key) {
-    this.onDelete.next(key);
+  deleteData(id) {
+    this.onDelete.next(id);
   }
 
   editData(data) {

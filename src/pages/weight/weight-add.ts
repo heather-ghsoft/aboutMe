@@ -9,7 +9,7 @@ import { UtilService } from '../../services/utils/util.service';
 export class WeightAddModal {
 
   data = {
-    key: '',
+    _id: '',
     value: '',
     date: '',
     time: '',
@@ -24,7 +24,7 @@ export class WeightAddModal {
 
     let d = new Date();
 
-    this.data.key = this.params.get('key');
+    this.data._id = this.params.get('_id');
     this.data.value = this.params.get('value');
     this.data.date = this.params.get('date') || (d.getFullYear() + '-' + ( d.getMonth() < 10 ? '0' : '' ) + (d.getMonth() + 1) + '-' + d.getDate());
     this.data.time = this.params.get('time') || ((d.getHours() < 10 ? '0': '') + d.getHours() + ':' + ( d.getMinutes() < 10 ? '0' : '' ) + d.getMinutes());
