@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import _ from "lodash";
+import { UtilService } from '../utils/util.service';
 // import { Http } from '@angular/http';
 // import { Observable, Subscriber } from 'rxjs';
 // import 'rxjs/add/operator/map';
@@ -15,7 +17,9 @@ export class DbService {
   
   rootRef;
 
-  constructor() {
+  constructor(
+    private util: UtilService
+  ) {
     setTimeout(() => {
       console.log('DbService constructor');
       this.rootRef = firebase.database().ref();
@@ -28,10 +32,13 @@ export class DbService {
 
   addTodo(value, callback) {
     console.log('DB:: addTodo: ', value);
+    let d = new Date();
+
     value = pruneObj(value);
     value.createdAt = {
       ".sv": "timestamp"
     };
+    value.order = this.util.getOrderTimeDesc(d);
     value.lastModifiedAt = value.createdAt;
     return this.rootRef.child(`${this.uid()}/todos`).push(value).then(callback);
   }
@@ -41,7 +48,7 @@ export class DbService {
     console.log('DB: getTodo');
     const ref = this.rootRef.child(`${this.uid()}/todos`);
     
-    ref.orderByChild('createdAt').on('value', (snap) => {
+    ref.orderByChild('order').on('value', (snap) => {
       
       var data = snap.val();
       var todos = [];
@@ -80,7 +87,22 @@ export class DbService {
   // }
 
   getWeights(callback) {
+    console.log('DB: getWeights');
+    const ref = this.rootRef.child(`${this.uid()}/weights`);
+    
+    ref.orderByChild('order').on('value', (snap) => {
+      
+      let dataArr = [];
 
+      console.log('DB: getWeights: onValue');
+
+      snap.forEach((child) => {
+        let data = child.val();
+        data.key = child.key;
+        dataArr.push(data);
+      });
+      callback(dataArr);
+    });
   }
 
   addWeight(value, callback) {
@@ -91,6 +113,17 @@ export class DbService {
     };
     value.lastModifiedAt = value.createdAt;
     return this.rootRef.child(`${this.uid()}/weights`).push(value).then(callback);
+  }
+
+  updateWeight(value) {
+    console.log('DB:: updateWeight: ', value);
+    value = pruneObj(value);
+    value.lastModifiedAt = {
+      ".sv": "timestamp"
+    };
+    let key = value.key;
+    delete value.key;
+    return this.rootRef.child(`${this.uid()}/weights/${key}`).update(value);
   }
 
   deleteWeight(key) {
