@@ -22,6 +22,14 @@
 .space_h-30 {width: 100%; height: 30px;}
 .space_h-50 {width: 100%; height: 50px;}
 
+ion-nav.menu-content-open .ion-page {
+  opacity: 0.5;
+  transition: opacity 0.5s;
+}
+ion-nav .ion-page {
+  transition: opacity 0.5s;
+}
+
 .bar_btn_padding {margin: 2px 7px 2px 7px;}
 .toolbar-title {color: map-get($colors, text);}
 /*ion-nav .header .toolbar .toolbar-background {background: transparent; border-width: 0; border-style: none;};*/

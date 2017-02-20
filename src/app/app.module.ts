@@ -9,11 +9,18 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
 import { DiaryPage } from '../pages/diary/diary';
 import { DiaryDayPage } from '../pages/diary/diary-day';
 import { WeightPage } from '../pages/weight/weight';
-
-import { TodoAddModal } from '../pages/todo-list/todo-add';
+import { WeightAddModal } from '../pages/weight/weight-add';
+import { WeightItem } from '../pages/weight/weight-item';
 
 import { ZmCalendar } from '../components/calendar/zm-calendar';
 import { ZmCalendarDay } from '../components/calendar/zm-calendar-day';
+
+import { ListDateDivider } from '../components/list-date-divider/list-date-divider';
+
+import { AuthService } from '../services/firebase/firebase.auth.service';
+import { DbService } from '../services/firebase/firebase.db.service';
+import { ViewService } from '../services/view/view.service';
+import { UtilService } from '../services/utils/util.service';
 
 import { MapFilter } from '../components/filters/MapFilter';
 import { TodoFilter } from '../pages/todo-list/todoFilter';
@@ -29,9 +36,11 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     DiaryPage,
     DiaryDayPage,
     WeightPage,
-    TodoAddModal,
+    WeightAddModal,
+    WeightItem,
     ZmCalendar,
     ZmCalendarDay,
+    ListDateDivider,
     MapFilter,
     TodoFilter
   ],
@@ -49,11 +58,17 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     DiaryPage,
     DiaryDayPage,
     WeightPage,
-    TodoAddModal
+    WeightAddModal 
   ],
-  providers: [{
-    provide: ErrorHandler, 
-    useClass: IonicErrorHandler
-  }]
+  providers: [
+    AuthService,
+    DbService,
+    ViewService,
+    UtilService, 
+    {
+      provide: ErrorHandler, 
+      useClass: IonicErrorHandler
+    }
+  ]
 })
 export class AppModule {}

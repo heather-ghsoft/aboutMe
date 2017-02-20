@@ -13,18 +13,20 @@ import { WeightPage } from '../pages/weight/weight';
 import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
 import { ViewService } from '../services/view/view.service';
+import { UtilService } from '../services/utils/util.service';
 import { firebaseConfig } from '../scripts/config';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [ AuthService, DbService, ViewService ]
+  providers: [ AuthService, DbService, ViewService, UtilService ]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   initialized: boolean;
-  authInfo: any;
-  rootPage: any = LoginPage;
+  // authInfo: any;
+  // rootPage: any = LoginPage;
+  rootPage: any;
   pages: Array<{title: string, component: any}>;
 
   constructor(
@@ -44,14 +46,14 @@ export class MyApp {
     ];
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-      Splashscreen.hide();
-    });
-  }
+  // initializeApp() {
+  //   this.platform.ready().then(() => {
+  //     // Okay, so the platform is ready and our plugins are available.
+  //     // Here you can do any higher level native things you might need.
+  //     StatusBar.styleDefault();
+  //     Splashscreen.hide();
+  //   });
+  // }
 
   openPage(page) {
     // close the menu when clicking a link from the menu
@@ -61,44 +63,45 @@ export class MyApp {
   }
 
   ngOnInit() {
-    const app = firebase.initializeApp(firebaseConfig);
+    // const app = firebase.initializeApp(firebaseConfig);
     // this.initialize();
   }
 
-  // public initialize() {
-  //   console.log('MyApp:: initialize');
-  //   this.initialized = false;
+  initializeApp() {
+    console.log('MyApp:: initialize');
+    this.initialized = false;
 
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     console.log('onAuthStateChanged fired');
+    firebase.initializeApp(firebaseConfig)
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log('onAuthStateChanged fired');
 
-  //     this.platform.ready().then(() => {
-  //       StatusBar.styleDefault();
+      this.platform.ready().then(() => {
+        StatusBar.styleDefault();
 
-  //       if (this.initialized) return;
+        if (this.initialized) return;
 
-  //       let targetPage;
-  //       if (user && !user.isAnonymous) {
-  //         console.log('logged in ');
-  //         targetPage = DashboardPage;
-  //       } else {
-  //         console.log('not logged in ');
-  //         targetPage = LoginPage;
-  //       }
+        let targetPage;
+        if (user && !user.isAnonymous) {
+          console.log('logged in ');
+          targetPage = WeightPage;
+        } else {
+          console.log('not logged in ');
+          targetPage = LoginPage;
+        }
 
-  //       Splashscreen.hide();
+        Splashscreen.hide();
 
-  //       this.zone.run(() => {
-  //         this.setAuthInfo(user);
-  //         this.initialized = true;
-  //         this.rootPage = targetPage;
-  //         this.nav.setRoot(targetPage, { initialized: true });
-  //       });
-  //     });
-  //   }, err => {
-  //       console.error(err);
-  //   });
-  // }
+        this.zone.run(() => {
+          // this.setAuthInfo(user);
+          this.initialized = true;
+          this.rootPage = targetPage;
+          this.nav.setRoot(targetPage, { initialized: true });
+        });
+      });
+    }, err => {
+        console.error(err);
+    });
+  }
 
   // setAuthInfo(authData) {
   //   if (!authData) {
