@@ -8,10 +8,13 @@
 </ion-header>
 <ion-content>
   <div class="div_content">
-    <div zm-line-chart 
-      width="100%" 
-      height="300px"
-      [graphData]="dataArr"
+    <div zm-line-chart
+      style="width: 100%; height: 300px" 
+      colX="date"
+      colY="value"
+      colXType="date"
+      colXFormat="%Y-%m-%d"
+      [bindData]="dataArr"
     >
     </div>
   </div>

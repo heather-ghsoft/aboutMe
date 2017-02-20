@@ -10,7 +10,7 @@ import { DbService } from '../../services/firebase/firebase.db.service';
 
 export class WeightChartPage {
 
-  dataArr;
+  dataArr = [];
 
   constructor(
     private navCtrl: NavController,
@@ -26,10 +26,10 @@ export class WeightChartPage {
   }
 
   getData() {
-    this.dataArr = [10,20,30,40,60];
-    // this.db.getWeights((dataArr) => {
-    //   this.zone.run(() => this.dataArr = dataArr);
-    //   console.log('WeightChartPage:: getData');
-    // });
+    // this.dataArr = [10,20,30,40,60];
+    this.db.getWeights((dataArr) => {
+      this.zone.run(() => this.dataArr = dataArr);
+      console.log('WeightChartPage:: getData');
+    });
   }
 }
