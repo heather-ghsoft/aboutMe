@@ -36,7 +36,7 @@ export class DbService {
     let d = new Date();
 
     value.createdAt = { ".sv": "timestamp" };
-    value.order = this.util.getOrderTimeDesc(d);
+    value.orderAt = this.util.getOrderTimeDesc(d);
     value.lastModifiedAt = value.createdAt;
 
     value = pruneObj(value);
@@ -84,11 +84,12 @@ export class DbService {
   //   });
   // }
 
-  getWeights(callback) {
+  getWeights(isDesc, callback) {
     console.log('DbService: getWeights');
     const ref = this.rootRef.child(`${this.uid()}/weights`);
-    
-    ref.orderByChild('order').on('value', (snap) => {
+    const descCol = isDesc ? 'orderAt': 'dateAt';
+
+    ref.orderByChild(descCol).on('value', (snap) => {
       
       let dataArr = [];
 

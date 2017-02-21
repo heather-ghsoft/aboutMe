@@ -1,6 +1,7 @@
 import { Directive, ElementRef, Renderer, Input, OnChanges } from '@angular/core';
 import * as d3 from 'd3';
 import { ZmLineChartVo as ChartVo} from './zm-line-chart-vo';
+import _ from "lodash";
 
 @Directive({
   selector: '[zm-line-chart]'   // [selector]: attr
@@ -32,7 +33,6 @@ export class ZmLineChart implements OnChanges{
   ngOnInit() {
     console.log('ZmLineChart:: ngOnInit');
     this.setComponentStyle();
-    this.initGraph();
     this.getGraphData();
     this.drawGraph();
     this.loaded = true;
@@ -74,46 +74,49 @@ export class ZmLineChart implements OnChanges{
     return Number(y);
   }
 
-  initGraph() {
-
-    let el:any = this.elem.nativeElement;
-    let margin = {top: 0, right: 0, bottom: 30, left: 30};
-    let width = el.offsetWidth;
-    let height = el.offsetHeight;
-
-    this.chWidth = width - margin.left - margin.right;
-    this.chHeight = height - margin.top - margin.bottom;
-
-    console.log('this.chWidth: ', width);
-    console.log('this.chHeight: ', height);
-
-    let div = d3.select(el);
-    let svg = div.append('svg').attr('width', width).attr('height', height);
-    
-    this.g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    this.x = d3.scaleTime()
-        .rangeRound([0, this.chWidth]);
-
-    this.y = d3.scaleLinear()
-        .rangeRound([this.chHeight, 0]);
-
-    this.line = d3.line()
-        .x( d => this.x(d['x']) )
-        .y( d => this.y(d['y']) );
-  }
-
   drawGraph() {
-    this.x.domain(d3.extent(this.graphData, d => d.x));
-    this.y.domain(d3.extent(this.graphData, d => d.y));
 
-    this.g.append("g")
-        .attr("transform", "translate(0," + this.chHeight + ")")
-        .call(d3.axisBottom(this.x))
+    const el:any = this.elem.nativeElement;
+    const margin = {top: 10, right: 10, bottom: 30, left: 50};
+
+    const divW = el.offsetWidth;      // div width
+    const divH = el.offsetHeight;      // div height
+
+    const chtW = divW - margin.left - margin.right;   // chart width
+    const chtH = divH - margin.top - margin.bottom;   // chart height
+
+    // draw chart start
+    const div = d3.select(el);
+    const svg = div.append('svg').attr('divW', divW).attr('divH', divH);
+    
+    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const x = d3.scaleTime().rangeRound([0, chtW]);
+    const y = d3.scaleLinear().rangeRound([chtH, 0]);
+
+    const line = d3.line()
+        .x( d => x(d['x']) )
+        .y( d => y(d['y']) );
+    // -
+
+    // make data
+    const _graphData = this.graphData;
+    const xDomain = d3.extent(_graphData, d => d.x);
+    const yDomain = d3.extent(_graphData, d => d.y);
+    // -
+
+    // const xAxis = d3.axisBottom.scale(x).tickSize(-chtH).tickSubdivide(true);
+
+    // x, y 축 범위 지정 
+    x.domain(xDomain);
+    y.domain([yDomain[0] - 4, yDomain[1] + 1]);
+
+    g.append("g")
+        .attr("transform", "translate(0," + chtH + ")")
+        .call(d3.axisBottom(x));
         // .select(".domain")
         // .remove();
 
-    this.g.append("g")
+    g.append("g")
         .call(d3.axisLeft(this.y))
         .append("text")
         .attr("fill", "#000")
@@ -123,35 +126,21 @@ export class ZmLineChart implements OnChanges{
         .attr("text-anchor", "end")
         .text("Price ($)");
 
-    this.g.append("path")
-        .datum(this.graphData)
+    g.append("path")
+        .datum(_graphData)
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
-        .attr("d", this.line);
+        .attr("d", line);
   }
 
   setComponentStyle() {
     let el:any = this.elem.nativeElement;
-    // console.log('ZmLineChart:: setComponentStyle: height: ', this.height);
     el.style.backgroundColor = 'yellow';
-    // el.style.width = '100%';
-    // el.style.height = this.height + 'px';
   }
-
-  // render(newValue) {
-  //   if (!newValue) return;
-
-  //   this.divs.data(newValue).enter().append('div')
-  //     .transition().ease('elastic')
-  //     .style('width', d => d + '%')
-  //     .text(d => d + '%');
-
-  // }
-
-  // onChange() {
-  //   this.render(this.data);
-  // }
 }
+
+
+

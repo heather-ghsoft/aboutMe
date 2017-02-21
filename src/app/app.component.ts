@@ -11,6 +11,7 @@ import { TodoListPage } from '../pages/todo-list/todo-list';
 import { CalendarPage } from '../pages/calendar/calendar';
 import { WeightPage } from '../pages/weight/weight';
 import { WeightChartPage } from '../pages/weight-chart/weight-chart';
+import { WeightChartD3Page } from '../pages/weight-chart/weight-chart-d3';
 
 import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
@@ -44,6 +45,7 @@ export class MyApp {
       { title: 'Calendar', component: CalendarPage },
       { title: 'Weight', component: WeightPage },
       { title: 'Trend', component: WeightChartPage },
+      { title: 'Trend D3', component: WeightChartD3Page },
       { title: 'TO DO', component: TodoListPage }
     ];
   }
