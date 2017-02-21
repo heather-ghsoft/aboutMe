@@ -13,7 +13,8 @@ export class WeightAddModal {
     value: '',
     date: '',
     time: '',
-    order: 0
+    dateAt: 0,
+    orderAt: 0
   };
 
   constructor(
@@ -28,6 +29,7 @@ export class WeightAddModal {
     this.data.value = this.params.get('value');
     this.data.date = this.params.get('date') || (d.getFullYear() + '-' + ( d.getMonth() < 10 ? '0' : '' ) + (d.getMonth() + 1) + '-' + d.getDate());
     this.data.time = this.params.get('time') || ((d.getHours() < 10 ? '0': '') + d.getHours() + ':' + ( d.getMinutes() < 10 ? '0' : '' ) + d.getMinutes());
+    this.data.dateAt = this.params.get('dateAt') || d.getTime();
     console.log('WeightAddModal: data: ', this.data);
   }
 
@@ -45,7 +47,8 @@ export class WeightAddModal {
 
   saveData() {
     let d = this.util.changeDataFormat(this.data.date, this.data.time);
-    this.data.order = this.util.getOrderTimeDesc(d.dateObj);
+    this.data.dateAt = d.dateObj.getTime();
+    this.data.orderAt = this.util.getOrderTimeDesc(d.dateObj);
     this.dismiss(this.data);
   }
 

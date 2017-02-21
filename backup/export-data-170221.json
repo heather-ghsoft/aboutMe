@@ -1,0 +1,269 @@
+{
+  "todos" : {
+    "-Kd5-O_lfvJS_WxIsWHB" : {
+      "completed" : true,
+      "createdAt" : 1487233194551,
+      "lastModifiedAt" : 1487233194551,
+      "orderAt" : 8512766805571,
+      "value" : "1"
+    },
+    "-Kd5-PJOz0WLAunD93TC" : {
+      "completed" : false,
+      "createdAt" : 1487233197529,
+      "lastModifiedAt" : 1487233197529,
+      "orderAt" : 8512766802585,
+      "value" : "2"
+    },
+    "-Kd5-Pw2Ui2sgdPzpXjc" : {
+      "completed" : true,
+      "createdAt" : 1487233200066,
+      "lastModifiedAt" : 1487233200066,
+      "orderAt" : 8512766800048,
+      "value" : "3"
+    }
+  },
+  "weights" : {
+    "-KdO0VqjmmGI8nx5nUFY" : {
+      "createdAt" : 1487552253536,
+      "date" : "2017-02-15",
+      "dateAt" : "2017-02-14T15:00:00.000Z",
+      "lastModifiedAt" : 1487655794258,
+      "orderAt" : 8512915599999,
+      "orderAtAt" : 8512915599999,
+      "time" : "09:57",
+      "value" : "54.9"
+    },
+    "-KdO0Ydt80Uj9L35Qiua" : {
+      "createdAt" : 1487552264997,
+      "date" : "2017-02-14",
+      "lastModifiedAt" : 1487552264997,
+      "orderAt" : 8513001999999,
+      "time" : "09:57",
+      "value" : "54.9"
+    },
+    "-KdO0bv_aAkjUfxI2Fxt" : {
+      "createdAt" : 1487552282515,
+      "date" : "2017-02-13",
+      "lastModifiedAt" : 1487552282515,
+      "orderAt" : 8513088399999,
+      "time" : "09:57",
+      "value" : "55.9"
+    },
+    "-KdO0fmjQXja6psCnNMz" : {
+      "createdAt" : 1487552298333,
+      "date" : "2017-02-10",
+      "lastModifiedAt" : 1487552298333,
+      "orderAt" : 8513347599999,
+      "time" : "09:58",
+      "value" : "54.7"
+    },
+    "-KdO0jBQIK2yUFLyYqJ2" : {
+      "createdAt" : 1487552312265,
+      "date" : "2017-02-08",
+      "lastModifiedAt" : 1487552312265,
+      "orderAt" : 8513520399999,
+      "time" : "09:58",
+      "value" : "55.1"
+    },
+    "-KdO0mgtwwwDz8w0SDaN" : {
+      "createdAt" : 1487552326629,
+      "date" : "2017-02-07",
+      "lastModifiedAt" : 1487552326629,
+      "orderAt" : 8513606799999,
+      "time" : "09:58",
+      "value" : "54.8"
+    },
+    "-KdO0qMYf_SluxTGfQTo" : {
+      "createdAt" : 1487552342934,
+      "date" : "2017-02-06",
+      "lastModifiedAt" : 1487552342934,
+      "orderAt" : 8513693199999,
+      "time" : "09:58",
+      "value" : "55.8"
+    },
+    "-KdO0vnhccHPUm8T_CZk" : {
+      "createdAt" : 1487552363932,
+      "date" : "2017-02-03",
+      "lastModifiedAt" : 1487552363932,
+      "orderAt" : 8513952399999,
+      "time" : "09:58",
+      "value" : "55.4"
+    },
+    "-KdO0zeq1PYxmO8yX3an" : {
+      "createdAt" : 1487552379752,
+      "date" : "2017-02-02",
+      "lastModifiedAt" : 1487552379752,
+      "orderAt" : 8514038799999,
+      "time" : "09:59",
+      "value" : "54.4"
+    },
+    "-KdO13S5MWo-Mf0r5m80" : {
+      "createdAt" : 1487552399364,
+      "date" : "2017-02-01",
+      "lastModifiedAt" : 1487552399364,
+      "orderAt" : 8514125199999,
+      "time" : "09:59",
+      "value" : "54.6"
+    },
+    "-KdO197SlV9jveiys9O-" : {
+      "createdAt" : 1487552422603,
+      "date" : "2017-01-31",
+      "lastModifiedAt" : 1487552422603,
+      "orderAt" : 8514211599999,
+      "time" : "10:00",
+      "value" : "54.9"
+    },
+    "-KdO1Cnm_zkswzvZNVB-" : {
+      "createdAt" : 1487552437670,
+      "date" : "2017-01-28",
+      "lastModifiedAt" : 1487552437670,
+      "orderAt" : 8514470799999,
+      "time" : "10:00",
+      "value" : "54.9"
+    },
+    "-KdO1GJnE8ukCFhMeGf9" : {
+      "createdAt" : 1487552452065,
+      "date" : "2017-01-25",
+      "lastModifiedAt" : 1487552452065,
+      "orderAt" : 8514729999999,
+      "time" : "10:00",
+      "value" : "54.0"
+    },
+    "-KdO1KMuG4zU83nOhyXm" : {
+      "createdAt" : 1487552468648,
+      "date" : "2017-01-24",
+      "lastModifiedAt" : 1487552475498,
+      "orderAt" : 8514816399999,
+      "time" : "10:00",
+      "value" : "54.6"
+    },
+    "-KdO1PylOT31JOYc10Jv" : {
+      "createdAt" : 1487552492004,
+      "date" : "2017-01-23",
+      "lastModifiedAt" : 1487552492004,
+      "orderAt" : 8514902799999,
+      "time" : "10:01",
+      "value" : "56.5"
+    },
+    "-KdO1XNBHLh4jCriSk7T" : {
+      "createdAt" : 1487552521913,
+      "date" : "2017-01-20",
+      "lastModifiedAt" : 1487552521913,
+      "orderAt" : 8515161999999,
+      "time" : "10:01",
+      "value" : "54.4"
+    },
+    "-KdO1byFnCw0soWmLgqr" : {
+      "createdAt" : 1487552544834,
+      "date" : "2017-01-19",
+      "lastModifiedAt" : 1487552544834,
+      "orderAt" : 8515248399999,
+      "time" : "10:02",
+      "value" : "54.6"
+    },
+    "-KdO1gO3d5uNzfCi-i8c" : {
+      "createdAt" : 1487552562949,
+      "date" : "2017-02-18",
+      "lastModifiedAt" : 1487552562949,
+      "orderAt" : 8512656399999,
+      "time" : "10:02",
+      "value" : "54.7"
+    },
+    "-KdO1jqQzXSqgSHcl8ix" : {
+      "createdAt" : 1487552577098,
+      "date" : "2017-01-18",
+      "lastModifiedAt" : 1487552577098,
+      "orderAt" : 8515334799999,
+      "time" : "10:02",
+      "value" : "54.7"
+    },
+    "-KdO1s_XKdIEbSyN4fqf" : {
+      "createdAt" : 1487552612880,
+      "date" : "2017-01-17",
+      "lastModifiedAt" : 1487552612880,
+      "orderAt" : 8515421199999,
+      "time" : "10:02",
+      "value" : "54.5"
+    },
+    "-KdO1wkC23BJ8MY82YRj" : {
+      "createdAt" : 1487552629948,
+      "date" : "2017-01-16",
+      "lastModifiedAt" : 1487552629948,
+      "orderAt" : 8515507599999,
+      "time" : "10:03",
+      "value" : "54.0"
+    },
+    "-KdO2-R8JhyY6wicR6DV" : {
+      "createdAt" : 1487552645046,
+      "date" : "2017-01-15",
+      "lastModifiedAt" : 1487552645046,
+      "orderAt" : 8515593999999,
+      "time" : "10:03",
+      "value" : "54.3"
+    },
+    "-KdO24TmxJdOt6ugEQce" : {
+      "createdAt" : 1487552665697,
+      "date" : "2017-01-14",
+      "lastModifiedAt" : 1487552665697,
+      "orderAt" : 8515680399999,
+      "time" : "10:04",
+      "value" : "54.9"
+    },
+    "-KdO2DacTarsIjabK4WE" : {
+      "createdAt" : 1487552703063,
+      "date" : "2017-02-13",
+      "lastModifiedAt" : 1487552703063,
+      "orderAt" : 8513088399999,
+      "time" : "10:04",
+      "value" : "56.3"
+    },
+    "-KdO2HqlCB7RmvourVWs" : {
+      "createdAt" : 1487552720482,
+      "date" : "2017-01-13",
+      "lastModifiedAt" : 1487552720482,
+      "orderAt" : 8515766799999,
+      "time" : "10:05",
+      "value" : "56.3"
+    },
+    "-KdO2LI4RcfV7cbAsGGo" : {
+      "createdAt" : 1487552734577,
+      "date" : "2017-01-12",
+      "lastModifiedAt" : 1487552749388,
+      "orderAt" : 8515853199999,
+      "time" : "10:05",
+      "value" : "55.2"
+    },
+    "-KdO2S-lo2p4rODUJuc0" : {
+      "createdAt" : 1487552762080,
+      "date" : "2017-01-11",
+      "lastModifiedAt" : 1487552762080,
+      "orderAt" : 8515939599999,
+      "time" : "10:05",
+      "value" : "55.0"
+    },
+    "-KdO2VL3IBvgzKMHFOFD" : {
+      "createdAt" : 1487552775730,
+      "date" : "2017-01-10",
+      "lastModifiedAt" : 1487552775730,
+      "orderAt" : 8516025999999,
+      "time" : "10:05",
+      "value" : "55.5"
+    },
+    "-KdO2Z4NXQHKk3OlQDlm" : {
+      "createdAt" : 1487552791049,
+      "date" : "2017-01-04",
+      "lastModifiedAt" : 1487552791049,
+      "orderAt" : 8516544399999,
+      "time" : "10:06",
+      "value" : "55.4"
+    },
+    "-KdQ1C462dSmTXr2YSsN" : {
+      "createdAt" : 1487585989142,
+      "date" : "2017-02-20",
+      "lastModifiedAt" : 1487655873975,
+      "orderAt" : 8512483599999,
+      "time" : "19:19",
+      "value" : "55.6"
+    }
+  }
+}

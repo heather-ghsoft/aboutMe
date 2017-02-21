@@ -43,7 +43,7 @@ export class WeightPage {
   // }
 
   getData() {
-    this.db.getWeights((dataArr) => {
+    this.db.getWeights(true, (dataArr) => {
       this.zone.run(() => this.dataArr = dataArr);
       console.log('WeightListPage:: getWeight');
     });
