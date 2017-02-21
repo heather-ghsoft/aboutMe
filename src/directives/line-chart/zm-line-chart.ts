@@ -17,6 +17,7 @@ export class ZmLineChart implements OnChanges{
   @Input() bindData: Array<ChartVo>;
   
   loaded = false;
+  idDrawn = false;
   graphData = [];
   chWidth: number;
   chHeight: number;
@@ -33,8 +34,6 @@ export class ZmLineChart implements OnChanges{
   ngOnInit() {
     console.log('ZmLineChart:: ngOnInit');
     this.setComponentStyle();
-    this.getGraphData();
-    this.drawGraph();
     this.loaded = true;
   }
 
@@ -45,9 +44,10 @@ export class ZmLineChart implements OnChanges{
 
   ngOnChanges(changes) {
     console.log(changes);
-    if (!this.loaded) return;
+    if (this.loaded && !this.idDrawn) return;
     this.getGraphData();
     this.drawGraph();
+    this.idDrawn = true;
   }
 
   getGraphData() {
@@ -76,6 +76,8 @@ export class ZmLineChart implements OnChanges{
 
   drawGraph() {
 
+    console.log('ZmLineChart:: drawGraph');
+
     const el:any = this.elem.nativeElement;
     const margin = {top: 10, right: 10, bottom: 30, left: 50};
 
@@ -87,7 +89,7 @@ export class ZmLineChart implements OnChanges{
 
     // draw chart start
     const div = d3.select(el);
-    const svg = div.append('svg').attr('divW', divW).attr('divH', divH);
+    const svg = div.append('svg').attr('width', divW).attr('height', divH);
     
     const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     const x = d3.scaleTime().rangeRound([0, chtW]);
@@ -117,7 +119,7 @@ export class ZmLineChart implements OnChanges{
         // .remove();
 
     g.append("g")
-        .call(d3.axisLeft(this.y))
+        .call(d3.axisLeft(y))
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
