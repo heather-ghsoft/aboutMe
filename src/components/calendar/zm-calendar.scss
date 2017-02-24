@@ -56,4 +56,59 @@ zm-calendar {
 
   }
   
+
+  .calendar-box .day-box {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    padding: 3px 1px 1px 1px;
+    border-bottom: 1px solid; 
+    border-bottom-color: map-get($colors, gray);
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .calendar-box.extra .day-box {
+    background-color: map-get($colors, light);
+  }
+
+  .calendar-box .row-date {
+    padding: 1px 5px 1px 5px;
+  }
+
+  .calendar-box .row{
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin-bottom: 1px;
+  }
+  .calendar-box .center {
+    align-items: center;
+  }
+  .calendar-box .left {
+    align-items: left;
+  }
+  .calendar-box .date {
+    color: map-get($colors, text);
+  }
+
+  .calendar-box.extra .date {
+    color: #aaa;
+  }
+  .calendar-box .date.holiday {
+    color: #aaa;
+  }
+  
+  .calendar-box .row-value {
+    padding-left: 6px;
+    padding-bottom: 2px;
+    color: map-get($colors, text);
+    font-size: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
 }

@@ -13,7 +13,7 @@ export class CalendarPage {
 
   data = [];
   types: any = { 
-    'weight': { background: 'rgb(255, 232, 245)', tailStr: ' kg' },  //'#ffc9e6'
+    'weight': { background: 'rgba(255, 90, 95, 0.27)', tailStr: ' kg' },  //'#ffc9e6'
     'food': { background: 'rgb(224, 255, 252)', tailStr:'' },  //'#ccfdf9'
     'score': { background: 'rgb(231, 231, 253)', tailStr: ' 점' }  //'#c8c8fd'
   }

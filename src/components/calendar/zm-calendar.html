@@ -14,8 +14,8 @@
     </div>
   </div>
   <div class="calendar">
-    <zm-calendar-day class="calendar-box empty" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of startEmptyDay "> </zm-calendar-day>
+    <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of startEmptyDay "> </zm-calendar-day>
     <zm-calendar-day class="calendar-box" [data]="day.data" [date]="day.date" [types]="types" (dayClickEvent)=" selectDate($event) " *ngFor=" let day of days "></zm-calendar-day>
-    <zm-calendar-day class="calendar-box empty" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of endEmptyDay "> </zm-calendar-day>
+    <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of endEmptyDay "> </zm-calendar-day>
   </div>
 </div>
