@@ -6,6 +6,7 @@ weight-item {
   }
   .item_left {
     width: 60px;
+    height: 100%;
     border-right: 1px solid map-get($colors, light);
     display: flex;
     flex-flow: column nowrap;
@@ -34,7 +35,7 @@ weight-item {
     color: map-get($colors, text);
   }
   .item_value {
-    flex: 1;
+    height: 100%;
     font-size: 24px;
     color: map-get($colors, text);
   }
