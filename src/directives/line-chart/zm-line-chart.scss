@@ -1,0 +1,10 @@
+.zm-line-chart {
+
+  .tick line { 
+    color: map-get($colors, text); 
+  }
+  
+  .tick text { 
+    color: map-get($colors, text); 
+  }
+}

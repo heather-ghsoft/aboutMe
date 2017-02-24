@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { UtilService } from '../../services/utils/util.service';
+import { DateService } from '../../services/utils/date.service';
 
 @Component({
   selector: 'weight-item',
@@ -42,7 +42,7 @@ export class WeightItem {
   date;
 
   constructor(
-    private util: UtilService
+    private dateService: DateService
   ) {
   }
 
@@ -53,7 +53,7 @@ export class WeightItem {
 
   changeDataFormat(data) {
     if (!data) return; 
-    this.date = this.util.changeDataFormat(data.date, data.time);
+    this.date = this.dateService.formatString2Date(data.date, data.time);
   }
 
   deleteData(id) {

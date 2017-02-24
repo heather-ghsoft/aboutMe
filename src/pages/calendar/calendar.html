@@ -13,5 +13,5 @@
 </ion-header>
 
 <ion-content>
-  <zm-calendar [data]="data" [types]="types" (dayClickEvent)=" selectDate($event) "></zm-calendar>
+  <zm-calendar [types]="types" (getData)=" getCalendarData($event[0], $event[1], $event[2]) " (dayClickEvent)=" selectDate($event) "></zm-calendar>
 </ion-content>

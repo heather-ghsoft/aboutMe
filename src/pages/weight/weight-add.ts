@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
 import { UtilService } from '../../services/utils/util.service';
+import { DateService } from '../../services/utils/date.service';
 
 @Component({
   selector: 'page-weight-add',
@@ -20,7 +21,8 @@ export class WeightAddModal {
   constructor(
     private params: NavParams,
     private viewCtrl: ViewController,
-    private util: UtilService
+    private utilService: UtilService,
+    private dateService: DateService
   ) {
 
     let d = new Date();
@@ -46,9 +48,9 @@ export class WeightAddModal {
   }
 
   saveData() {
-    let d = this.util.changeDataFormat(this.data.date, this.data.time);
+    let d = this.dateService.formatString2Date(this.data.date, this.data.time);
     this.data.dateAt = d.dateObj.getTime();
-    this.data.orderAt = this.util.getOrderTimeDesc(d.dateObj);
+    this.data.orderAt = this.utilService.getOrderTimeDesc(d.dateObj);
     this.dismiss(this.data);
   }
 

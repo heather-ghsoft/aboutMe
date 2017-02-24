@@ -17,11 +17,12 @@ import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
 import { ViewService } from '../services/view/view.service';
 import { UtilService } from '../services/utils/util.service';
+import { DateService } from '../services/utils/date.service';
 import { firebaseConfig } from '../scripts/config';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [ AuthService, DbService, ViewService, UtilService ]
+  providers: [ AuthService, DbService, ViewService, UtilService, DateService ]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -87,7 +88,7 @@ export class MyApp {
         let targetPage;
         if (user && !user.isAnonymous) {
           console.log('logged in ');
-          targetPage = WeightChartPage;
+          targetPage = CalendarPage;
         } else {
           console.log('not logged in ');
           targetPage = LoginPage;

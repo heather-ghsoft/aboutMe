@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-// import { DbService } from '../../services/firebase/firebase.db.service';
+import { DbService } from '../../services/firebase/firebase.db.service';
 // import { ViewService } from '../../services/view/view.service';
 // import { CalendarDayPage } from './calendar-day';
 
@@ -19,12 +19,30 @@ export class CalendarPage {
   }
 
   constructor(
-    private navCtrl: NavController
-    // private db: DbService
+    private navCtrl: NavController,
+    private db: DbService
   ) {}
 
   ngOnInit() {
 
+  }
+
+  getCalendarData(startDate, endDate, callback) {
+    
+    console.log('CalendarPage:: getCalendarData');
+
+    this.db.getWeights_calendar(startDate, endDate, (dataArr) => {
+      let _dataArr = {};
+      dataArr.forEach((d) => {
+        _dataArr[d.date] = [];
+        _dataArr[d.date].push({
+          type: 'weight',
+          value: d.value
+        });
+      });
+      // console.log('CalendarPage:: getWeight: _dataArr: ', _dataArr);
+      callback(_dataArr); 
+    });
   }
   
   selectDate(dayDate) {

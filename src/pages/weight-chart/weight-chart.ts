@@ -24,15 +24,15 @@ export class WeightChartPage {
           beginAtZero: false,
           stepSize: 1
         }
-      }],
-      xAxes: [{
-          type: 'time',
-          time: {
-              displayFormats: {
-                  quarter: 'MM D'
-              }
-          }
       }]
+      // xAxes: [{
+      //     type: 'time',
+      //     time: {
+      //         displayFormats: {
+      //             quarter: 'MM D'
+      //         }
+      //     }
+      // }]
     }
   };
   lineChartColors:Array<any> = [
@@ -79,7 +79,7 @@ export class WeightChartPage {
     // data 에서 x, y 축의 데이터에 맞게 변환
     weightData.forEach((item) => {
       // _xArr.push(this.getColXData(item[this.weightColX]));
-      _xArr.push(item[this.weightColX]);
+      _xArr.push(this.getColXData(item[this.weightColX]));
       _yArr.push(this.getColYData(item[this.weightColY]));
     })
 

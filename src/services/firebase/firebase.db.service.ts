@@ -50,13 +50,11 @@ export class DbService {
     
     ref.orderByChild('order').on('value', (snap) => {
       
-      let todos = [];
+      let dataArr = [];
       snap.forEach((child) => {
-        let todo = child.val();
-        todo._id = child.key;
-        todos.push(todo);
+        dataArr.push(convertChild2Object(child));
       });
-      callback(todos);
+      callback(dataArr);
     });
   }
 
@@ -96,12 +94,30 @@ export class DbService {
       console.log('DbService: getWeights: onValue');
 
       snap.forEach((child) => {
-        let data = child.val();
-        data._id = child.key;
-        dataArr.push(data);
+        dataArr.push(convertChild2Object(child));
       });
       callback(dataArr);
     });
+  }
+
+  getWeights_calendar(startDate, endDate, callback) {
+    console.log('DbService: getWeights_calendar');
+    const ref = this.rootRef.child(`${this.uid()}/weights`);
+
+    ref.orderByChild('dateAt')
+      .startAt(startDate.getTime())
+      .endAt(endDate.getTime())
+      .on('value', (snap) => {
+      
+        let dataArr = [];
+
+        console.log('DbService: getWeights: onValue');
+
+        snap.forEach((child) => {
+          dataArr.push(convertChild2Object(child));
+        });
+        callback(dataArr);
+      });
   }
 
   addWeight(value, callback) {
@@ -130,6 +146,12 @@ export class DbService {
     const ref = this.rootRef.child(`${this.uid()}/weights/${id}`);
     ref.remove();
   }
+}
+
+const convertChild2Object = (child) => {
+  let data = child.val();
+  data._id = child.key;
+  return data;
 }
 
 const pruneObj = (obj) => {

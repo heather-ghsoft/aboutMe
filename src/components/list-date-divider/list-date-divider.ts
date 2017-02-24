@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UtilService } from '../../services/utils/util.service';
+import { DateService } from '../../services/utils/date.service';
 
 @Component({
   selector: 'list-date-divider',
@@ -20,7 +20,7 @@ export class ListDateDivider {
   }
 
   constructor(
-    private util: UtilService
+    private dateService: DateService
   ) {
   }
 
@@ -32,7 +32,7 @@ export class ListDateDivider {
   changeDataFormat(data) {
 
     if (!data) return; 
-    this.date = this.util.changeDataFormat(data.date, data.time);
+    this.date = this.dateService.formatString2Date(data.date, data.time);
 
     // this.year = tempDate[0];
     // this.month = tempDate[1];
@@ -43,7 +43,7 @@ export class ListDateDivider {
     // let d = new Date(this.year, this.month, this.date);
     // console.log('WeightItem:: changeDataFormat: day: ', d.getDay());
 
-    // this.day = this.util.getDayName(d.getDay());
+    // this.day = this.dateService.getDayName(d.getDay());
 
 
   }
