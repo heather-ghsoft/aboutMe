@@ -29,6 +29,7 @@ import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
 import { ViewService } from '../services/view/view.service';
 import { UtilService } from '../services/utils/util.service';
+import { DateService } from '../services/utils/date.service';
 
 import { MapFilter } from '../filters/MapFilter';
 import { TodoFilter } from '../pages/todo-list/todoFilter';
@@ -81,6 +82,7 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     DbService,
     ViewService,
     UtilService, 
+    DateService,
     {
       provide: ErrorHandler, 
       useClass: IonicErrorHandler
