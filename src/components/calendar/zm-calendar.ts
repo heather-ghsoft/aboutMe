@@ -1,5 +1,6 @@
 import { Component, NgZone, Input, Output, EventEmitter } from '@angular/core';
 import { DateService } from '../../services/utils/date.service';
+import _ from "lodash";
 
 @Component({
   selector: 'zm-calendar',
@@ -47,52 +48,55 @@ export class ZmCalendar {
 
     console.log('ZmCalendar: calcData');
 
+    // 초기화
     this.year = currDate.getFullYear();
     this.month = currDate.getMonth();
+    
     this.startEmptyDay = [];
     this.endEmptyDay = [];
     this.days = [];
-    let _days = [];
 
-    let startDate = new Date(currDate.getTime());
-    startDate.setDate(1);
-    let startDay = startDate.getDay();
+    // 변수 선언
+    let _startEmptyDay: any[] = [];
+    let _endEmptyDay: any[] = [];
+    let _days: any[] = [];
 
-    let endDate = new Date(startDate.getTime());
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(endDate.getDate() - 1);
-    let endDay = endDate.getDay();
+    let _cal = this.calcCalendarDate(currDate);
 
-    this.getData.next([startDate, endDate, (data) => {
+    this.getData.next([_cal.firstDate, _cal.lastDate, (calData) => {
 
-      console.log('ZmCalendar:: calcData: getData: ', data);
+      console.log('ZmCalendar:: calcData: getData: ', calData);
 
-      for(let i = 0; i < startDay; i++) {
-        this.startEmptyDay.push({});
-      }
-      for(let i = 6; i > endDay; i--) {
-        this.endEmptyDay.push({});
-      }
+      let allDays = (_cal.lastDate - _cal.firstDate)/1000/60/60/24;
 
-      let lastDay = endDate.getDate();
-      for(let i = 1; i < lastDay + 1; i++) {
+      for(let i = 0; i < allDays + 1; i++) {
+
+        let _date: any;
+        let _fullDateStr: string;
+        let _day: any;
         
-        let _date = new Date(currDate.getTime());
-        _date.setDate(i);
+        _date = _.cloneDeep(_cal.firstDate);
+        _date.setDate(_date.getDate() + i);
 
-        let _monthStr = this.dateService.formatTwoString(this.month + 1);
-        let _dateStr = this.dateService.formatTwoString(i);
-        let _fullDateStr = `${this.year}-${_monthStr}-${_dateStr}`;
-
-        let _day = {
+        _fullDateStr = this.dateService.formatDate2String(_date, true);
+        _day = {
           date: _date,
-          data: data[_fullDateStr] || {} //this.getDateData()
+          data: calData[_fullDateStr] || {} //this.getDateData()
         }
-        _days.push(_day);
+
+        if ( _date < _cal.startDate ) {
+          _startEmptyDay.push(_day);
+        } else if ( _date > _cal.endDate ) {
+          _endEmptyDay.push(_day);
+        } else {
+          _days.push(_day);
+        }
       }
         
       this.zone.run(() => {
         this.days = _days;
+        this.startEmptyDay = _startEmptyDay;
+        this.endEmptyDay = _endEmptyDay;
       });
     }]);
   }
@@ -109,6 +113,52 @@ export class ZmCalendar {
 
   selectDate(data) {
     this.dayClickEvent.next(data);
+  }
+
+  calcCalendarDate(_currDate) {
+
+    let _startDate: Date = null;
+    let _startDay: number = 0;
+    let _endDate: Date = null;
+    let _endDay: number = 0;
+    let _firstDate: Date = null;
+    let _lastDate: Date = null;
+
+    let _result: any = null;
+
+    // 이번달의 시작 날짜 
+    _startDate = new Date(_currDate.getTime());
+    _startDate.setDate(1);
+
+    // 이번달의 시작 요일
+    _startDay = _startDate.getDay();
+
+    // 이번달의 마지막 날짜 
+    _endDate = new Date( _startDate.getTime() );
+    _endDate.setMonth( _endDate.getMonth() + 1 );
+    _endDate.setDate( _endDate.getDate() - 1 );
+    // 이번달의 마지막 요일
+    _endDay = _endDate.getDay();
+
+    // 이번 달의 첫째날 (첫째주 일요일)
+    _firstDate = _.cloneDeep(_startDate);
+    _firstDate.setDate( _firstDate.getDate() - _firstDate.getDay() );
+
+    // 이번 달의 마지막날 (마지막주 토요일)
+    _lastDate = _.cloneDeep(_endDate);
+    _lastDate.setDate( _lastDate.getDate() + 6 - _lastDate.getDay() );
+
+    _result = {
+      startDate: _startDate,
+      startDay: _startDay,
+      endDate: _endDate,
+      endDay: _endDay,
+      firstDate: _firstDate,
+      lastDate: _lastDate
+    }
+
+    return _result;
+
   }
 
   monthDec() {

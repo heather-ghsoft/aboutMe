@@ -49,9 +49,9 @@ export class DateService {
   }
   
   // alert(formatDate('Sun May 11,2014'));
-  formatDate2String(date) {
+  formatDate2String(date, isDate) {
 
-    let d     = new Date(date);
+    let d     = isDate ? date : new Date(date);
     let month = d.getMonth() + 1;
     let day   = d.getDate();
     let year  = d.getFullYear();
