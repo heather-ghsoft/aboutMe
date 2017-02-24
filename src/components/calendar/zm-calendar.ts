@@ -170,6 +170,14 @@ export class ZmCalendar {
     this.currDate.setMonth(this.currDate.getMonth() + 1);
     this.calcData(this.currDate);
   }
+
+  swipeEvent(event) {
+    if (event.direction === 2) {
+      this.monthInc();
+    } else if (event.direction === 4){
+      this.monthDec();
+    }
+  }
 }
 
 
