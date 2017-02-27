@@ -80,30 +80,51 @@ export class ZmLineChart implements OnChanges{
     console.log('ZmLineChart:: drawGraph');
 
     const el:any = this.elem.nativeElement;
-    const margin = {top: 10, right: 10, bottom: 30, left: 40};
+    const margin = {top: 20, right: 10, bottom: 30, left: 40};
 
-    const divW = el.offsetWidth;      // div width
-    const divH = el.offsetHeight;      // div height
+    // 디렉티브 div
+    const divW = el.offsetWidth;
+    const divH = el.offsetHeight;
 
-    const chtW = divW - margin.left - margin.right; // 20 * _graphData.length;
-    const chtH = divH - margin.top - margin.bottom;   // chart height
+    // svg를 감싸고 있는 div
+    const wrapW = divW;  
+    const wrapH = divH;
 
-    const svgW = divW;  // chtW + margin.left + margin.right;
-    const svgH = divH;
+    // chart 내 x축 y축 기준
+    const chtW = divW - margin.left;
+    const chtH = divH - margin.top - margin.bottom;   
+
+    const svgW = 30 * _graphData.length;
+    const svgH = divH - 10;
     // const axisW = divW - margin.left - margin.right;   // chart width
 
-
-    if (el.children.length) {
-      d3.select(el.children[0]).remove();
+    console.log('el: ', el.children.length);
+    for (let i = el.children.length - 1 ; i > -1; i--) {
+      console.log('el.children[' + i + ']: ', el.children[i]);
+      d3.select(el.children[i]).remove();
     }
+    console.log('el2: ', el.children.length);
 
     // draw chart start
     const div = d3.select(el);
+    const svg_yaxis = div.append('svg')
+      .attr('class', 'svg_yAxis')
+      .attr('width', divW)
+      .attr('height', svgH);
 
-    const svg = div.append('svg').attr('width', svgW).attr('height', svgH);
+    const divWrap = div
+      .append('div')
+      .attr('class', 'chartWrapper')
+      .style('width', wrapW + 'px')
+      .style('height', wrapH + 'px');
+    const svg = divWrap
+      .append('svg')
+      .attr('width', svgW)
+      .attr('height', svgH);
     
+    const g_yaxis = svg_yaxis.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    const x = d3.scaleTime().rangeRound([0, chtW]);
+    const x = d3.scaleTime().rangeRound([0, svgW - 80]);
     const y = d3.scaleLinear().rangeRound([chtH, 0]);
 
     const line = d3.line()
@@ -121,12 +142,45 @@ export class ZmLineChart implements OnChanges{
     const yDomain = d3.extent(_graphData, d => d.y);
     // -
 
-    const xAxis = d3.axisBottom(x);//.tickArguments([d3.timeDate.every(15)]);
-
     // x, y 축 범위 지정 
     x.domain(xDomain);
-    y.domain([yDomain[0] - 4, yDomain[1] + 1]);
+    y.domain([yDomain[0] - 2, yDomain[1] + 0.5]);
 
+    const xAxis = d3.axisBottom(x);//.tickArguments([d3.timeDate.every(15)]);
+    const yAxis = d3.axisLeft(y);//.tickArguments([d3.timeDate.every(15)]);
+
+    g.append("g")
+        .attr("transform", "translate(0," + chtH + ")")
+        .call(xAxis);
+        // .select(".domain")
+        // .remove();
+
+    g_yaxis.append("g")
+        .call(yAxis)
+        .attr('class', 'y axis')
+        .append("text")
+        .attr("fill", "#565A5B")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .text("Weight (kg)");
+
+    d3.selectAll("g.y.axis g.tick line")
+    .attr("x2", function(d: number){
+        //d for the tick line is the value
+        //of that tick 
+        //(a number between 0 and 1, in this case)
+       console.log('d: ', d);
+       if ( !(d % 1) ) //if it's an even multiple of 10%
+           return chtW;
+       // else
+           // return 4;
+    });
+
+
+    // 그래프 영역
+    // 그래프 데이터 면적 
     g.append("path")
         .datum(_graphData)
         .attr("fill", "#ffced0")
@@ -137,6 +191,7 @@ export class ZmLineChart implements OnChanges{
         .attr("stroke-width", 1.5)
         .attr("d", area);
 
+    // 그래프 데이터 선 
     g.append("path")
         .datum(_graphData)
         .attr("fill", "none")
@@ -146,22 +201,6 @@ export class ZmLineChart implements OnChanges{
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
         .attr("d", line);
-
-    g.append("g")
-        .attr("transform", "translate(0," + chtH + ")")
-        .call(xAxis);
-        // .select(".domain")
-        // .remove();
-
-    g.append("g")
-        .call(d3.axisLeft(y))
-        .append("text")
-        .attr("fill", "#565A5B")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", "0.71em")
-        .attr("text-anchor", "end")
-        .text("Weight (kg)");
 
     this.drawing = false;
   }

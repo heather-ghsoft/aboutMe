@@ -7,4 +7,17 @@
   .tick text { 
     color: map-get($colors, text); 
   }
+
+  .zm-line-chart {
+    position: relative;
+  }
+  
+  .chartWrapper {
+    position: absolute;
+    overflow: auto;
+  }
+
+  .svg_yAxis {
+    position: absolute;
+  }
 }

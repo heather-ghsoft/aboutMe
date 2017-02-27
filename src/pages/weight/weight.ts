@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { ModalController } from 'ionic-angular';
+import { ModalController, Content } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
 import { WeightAddModal } from './weight-add';
 
@@ -18,7 +18,8 @@ export class WeightPage {
   constructor(
     private zone: NgZone,
     private db: DbService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private content: Content
   ) {
     
     console.log('WeightListPage: constructor');
@@ -28,6 +29,12 @@ export class WeightPage {
 
   ngOnInit() {
     console.log('WeightListPage: ngOnInit');
+  }
+
+  ngAfterViewInit() {
+    this.content.ionScroll.subscribe((event) =>  {
+      console.log('WeightPage: onScroll: ', event);
+    });  
   }
 
   // keypressNewData (event) {
@@ -91,5 +98,6 @@ export class WeightPage {
     console.log('WeightListPage:: updateData: data', data);
     if(data.value === '') return;
     this.db.updateWeight(data);
-  }  
+  } 
+
 }

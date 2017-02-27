@@ -24,15 +24,15 @@ export class WeightChartPage {
           beginAtZero: false,
           stepSize: 1
         }
+      }],
+      xAxes: [{
+          type: 'time',
+          time: {
+              displayFormats: {
+                  quarter: 'MM D'
+              }
+          }
       }]
-      // xAxes: [{
-      //     type: 'time',
-      //     time: {
-      //         displayFormats: {
-      //             quarter: 'MM D'
-      //         }
-      //     }
-      // }]
     }
   };
   lineChartColors:Array<any> = [
@@ -103,9 +103,10 @@ export class WeightChartPage {
     _ticks.min = _.min(_yArr) - 5;
   }
 
-  getColXData(x: number): string {
+  getColXData(x: number): any {
+  
     let _d = new Date(x);
-    return _.toString(_d.getDate());
+    return _d;//_.toString(_d.getDate());
   }
 
   getColYData(y) {
