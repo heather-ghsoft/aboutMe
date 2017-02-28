@@ -76,8 +76,7 @@ export class ListDateDivider {
         this.renderer.setElementStyle(this.elem.nativeElement, 'top', '44px');
       }
     } else {
-      console.log('currentTop: ', currentTop, ', this.offsetTop :', this.offsetTop);
-      if (currentTop < this.offsetTop + 10) {
+      if (currentTop < this.offsetTop + 2) {
         this.renderer.setElementStyle(this.elem.nativeElement, 'position', 'relative');
         this.renderer.setElementStyle(this.elem.nativeElement, 'top', '0px');
       }

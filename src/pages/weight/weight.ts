@@ -36,7 +36,7 @@ export class WeightPage {
 
   ngAfterViewInit() {
     this.content.ionScroll.subscribe((event) =>  {
-      // this.zone.run(() => this.scrollTop = event.scrollTop);
+      this.zone.run(() => this.scrollTop = event.scrollTop);
     });  
     this.content.ionScrollEnd.subscribe((event) =>  {
       this.zone.run(() => this.scrollTop = event.scrollTop);
