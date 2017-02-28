@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef, Renderer } from '@angular/core';
+import { Content } from 'ionic-angular';
 import { DateService } from '../../services/utils/date.service';
 
 @Component({
@@ -12,7 +13,13 @@ import { DateService } from '../../services/utils/date.service';
 })
 
 export class ListDateDivider {
+
   @Input() data;
+  @Input() scrollTop;
+  @Input() dividers;
+
+  dividerIndex = 0;
+  offsetTop = 0;
   date;
   
   track($event) {
@@ -20,7 +27,9 @@ export class ListDateDivider {
   }
 
   constructor(
-    private dateService: DateService
+    private dateService: DateService,
+    private elem: ElementRef,
+    public renderer: Renderer
   ) {
   }
 
@@ -29,22 +38,54 @@ export class ListDateDivider {
     this.changeDataFormat(this.data);
   }
 
+
+  ngAfterViewInit() {
+
+    this.renderer.setElementStyle(this.elem.nativeElement, 'width', '100%');
+    this.dividerIndex = this.dividers.length - 1;
+    this.renderer.setElementStyle(this.elem.nativeElement, 'z-index', 9999 + this.dividerIndex + '' );
+    this.dividers.push = {
+      'fixed': false,
+      'offsetTop': this.elem.nativeElement.offsetTop
+    };
+    this.offsetTop = this.elem.nativeElement.offsetTop;
+  }
+
+
+  ngOnChanges(changes) {
+    this.changePosition(changes.scrollTop.previousValue, changes.scrollTop.currentValue);
+  }
+
   changeDataFormat(data) {
 
     if (!data) return; 
     this.date = this.dateService.formatString2Date(data.date, data.time);
+  }
+  
+  changePosition(previousTop, currentTop) {
+    
+    if (currentTop === undefined) return;
 
-    // this.year = tempDate[0];
-    // this.month = tempDate[1];
-    // this.date = tempDate[2];
-    // this.hour = tempTime[0];
-    // this.minute = tempTime[1];
+    let isPlus = false;
 
-    // let d = new Date(this.year, this.month, this.date);
-    // console.log('WeightItem:: changeDataFormat: day: ', d.getDay());
+    if (previousTop <= currentTop) isPlus = true;
 
-    // this.day = this.dateService.getDayName(d.getDay());
+    if (isPlus) {
+      if (currentTop + 48 > this.offsetTop) {
+        this.renderer.setElementStyle(this.elem.nativeElement, 'position', 'fixed');
+        this.renderer.setElementStyle(this.elem.nativeElement, 'top', '44px');
+      }
+    } else {
+      console.log('currentTop: ', currentTop, ', this.offsetTop :', this.offsetTop);
+      if (currentTop < this.offsetTop + 10) {
+        this.renderer.setElementStyle(this.elem.nativeElement, 'position', 'relative');
+        this.renderer.setElementStyle(this.elem.nativeElement, 'top', '0px');
+      }
+    }
+  }
 
-
+  moveScroll() {
+    // const el:any = this.elem.nativeElement;
+    //this.divider.push();
   }
 }

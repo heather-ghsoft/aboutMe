@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { ModalController, Content } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
 import { WeightAddModal } from './weight-add';
@@ -9,17 +9,20 @@ import { WeightAddModal } from './weight-add';
 })
 
 export class WeightPage {
+
+  @ViewChild(Content) content: Content;
   
   dataArr: Array<any> = [];
   editMode: boolean;
   newValue: string = "";
   newDate: Date = new Date();
+  scrollTop: number;
+  dividers: any[] = [];
 
   constructor(
     private zone: NgZone,
     private db: DbService,
-    private modalCtrl: ModalController,
-    private content: Content
+    private modalCtrl: ModalController
   ) {
     
     console.log('WeightListPage: constructor');
@@ -33,7 +36,10 @@ export class WeightPage {
 
   ngAfterViewInit() {
     this.content.ionScroll.subscribe((event) =>  {
-      console.log('WeightPage: onScroll: ', event);
+      // this.zone.run(() => this.scrollTop = event.scrollTop);
+    });  
+    this.content.ionScrollEnd.subscribe((event) =>  {
+      this.zone.run(() => this.scrollTop = event.scrollTop);
     });  
   }
 
