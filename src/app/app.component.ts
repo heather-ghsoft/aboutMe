@@ -15,6 +15,7 @@ import { WeightChartD3Page } from '../pages/weight-chart/weight-chart-d3';
 
 import { AuthService } from '../services/firebase/firebase.auth.service';
 import { DbService } from '../services/firebase/firebase.db.service';
+import { StorageService } from '../services/firebase/firebase.storage.service';
 import { ViewService } from '../services/view/view.service';
 import { UtilService } from '../services/utils/util.service';
 import { DateService } from '../services/utils/date.service';

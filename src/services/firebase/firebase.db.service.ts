@@ -146,6 +146,72 @@ export class DbService {
     const ref = this.rootRef.child(`${this.uid()}/weights/${id}`);
     ref.remove();
   }
+
+
+  getDiaries(isDesc, callback) {
+    console.log('DbService: getDiary');
+    const ref = this.rootRef.child(`${this.uid()}/diary`);
+    const descCol = isDesc ? 'orderAt': 'dateAt';
+
+    ref.orderByChild(descCol).on('value', (snap) => {
+      
+      let dataArr = [];
+
+      console.log('DbService: getDiary: onValue');
+
+      snap.forEach((child) => {
+        dataArr.push(convertChild2Object(child));
+      });
+      callback(dataArr);
+    });
+  }
+
+  getDiaryList_calendar(startDate, endDate, callback) {
+    console.log('DbService: getDiary_calendar');
+    const ref = this.rootRef.child(`${this.uid()}/diary`);
+
+    ref.orderByChild('dateAt')
+      .startAt(startDate.getTime())
+      .endAt(endDate.getTime())
+      .on('value', (snap) => {
+      
+        let dataArr = [];
+
+        console.log('DbService: getDiary: onValue');
+
+        snap.forEach((child) => {
+          dataArr.push(convertChild2Object(child));
+        });
+        callback(dataArr);
+      });
+  }
+
+  addDiary(value, callback) {
+    console.log('DbService:: addDiary: value: ', value);
+    value.createdAt = { ".sv": "timestamp" };
+    value.lastModifiedAt = value.createdAt;
+    delete value._id;
+    
+    value = pruneObj(value);
+    return this.rootRef.child(`${this.uid()}/diary`).push(value).then(callback);
+  }
+
+  updateDiary(value) {
+    console.log('DbService:: updateDiary: value: ', value);
+    const ref = this.rootRef.child(`${this.uid()}/diary/${value._id}`);
+
+    value.lastModifiedAt = { ".sv": "timestamp" };
+    delete value._id;
+
+    value = pruneObj(value);
+    return ref.update(value);
+  }
+
+  deleteDiary(id) {
+    console.log('DbService:: deleteDiary: id: ', id);
+    const ref = this.rootRef.child(`${this.uid()}/diary/${id}`);
+    ref.remove();
+  }
 }
 
 const convertChild2Object = (child) => {

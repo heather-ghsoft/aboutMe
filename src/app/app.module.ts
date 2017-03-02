@@ -11,6 +11,7 @@ import { RegisterPage } from '../pages/register/register';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { CalendarPage } from '../pages/calendar/calendar';
 import { DiaryPage } from '../pages/diary/diary';
+import { DiaryAddModal } from '../pages/diary/diary-add';
 import { WeightPage } from '../pages/weight/weight';
 import { WeightAddModal } from '../pages/weight/weight-add';
 import { WeightChartPage } from '../pages/weight-chart/weight-chart';
@@ -48,6 +49,7 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     WeightChartPage,
     WeightChartD3Page,
     DiaryPage,
+    DiaryAddModal,
     ZmCalendar,
     ZmCalendarDay,
     ListDateDivider,
@@ -72,7 +74,8 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     WeightAddModal,
     WeightChartPage,
     WeightChartD3Page,
-    DiaryPage
+    DiaryPage,
+    DiaryAddModal
   ],
   providers: [
     AuthService,

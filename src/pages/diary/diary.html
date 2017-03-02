@@ -3,15 +3,23 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title color="primary">Calendar</ion-title>
+    <ion-title color="primary">Diary</ion-title>
     <ion-buttons end>
-      <!-- <button ion-button icon-only (click)=" writeDiary() "> -->
-        <!-- <ion-icon name="create"></ion-icon> -->
-      <!-- </button> -->
+      <button ion-button icon-only (click)=" openAddData() ">
+        <ion-icon name="add"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <zm-calendar [types]="types" (dayClickEvent)=" selectDate($event) "></zm-calendar>
+  <ion-list>
+    <div *ngFor=" let data of dataArr; let i = index ">
+      <list-date-divider [data]="data" [scrollTop]="scrollTop" [dividers]="dividers" *ngIf="i === 0 || dataArr[i].date.substr(0, 7) !== dataArr[i-1].date.substr(0, 7)" ></list-date-divider>
+      <weight-item [data]="data" (onDelete)="deleteData($event)" (onEdit)="editData($event)"></weight-item>
+    </div>
+  </ion-list>
+  <div class="div_content">
+    <p *ngIf="!dataArr.length">식단을 기록하세요 :)</p>
+  </div>
 </ion-content>

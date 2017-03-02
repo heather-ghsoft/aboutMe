@@ -5,7 +5,7 @@ weight-item {
     height: 60px;
   }
   .item_left {
-    width: 60px;
+    width: 80px;
     height: 100%;
     border-right: 1px solid map-get($colors, light);
     display: flex;
@@ -29,6 +29,7 @@ weight-item {
     color: map-get($colors, text);
   }
   .item_content {
+    width: 100%;
     display: flex;
     padding: 8px 14px 5px 14px;
     flex-flow: column nowrap;

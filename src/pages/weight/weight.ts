@@ -16,7 +16,7 @@ export class WeightPage {
   editMode: boolean;
   newValue: string = "";
   newDate: Date = new Date();
-  scrollTop: number;
+  scrollTop: number = 0;
   dividers: any[] = [];
 
   constructor(
@@ -35,25 +35,28 @@ export class WeightPage {
   }
 
   ngAfterViewInit() {
-    this.content.ionScroll.subscribe((event) =>  {
-      this.zone.run(() => this.scrollTop = event.scrollTop);
+    this.content.ionScroll.subscribe((event) => {
+      this.saveScrollTop(event.scrollTop);
     });  
     this.content.ionScrollEnd.subscribe((event) =>  {
-      this.zone.run(() => this.scrollTop = event.scrollTop);
+      this.saveScrollTop(event.scrollTop);
     });  
   }
 
-  // keypressNewData (event) {
-  //   var code = event.keyCode || event.which;
-  //   if( code === 13 )
-  //   {
-  //     if( event.srcElement.tagName === "INPUT" )
-  //     {
-  //       event.preventDefault();
-  //       this.addData();
-  //     }
-  //   }
-  // }
+  ngOnChanges(changes) {
+    console.log('WeightPage:: changes: ', changes);
+  }
+
+  // previousTop = 0;
+  saveScrollTop(scrollTop) {
+    for(let i = 0; i < this.dividers.length; i++) {
+      const divider = this.dividers[i];
+      if ((scrollTop + 100 > divider.offsetTop && !divider.fixed) || (scrollTop < divider.offsetTop + 40 && divider.fixed)) {
+        this.zone.run(() => this.scrollTop = scrollTop);
+        break;
+      }
+    }
+  }
 
   getData() {
     this.db.getWeights(true, (dataArr) => {
@@ -62,14 +65,6 @@ export class WeightPage {
     });
   }
 
-  // getWeight() {
-  //   this.db.getWeight().then((weights) => {
-      
-  //     console.log(weights);
-  //     this.weights = weights;
-  //     console.log('WeightListPage:: getWeight: ', this.weights);
-  //   });
-  // }
   openAddData() {
     let weightAddModal = this.modalCtrl.create(WeightAddModal);
     weightAddModal.onDidDismiss(data => {
