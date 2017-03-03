@@ -18,7 +18,6 @@ export class ListDateDivider {
   @Input() data;
   @Input() scrollTop;
   @Input() dividers;
-  @Input('isFixedOnTop') isFixedOnTop;
 
   dividerIndex = 0;
   offsetTop = 0;
@@ -27,7 +26,6 @@ export class ListDateDivider {
     month: ''
   };
   isFixed = false;
-  fixedOnTop = false;
   
   constructor(
     private zone: NgZone,
@@ -43,55 +41,20 @@ export class ListDateDivider {
 
   ngAfterViewInit() {
     this.renderer.setElementStyle(this.elem.nativeElement, 'width', '100%');
-    // console.log('ngAfterViewInit:: isFixedOnTop: ', this.isFixedOnTop);
-    this.fixedOnTop = (this.isFixedOnTop !== 'false');
-
-    if (this.fixedOnTop) {
-      // this.renderer.setElementStyle(this.elem.nativeElement, 'display', 'none');
-      this.renderer.setElementStyle(this.elem.nativeElement, 'z-index', '9999');
-      // this.renderer.setElementStyle(this.elem.nativeElement, 'position', 'fixed');
-      // this.renderer.setElementStyle(this.elem.nativeElement, 'top', '43px');
-    } else {
-      this.dividerIndex = this.dividers.length;
-      if (this.dividerIndex === 0) {
-        this.renderer.setElementStyle(this.elem.nativeElement, 'display', 'none');
-      }
-      this.renderer.setElementStyle(this.elem.nativeElement, 'z-index', '9990');
-      this.dividers.push({
-        'fixed': (this.dividerIndex === 0) ? true : false,
-        'offsetTop': this.elem.nativeElement.offsetTop,
-        'year': this.date.year,
-        'month': this.date.month
-      });
-      this.offsetTop = this.elem.nativeElement.offsetTop;
-      console.log('this.dividerIndex: ', this.dividerIndex);
-      console.log('(this.dividerIndex === 0) ? true : false: ', (this.dividerIndex === 0) ? true : false);
-      console.log('this.dividers: ', this.dividers[this.dividers.length-1].fixed);
-    }
+    this.dividerIndex = this.dividers.length;
+    this.renderer.setElementStyle(this.elem.nativeElement, 'z-index', '9990');
+    this.dividers.push({
+      'fixed': (this.dividerIndex === 0) ? true : false,
+      'offsetTop': this.elem.nativeElement.offsetTop,
+      'year': this.date.year,
+      'month': this.date.month
+    });
+    this.offsetTop = this.elem.nativeElement.offsetTop;
   }
 
 
   ngOnChanges(changes) {
-
-    if (this.fixedOnTop) {
-      for(let i = this.dividers.length - 1; i > -1; i--) {
-        let _data = this.dividers[i];
-        console.log('_data.fixed:: ', _data.fixed); 
-        if (_data.fixed) {
-          console.log('_data:: ', _data);
-          this.renderer.setElementStyle(this.elem.nativeElement, 'display', 'block');
-          this.zone.run(() =>
-            this.date = {
-              year: _data.year,
-              month: _data.month
-            }
-          );
-          return;
-        }
-      }
-    } else {
-      this.changePosition(changes.scrollTop.previousValue, changes.scrollTop.currentValue);
-    }
+    // this.changePosition(changes.scrollTop.previousValue, changes.scrollTop.currentValue);
   }
 
   changeDataFormat(data) {
@@ -106,7 +69,7 @@ export class ListDateDivider {
 
     if (previousTop <= currentTop) {
       // 스크롤 내릴 때
-      if (currentTop + 1 > this.offsetTop) {
+      if (currentTop + 24 > this.offsetTop) {
         this.renderer.setElementStyle(this.elem.nativeElement, 'display', 'none');
       } else {
         _isFixed = false;

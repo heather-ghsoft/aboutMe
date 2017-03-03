@@ -13,10 +13,9 @@
 </ion-header>
 
 <ion-content>
-  <list-date-divider isFixedOnTop="true" [data]="dataArr[0]" [scrollTop]="scrollTop" [dividers]="dividers"></list-date-divider>
   <ion-list>
     <div *ngFor=" let data of dataArr; let i = index ">
-      <list-date-divider isFixedOnTop="false" [data]="data" [scrollTop]="scrollTop" [dividers]="dividers" *ngIf="i === 0 || dataArr[i].date.substr(0, 7) !== dataArr[i-1].date.substr(0, 7)" ></list-date-divider>
+      <list-date-divider [data]="data" [scrollTop]="scrollTop" [dividers]="dividers" *ngIf="i === 0 || dataArr[i].date.substr(0, 7) !== dataArr[i-1].date.substr(0, 7)" ></list-date-divider>
       <weight-item [data]="data" (onDelete)="deleteData($event)" (onEdit)="editData($event)"></weight-item>
     </div>
   </ion-list>
