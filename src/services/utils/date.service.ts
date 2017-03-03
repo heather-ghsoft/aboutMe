@@ -47,7 +47,7 @@ export class DateService {
 
     return result;
   }
-  
+
   // alert(formatDate('Sun May 11,2014'));
   formatDate2String(date, isDate) {
 
@@ -57,6 +57,16 @@ export class DateService {
     let year  = d.getFullYear();
 
     return `${year}-${this.formatTwoString(month)}-${this.formatTwoString(day)}`;
+  }
+  
+  // alert(formatDate('Sun May 11,2014'));
+  formatDate2TimeString(date, isDate) {
+
+    let d     = isDate ? date : new Date(date);
+    let hour  = d.getHours();
+    let min   = d.getMinutes();
+
+    return `${this.formatTwoString(hour)}:${this.formatTwoString(min)}`;
   }
 
   formatTwoString(num) {

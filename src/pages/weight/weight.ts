@@ -70,16 +70,10 @@ export class WeightPage {
     weightAddModal.onDidDismiss(data => {
       // firebase save
       if (data === null) return;
-      this.addData(data);
+      // this.addData(data);
     });
     weightAddModal.present();
   }
-
-  addData(data) {
-    console.log('WeightListPage:: addData: data', data);
-    if(data.value === '') return;
-    this.db.addWeight(data, () => {});
-  }  
 
   deleteData(id) {
     this.db.deleteWeight(id);

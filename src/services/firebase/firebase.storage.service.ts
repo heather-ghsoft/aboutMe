@@ -1,58 +1,69 @@
 import { Injectable } from '@angular/core';
 import { Info } from '../../info';
-import 'firebase';
+import firebase from 'firebase';
 import { Observable, Observer } from 'rxjs';
-
-declare var firebase: any;
+import { DateService } from '../utils/date.service';
 
 @Injectable()
 export class StorageService {
-  rootRef: any;
-  constructor() {
+  dataRef: any;
+  storageRef: any;
+  constructor(
+    private dateService: DateService
+  ) {
     setTimeout(() => {
-      this.rootRef = firebase.storage().ref();
-      console.log('firebase storage rootRef:', this.rootRef);
+      this.dataRef = firebase.database().ref();
+      this.storageRef = firebase.storage().ref();
     });
   }
 
-  getFileUrl(path:string): Promise<string> {
-    return this.rootRef.child(path).getDownloadURL();
+  uid() {
+    return firebase.auth().currentUser.uid;
   }
 
-  getFileMetadata(path:string): Promise<any> {
-    return this.rootRef.child(path).getMetadata();
+  // addDiaryPhotos(id, photos): firebase.Promise<any> {
+  addDiaryPhotos(id, photos, newPhotos, isPhotoChaged, callback) {
+
+    if (photos !== null) {
+
+
+      if (isPhotoChaged) {
+        for (let i = 0; i < photos.length; i++) {
+          let index = i;
+          this.dataRef.child(`${this.uid()}/diary/${id}/photos/${index}`)
+            .set(photos[i]);
+        }
+      }
+
+      let count = 0;
+      for (let i = 0; i < newPhotos.length; i++) {
+        // console.log('Storage:: addDiaryPhotos: photo: ', photos[i]);
+        let fileName = this.createFileName(i);
+        this.storageRef.child(`${this.uid()}/diary/${id}/${fileName}.png`)
+          .putString(newPhotos[i], firebase.storage.StringFormat.BASE64, {contentType: 'image/png'})
+          .then((savedPhoto) => {
+            console.log('Storage:: addDiaryPhotos: downloadURL: ', savedPhoto.downloadURL);
+            let index = photos.length + i;
+            this.dataRef.child(`${this.uid()}/diary/${id}/photos/${index}`)
+              .set(savedPhoto.downloadURL);
+          })
+          .then((result) => {
+            count++;
+            if (count === newPhotos.length) {
+              callback();
+            }
+          })
+          .catch((err) => {
+            console.log('Storage:: addDiaryPhotos: err: ', err);
+            callback();
+          }); 
+      }
+    }
   }
 
-  removeAvatar(userId: string): Promise<any> {
-    const url = `avatars/${userId}/avatar.jpg`;
-    return this.rootRef.child(url).delete();
-  }
-
-  uploadAvatarOf(userId: string, file: any): Observable<any> {
-    const fileName = 'avatar.jpg';
-    const url = `avatars/${userId}/${fileName}`;
-    const metadata = {
-      name: fileName,
-      contentType: 'image/jpeg',
-    };
-    console.log('uploadAvatarOf', userId, url);
-    console.log('file', file);
-    const ref = this.rootRef.child(url);
-    console.log('fulpath of new file', ref.fullPath);
-    return toObservable(ref, file, metadata);
-  }
-
-  uploadAttachmentOfPost(postId: string, file: any): Observable<any> {
-    const fileName = (file.hasOwnProperty('name') ? validateKey(file.name) : false) ? file.name : Date.now();
-    console.log('uploadAttachmentOfPost: filename:', fileName);
-    const url = `posts/${postId}/${fileName}`;
-
-    const metadata = {
-      name: fileName,
-      contentType: 'image/jpeg',
-    };
-    const ref = this.rootRef.child(url);
-    return toObservable(ref, file, metadata);
+  createFileName(tailName) {
+    let d = new Date();
+    return `${this.dateService.formatDate2String(d, true)} ${this.dateService.formatDate2TimeString(d, true)}_${tailName}`;
   }
 }
 

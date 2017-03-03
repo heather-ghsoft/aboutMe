@@ -1,7 +1,8 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { ModalController, Content } from 'ionic-angular';
+import { ModalController, NavController, Content } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
 import { DiaryAddModal } from './diary-add';
+import { DiaryDetailPage } from './diary-detail';
 
 @Component({
   selector: 'page-diary',
@@ -22,6 +23,7 @@ export class DiaryPage {
   constructor(
     private zone: NgZone,
     private db: DbService,
+    private navCtrl: NavController,
     private modalCtrl: ModalController
   ) {
     
@@ -75,16 +77,10 @@ export class DiaryPage {
     diaryAddModal.onDidDismiss(data => {
       // firebase save
       if (data === null) return;
-      this.addData(data);
+      // this.addData(data);
     });
     diaryAddModal.present();
   }
-
-  addData(data) {
-    console.log('DiaryPage:: addData: data', data);
-    if(data.value === '') return;
-    this.db.addDiary(data, () => {});
-  }  
 
   deleteData(id) {
     this.db.deleteDiary(id);
@@ -105,5 +101,13 @@ export class DiaryPage {
     if(data.value === '') return;
     this.db.updateDiary(data);
   } 
+
+  go2Detail(id) {
+    console.log('id:: ', id);
+    let params = {
+      id: id
+    }
+    this.navCtrl.push(DiaryDetailPage, params);
+  }
 
 }

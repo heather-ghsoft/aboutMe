@@ -16,7 +16,7 @@
   <ion-list>
     <div *ngFor=" let data of dataArr; let i = index ">
       <list-date-divider [data]="data" [scrollTop]="scrollTop" [dividers]="dividers" *ngIf="i === 0 || dataArr[i].date.substr(0, 7) !== dataArr[i-1].date.substr(0, 7)" ></list-date-divider>
-      <weight-item [data]="data" (onDelete)="deleteData($event)" (onEdit)="editData($event)"></weight-item>
+      <diary-item [data]="data" (onDelete)="deleteData($event)" (onEdit)="editData($event)" (click)="go2Detail(data._id)"></diary-item>
     </div>
   </ion-list>
   <div class="div_content">

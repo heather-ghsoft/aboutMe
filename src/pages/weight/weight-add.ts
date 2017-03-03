@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
 import { UtilService } from '../../services/utils/util.service';
 import { DateService } from '../../services/utils/date.service';
+import { DbService } from '../../services/firebase/firebase.db.service';
 
 @Component({
   selector: 'page-weight-add',
@@ -20,6 +21,7 @@ export class WeightAddModal {
 
   constructor(
     private params: NavParams,
+    private db: DbService,
     private viewCtrl: ViewController,
     private utilService: UtilService,
     private dateService: DateService
@@ -29,8 +31,8 @@ export class WeightAddModal {
 
     this.data._id = this.params.get('_id');
     this.data.value = this.params.get('value');
-    this.data.date = this.params.get('date') || (d.getFullYear() + '-' + ( d.getMonth() < 10 ? '0' : '' ) + (d.getMonth() + 1) + '-' + d.getDate());
-    this.data.time = this.params.get('time') || ((d.getHours() < 10 ? '0': '') + d.getHours() + ':' + ( d.getMinutes() < 10 ? '0' : '' ) + d.getMinutes());
+    this.data.date = this.params.get('date') || dateService.formatDate2String(d, true);
+    this.data.time = this.params.get('time') || dateService.formatDate2TimeString(d, true);
     this.data.dateAt = this.params.get('dateAt') || d.getTime();
     console.log('WeightAddModal: data: ', this.data);
   }
@@ -48,13 +50,20 @@ export class WeightAddModal {
   }
 
   saveData() {
+    console.log('WeightAddModal:: addData: data', this.data);
+    
     let d = this.dateService.formatString2Date(this.data.date, this.data.time);
     this.data.dateAt = d.dateObj.getTime();
     this.data.orderAt = this.utilService.getOrderTimeDesc(d.dateObj);
-    this.dismiss(this.data);
+    
+    if(this.data.value === '') return;
+
+    this.db.addWeight(this.data, () => {
+      this.dismiss();
+    });
   }
 
-  dismiss(data) {
-    this.viewCtrl.dismiss(data); 
+  dismiss() {
+    this.viewCtrl.dismiss(); 
   }
 }

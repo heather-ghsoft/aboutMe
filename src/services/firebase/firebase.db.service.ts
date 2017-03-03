@@ -52,7 +52,7 @@ export class DbService {
       
       let dataArr = [];
       snap.forEach((child) => {
-        dataArr.push(convertChild2Object(child));
+        dataArr.push(convertSnap2Object(child));
       });
       callback(dataArr);
     });
@@ -94,7 +94,7 @@ export class DbService {
       console.log('DbService: getWeights: onValue');
 
       snap.forEach((child) => {
-        dataArr.push(convertChild2Object(child));
+        dataArr.push(convertSnap2Object(child));
       });
       callback(dataArr);
     });
@@ -114,7 +114,7 @@ export class DbService {
         console.log('DbService: getWeights: onValue');
 
         snap.forEach((child) => {
-          dataArr.push(convertChild2Object(child));
+          dataArr.push(convertSnap2Object(child));
         });
         callback(dataArr);
       });
@@ -160,7 +160,7 @@ export class DbService {
       console.log('DbService: getDiary: onValue');
 
       snap.forEach((child) => {
-        dataArr.push(convertChild2Object(child));
+        dataArr.push(convertSnap2Object(child));
       });
       callback(dataArr);
     });
@@ -180,10 +180,19 @@ export class DbService {
         console.log('DbService: getDiary: onValue');
 
         snap.forEach((child) => {
-          dataArr.push(convertChild2Object(child));
+          dataArr.push(convertSnap2Object(child));
         });
         callback(dataArr);
       });
+  }
+
+  getDiary(id, callback) {
+    console.log('DbService: getDiary: id: ', id);
+    const ref = this.rootRef.child(`${this.uid()}/diary/${id}`);
+
+    ref.on('value', (snap) => {
+      callback(convertSnap2Object(snap));
+    });
   }
 
   addDiary(value, callback) {
@@ -214,8 +223,9 @@ export class DbService {
   }
 }
 
-const convertChild2Object = (child) => {
+const convertSnap2Object = (child) => {
   let data = child.val();
+
   data._id = child.key;
   return data;
 }

@@ -23,7 +23,14 @@ import { firebaseConfig } from '../scripts/config';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [ AuthService, DbService, ViewService, UtilService, DateService ]
+  providers: [ 
+    AuthService, 
+    DbService, 
+    ViewService, 
+    UtilService, 
+    DateService, 
+    StorageService 
+  ]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -45,7 +52,7 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Calendar', component: CalendarPage },
-      { title: 'DiaryPage', component: DiaryPage },
+      { title: 'Diary', component: DiaryPage },
       { title: 'Weight', component: WeightPage },
       { title: 'Trend', component: WeightChartPage },
       { title: 'Trend D3', component: WeightChartD3Page },
@@ -90,7 +97,7 @@ export class MyApp {
         let targetPage;
         if (user && !user.isAnonymous) {
           console.log('logged in ');
-          targetPage = WeightPage;
+          targetPage = DiaryPage;
         } else {
           console.log('not logged in ');
           targetPage = LoginPage;

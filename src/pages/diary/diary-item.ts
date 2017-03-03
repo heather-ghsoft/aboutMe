@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DateService } from '../../services/utils/date.service';
 
 @Component({
-  selector: 'weight-item',
+  selector: 'diary-item',
   template: `
     <ion-item-sliding>
       <ion-item>
@@ -13,7 +13,7 @@ import { DateService } from '../../services/utils/date.service';
             </div>
           </div>
           <div class="item_content">
-            <div class="item_value">{{data.value}} kg</div>
+            <div class="item_value">{{data.title}}</div>
             <div class="item_time">{{date.year}}년 {{date.month}}월 {{date.date}}일 ({{date.day}}) {{date.hour}}시 {{date.minute}}분</div>
           </div>
         </div>

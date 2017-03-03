@@ -5,7 +5,7 @@
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>체중기</ion-title>
+    <ion-title>Write Diary</ion-title>
     <ion-buttons end>
       <button class="bar_btn_padding" ion-button icon-only (click)="saveData()">
         SAVE
@@ -21,20 +21,17 @@
       <ion-datetime color="text" displayFormat="YYYY년 MM월 DD일" pickerFormat="YYYY-MM-DD" [(ngModel)]="data.date"></ion-datetime>
     </ion-item>
     <ion-item>
-      <ion-label color="primary">시간</ion-label>
-      <ion-datetime color="text" displayFormat="HH시 mm분" pickerFormat="HH:mm" [(ngModel)]="data.time"></ion-datetime>
+      <ion-label color="primary">제목</ion-label>
+      <ion-input type="text" color="text" [(ngModel)]="data.title"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label color="primary">몸무게(Kg)</ion-label>
-      <ion-input 
-        color="text" 
-        type="number" 
-        text-right 
-        placeholder="오늘의 몸무게는 ?" 
-        [(ngModel)]="data.value" 
-        (keypress)="keypressNewData($event)">
-      </ion-input>
-      kg
+      <ion-label color="primary">내용</ion-label>
+      <ion-textarea style="height: 300px;" [(ngModel)]="data.content"></ion-textarea>
     </ion-item>
+    <img style="width: 80px; height: 80px;" src="{{photo}}" *ngFor=" let photo of data.photos; let i = index " />
+    <img style="width: 80px; height: 80px;" src="{{'data:image/jpeg;base64,'+ photo}}" *ngFor=" let photo of newPhotos; let i = index " />
+    <button ion-button color="primary" block (click)="showActionSheet($event)">
+      Take a Picture
+    </button>
   </div>
 </ion-content>
