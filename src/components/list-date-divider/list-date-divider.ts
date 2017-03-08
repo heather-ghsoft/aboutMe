@@ -26,6 +26,7 @@ export class ListDateDivider {
   date = {
     year: '',
     month: '',
+    date: '',
     hour: '',
     minute: '',
     day: ''
