@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button class="bar_btn_padding" ion-button icon-only (click)="dismiss(null)">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>식사를 기록해줘</ion-title>
+    <ion-buttons end>
+      <button class="bar_btn_padding" ion-button icon-only (click)="saveData()">
+        저장
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="div_content">
+<!--     <ion-item-divider color="primary">
+      언제 먹었어?
+    </ion-item-divider> -->
+    <ion-item>
+      <ion-label color="primary" floating>날짜</ion-label>
+      <ion-datetime color="text" displayFormat="YYYY년 MM월 DD일" pickerFormat="YYYY-MM-DD" [(ngModel)]="data.date"></ion-datetime>
+    </ion-item>
+    <ion-item no-lines>
+      <ion-label color="primary" floating>시간</ion-label>
+      <ion-datetime color="text" displayFormat="HH시 mm분" pickerFormat="HH:mm" [(ngModel)]="data.time"></ion-datetime>
+    </ion-item>
+   <!--  <div class="div_line">
+    </div> -->
+    <!-- <ion-item-divider color="primary">
+      뭐 먹었어?
+    </ion-item-divider> -->
+    <div class="div_full_image" style="width: 100%; height: auto;" >
+      <img [src]="displayPhoto" style="height: 0px;" onload="this.style.height='auto';" onError="this.src='https://firebasestorage.googleapis.com/v0/b/aboutme-39281.appspot.com/o/assets%2Fimg%2Fno-image.png?alt=media&token=90cf2c63-b350-4f96-bcb2-37df22af1a64';">
+    </div>
+    <button ion-button full color="mint" (click)="showActionSheet($event)">
+      <span *ngIf="displayPhoto === undefined || displayPhoto === null">Photo Add</span>
+      <span *ngIf="displayPhoto !== undefined && displayPhoto !== null">Photo Edit</span>
+    </button>
+    <ion-item no-lines>
+      <ion-label color="primary" floating> 뭐 먹었어? </ion-label>
+      <ion-input 
+        color="text" 
+        text-left
+        [(ngModel)]="data.food" >
+      </ion-input>
+    </ion-item>
+    <ion-item-divider color="primary" style="font-size: inherit;">
+      어떻게 먹었어?
+    </ion-item-divider>
+    <ion-item *ngFor=" let estimation of data.estimations; let i = index ">
+      <ion-label color="text">{{estimation.question}}</ion-label>
+      <ion-checkbox color="primary" [(ngModel)]="estimation.answer"></ion-checkbox>
+    </ion-item>
+  </div>
+</ion-content>

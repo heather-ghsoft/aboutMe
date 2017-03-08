@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title color="primary">Foods</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)=" openAddData() ">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <div *ngFor=" let data of dataArr; let i = index ">
+      <list-date-divider [data]="data" dateFormat="YYYY년 MM월 dd일" [scrollTop]="scrollTop" [dividers]="dividers" *ngIf="i === 0 || dataArr[i].date.substr(0, 10) !== dataArr[i-1].date.substr(0, 10)" ></list-date-divider>
+      <food-item [data]="data" (onDelete)="deleteData($event)" (onEdit)="editData($event)" (click)="go2Detail(data._id)"></food-item>
+    </div>
+  </ion-list>
+  <div class="div_content">
+    <p *ngIf="!dataArr.length">식단을 기록하세요 :)</p>
+  </div>
+</ion-content>

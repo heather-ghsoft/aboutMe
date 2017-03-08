@@ -10,10 +10,17 @@ import { TodoListPage } from '../pages/todo-list/todo-list';
 import { RegisterPage } from '../pages/register/register';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { CalendarPage } from '../pages/calendar/calendar';
+
 import { DiaryPage } from '../pages/diary/diary';
 import { DiaryItem } from '../pages/diary/diary-item';
 import { DiaryDetailPage } from '../pages/diary/diary-detail';
 import { DiaryAddModal } from '../pages/diary/diary-add';
+
+import { FoodPage } from '../pages/food/food';
+import { FoodItem } from '../pages/food/food-item';
+import { FoodDetailPage } from '../pages/food/food-detail';
+import { FoodAddModal } from '../pages/food/food-add';
+
 import { WeightPage } from '../pages/weight/weight';
 import { WeightAddModal } from '../pages/weight/weight-add';
 import { WeightChartPage } from '../pages/weight-chart/weight-chart';
@@ -55,6 +62,10 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     DiaryItem,
     DiaryDetailPage,
     DiaryAddModal,
+    FoodPage,
+    FoodItem,
+    FoodDetailPage,
+    FoodAddModal,
     ZmCalendar,
     ZmCalendarDay,
     ListDateDivider,
@@ -81,7 +92,10 @@ import { TodoFilter } from '../pages/todo-list/todoFilter';
     WeightChartD3Page,
     DiaryPage,
     DiaryDetailPage,
-    DiaryAddModal
+    DiaryAddModal,
+    FoodPage,
+    FoodDetailPage,
+    FoodAddModal
   ],
   providers: [
     AuthService,

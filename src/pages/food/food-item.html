@@ -1,0 +1,22 @@
+<div class="card_box">
+  <div class="card_date">
+    {{date.year}}년 {{date.month}}월 {{date.date}}일 ({{date.day}}) {{date.hour}}시 {{date.minute}}분
+  </div> 
+  <div class="card_image" item-right *ngIf=" data.photo !== undefined && data.photo !== null ">
+    <img [src]="data.photo">
+  </div>
+  <div class="card_content">
+    <div class="card_content_left">
+      <div class="card_title">
+        {{data.food}}
+      </div>
+    </div>
+    <div class="card_content_right">
+      <div class="card_buttons">
+        <button ion-button clear item-left color="mint" (click)=" moreMenu() ">
+          <ion-icon name="more"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

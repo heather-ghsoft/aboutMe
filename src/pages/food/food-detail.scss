@@ -1,0 +1,19 @@
+page-food-detail {
+  .div_detail_date {
+    color: map-get($colors, text);
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px 10px 20px;
+  }
+
+  .div_estimation {
+
+  }
+  .div_check {
+    width: 30px;
+    height: 100%;
+  }
+  .div_question {
+    color: map-get($colors, text);
+  }
+}

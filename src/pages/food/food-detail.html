@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title color="primary">Diary</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="div_content">
+    <div class="div_detail_date">
+      <span>
+        {{date.year}}년 {{date.month}}월 {{date.date}}일 ({{date.day}})
+      </span>
+      <span>
+        {{date.hour}}시 {{date.minute}}분
+      </span>
+    </div>
+    <div class="div_full_image" style="width: 100%; height: auto;" *ngIf=" data.photo !== undefined && data.photo !== null ">
+      <img [src]="data.photo" style="height: 0px;" onload="this.style.height='auto';" onError="this.src='https://firebasestorage.googleapis.com/v0/b/aboutme-39281.appspot.com/o/assets%2Fimg%2Fno-image.png?alt=media&token=90cf2c63-b350-4f96-bcb2-37df22af1a64';">
+    </div>
+    <ion-item no-lines>
+      <ion-label color="primary" floating> 먹은 음식! </ion-label>
+      <ion-input 
+        readonly
+        color="primary" 
+        text-left
+        [(ngModel)]="data.food" >
+      </ion-input>
+    </ion-item>
+    <ion-item-divider color="primary" style="font-size: inherit;">
+      어떻게 먹었게? 
+    </ion-item-divider>
+    <ion-item class="div_estimation" *ngFor=" let estimation of data.estimations; let i = index ">
+      <ion-icon item-left name="heart" color="primary" *ngIf="estimation.answer"></ion-icon>
+      <ion-icon item-left name="heart-outline" color="primary" *ngIf="!estimation.answer"></ion-icon>
+      <div class="div_question">
+        {{estimation.question}}
+      </div>
+    </ion-item>
+  </div>
+</ion-content>

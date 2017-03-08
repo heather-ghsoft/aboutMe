@@ -40,7 +40,7 @@ export class DateService {
       dateObj: null
     };
 
-    let d = new Date(result.year, (result.month - 1), result.date);
+    let d = new Date(result.year, (result.month - 1), result.date, result.hour, result.minute);
     result.day = this.getDayName(d.getDay());
 
     result.dateObj = d;

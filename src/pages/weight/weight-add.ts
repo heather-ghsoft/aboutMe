@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
 import { UtilService } from '../../services/utils/util.service';
 import { DateService } from '../../services/utils/date.service';
+import { ViewService }    from '../../services/view/view.service';
 import { DbService } from '../../services/firebase/firebase.db.service';
+
+import _ from "lodash";
 
 @Component({
   selector: 'page-weight-add',
@@ -10,31 +13,37 @@ import { DbService } from '../../services/firebase/firebase.db.service';
 })
 export class WeightAddModal {
 
-  data = {
-    _id: '',
-    value: '',
-    date: '',
-    time: '',
-    dateAt: 0,
-    orderAt: 0
-  };
+  data:any = {};
+
+  isEdit:boolean = false;
 
   constructor(
     private params: NavParams,
     private db: DbService,
     private viewCtrl: ViewController,
     private utilService: UtilService,
-    private dateService: DateService
+    private dateService: DateService,
+    private viewService: ViewService
   ) {
 
     let d = new Date();
 
-    this.data._id = this.params.get('_id');
-    this.data.value = this.params.get('value');
-    this.data.date = this.params.get('date') || dateService.formatDate2String(d, true);
-    this.data.time = this.params.get('time') || dateService.formatDate2TimeString(d, true);
-    this.data.dateAt = this.params.get('dateAt') || d.getTime();
+
+    this.data = {
+      date: dateService.formatDate2String(d, true),
+      time: dateService.formatDate2TimeString(d, true),
+      dateAt: d.getTime(),
+      orderAt: 0
+    };
+
+    console.log('WeightAddModal: params1: ', this.params);
+    
+    this.data = _.assign(this.data, this.params.get('params'));
     console.log('WeightAddModal: data: ', this.data);
+
+    if (this.data._id !== undefined) {
+      this.isEdit = true;
+    }
   }
 
   keypressNewData (event) {
@@ -58,10 +67,30 @@ export class WeightAddModal {
     
     if(this.data.value === '') return;
 
-    this.db.addWeight(this.data, () => {
+    if (!this.isEdit) {
+      this.addData(this.data);
+    } else {
+      this.updateData(this.data);
+    }
+  }
+
+  addData(data) {
+    console.log('WeightAddModal:: addData: data', data);
+    const completeLoading = this.viewService.showLoading();
+    this.db.addWeight(data, () => {
+      completeLoading();
       this.dismiss();
     });
   }
+
+  updateData(data) {
+    console.log('WeightAddModal:: updateData: data', data);
+    const completeLoading = this.viewService.showLoading();
+    this.db.updateWeight(data, () => {
+      completeLoading();
+      this.dismiss();
+    });
+  } 
 
   dismiss() {
     this.viewCtrl.dismiss(); 

@@ -61,9 +61,34 @@ export class StorageService {
     }
   }
 
+  addFoodPhotos(id, newPhoto, callback) {
+
+    if (newPhoto !== null) {
+
+      console.log('Storage:: addFoodPhotos: newPhoto: ', newPhoto);
+      let fileName = this.createFileName('');
+      this.storageRef.child(`${this.uid()}/foods/${id}/${fileName}.png`)
+        .putString(newPhoto, firebase.storage.StringFormat.BASE64, {contentType: 'image/png'})
+        .then((savedPhoto) => {
+          console.log('Storage:: addFoodPhotos: downloadURL: ', savedPhoto.downloadURL);
+          this.dataRef.child(`${this.uid()}/foods/${id}/photo`)
+            .set(savedPhoto.downloadURL);
+        })
+        .then((result) => {
+          callback();
+        })
+        .catch((err) => {
+          console.log('Storage:: addDiaryPhotos: err: ', err);
+          callback();
+        }); 
+    }
+  }
   createFileName(tailName) {
     let d = new Date();
-    return `${this.dateService.formatDate2String(d, true)} ${this.dateService.formatDate2TimeString(d, true)}_${tailName}`;
+    if (tailName.length) {
+      tailName = `_${tailName}`;
+    }
+    return `${this.dateService.formatDate2String(d, true)} ${this.dateService.formatDate2TimeString(d, true)}${tailName}`;
   }
 }
 

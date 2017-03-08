@@ -6,7 +6,7 @@ import { DateService } from '../../services/utils/date.service';
   selector: 'list-date-divider',
   template: `
     <div class="date_divider">
-      {{date.year}}년 {{date.month}}월
+      {{title}}
     </div>
   `
 })
@@ -18,12 +18,17 @@ export class ListDateDivider {
   @Input() data;
   @Input() scrollTop;
   @Input() dividers;
+  @Input() dateFormat: string;
 
+  title = '';
   dividerIndex = 0;
   offsetTop = 0;
   date = {
     year: '',
-    month: ''
+    month: '',
+    hour: '',
+    minute: '',
+    day: ''
   };
   isFixed = false;
   
@@ -37,6 +42,18 @@ export class ListDateDivider {
 
   ngOnInit() {
     this.changeDataFormat(this.data);
+    console.log('this.dateFormat: ', this.dateFormat);
+    let _title = '';
+    if (this.dateFormat) {
+      if (this.dateFormat === 'YYYY년 MM월 dd일')
+      _title = `${this.date.year}년 ${this.date.month}월 ${this.date.date}일 (${this.date.day})`;
+    } else {
+      _title = `${this.date.year}년 ${this.date.month}월`;
+    }
+
+    this.zone.run(() => {
+      this.title = _title;
+    });
   }
 
   ngAfterViewInit() {

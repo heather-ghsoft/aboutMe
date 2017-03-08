@@ -80,19 +80,8 @@ export class WeightPage {
   }
 
   editData(data) {
-    let weightAddModal = this.modalCtrl.create(WeightAddModal, data);
-    weightAddModal.onDidDismiss(data => {
-      // firebase save
-      if (data === null) return;
-      this.updateData(data);
-    });
+    let weightAddModal = this.modalCtrl.create(WeightAddModal, {params: data});
+    weightAddModal.onDidDismiss(data => {});
     weightAddModal.present();
   }
-
-  updateData(data) {
-    console.log('WeightListPage:: updateData: data', data);
-    if(data.value === '') return;
-    this.db.updateWeight(data);
-  } 
-
 }

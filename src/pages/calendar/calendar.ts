@@ -31,17 +31,48 @@ export class CalendarPage {
     
     console.log('CalendarPage:: getCalendarData');
 
-    this.db.getWeights_calendar(startDate, endDate, (dataArr) => {
-      let _dataArr = {};
-      dataArr.forEach((d) => {
-        _dataArr[d.date] = [];
-        _dataArr[d.date].push({
-          type: 'weight',
-          value: d.value
-        });
+    this.getWeightData(startDate, endDate, {})
+      .then(dataArr => {
+        return this.getFoodData(startDate, endDate, dataArr);
+      })
+      .then(dataArr => {
+        callback(dataArr);
       });
-      // console.log('CalendarPage:: getWeight: _dataArr: ', _dataArr);
-      callback(_dataArr); 
+  }
+
+  getWeightData(startDate, endDate, dataArr) {
+    return new Promise(resolve => {
+      console.log('CalendarPage:: getCalendarData');
+
+      this.db.getWeights_calendar(startDate, endDate, (resultArr) => {
+        resultArr.forEach((d) => {
+          dataArr[d.date] = dataArr[d.date] || [];
+          dataArr[d.date].push({
+            type: 'weight',
+            value: d.value
+          });
+        });
+        // console.log('CalendarPage:: getWeight: dataArr: ', dataArr);
+        resolve(dataArr); 
+      });
+    });
+  }
+
+  getFoodData(startDate, endDate, dataArr) {
+    return new Promise(resolve => {
+      console.log('CalendarPage:: getCalendarData');
+
+      this.db.getFoodList_calendar(startDate, endDate, (resultArr) => {
+        resultArr.forEach((d) => {
+          dataArr[d.date] = dataArr[d.date] || [];
+          dataArr[d.date].push({
+            type: 'food',
+            value: d.food
+          });
+        });
+        // console.log('CalendarPage:: getWeight: dataArr: ', dataArr);
+        resolve(dataArr); 
+      });
     });
   }
   

@@ -130,7 +130,7 @@ export class DbService {
     return this.rootRef.child(`${this.uid()}/weights`).push(value).then(callback);
   }
 
-  updateWeight(value) {
+  updateWeight(value, callback) {
     console.log('DbService:: updateWeight: value: ', value);
     const ref = this.rootRef.child(`${this.uid()}/weights/${value._id}`);
 
@@ -138,7 +138,7 @@ export class DbService {
     delete value._id;
 
     value = pruneObj(value);
-    return ref.update(value);
+    return ref.update(value, callback);
   }
 
   deleteWeight(id) {
@@ -190,7 +190,7 @@ export class DbService {
     console.log('DbService: getDiary: id: ', id);
     const ref = this.rootRef.child(`${this.uid()}/diary/${id}`);
 
-    ref.on('value', (snap) => {
+    ref.once('value', (snap) => {
       callback(convertSnap2Object(snap));
     });
   }
@@ -219,6 +219,82 @@ export class DbService {
   deleteDiary(id) {
     console.log('DbService:: deleteDiary: id: ', id);
     const ref = this.rootRef.child(`${this.uid()}/diary/${id}`);
+    ref.remove();
+  }
+
+
+
+  getFoods(isDesc, callback) {
+    console.log('DbService: getFoods');
+    const ref = this.rootRef.child(`${this.uid()}/foods`);
+    const descCol = isDesc ? 'orderAt': 'dateAt';
+
+    ref.orderByChild(descCol).on('value', (snap) => {
+      
+      let dataArr = [];
+
+      console.log('DbService: getFoods: onValue');
+
+      snap.forEach((child) => {
+        dataArr.push(convertSnap2Object(child));
+      });
+      callback(dataArr);
+    });
+  }
+
+  getFoodList_calendar(startDate, endDate, callback) {
+    console.log('DbService: getFoodList_calendar');
+    const ref = this.rootRef.child(`${this.uid()}/foods`);
+
+    ref.orderByChild('dateAt')
+      .startAt(startDate.getTime())
+      .endAt(endDate.getTime())
+      .on('value', (snap) => {
+      
+        let dataArr = [];
+
+        console.log('DbService: getFoodList_calendar: onValue');
+
+        snap.forEach((child) => {
+          dataArr.push(convertSnap2Object(child));
+        });
+        callback(dataArr);
+      });
+  }
+
+  getFood(id, callback) {
+    console.log('DbService: getFood: id: ', id);
+    const ref = this.rootRef.child(`${this.uid()}/foods/${id}`);
+
+    ref.once('value', (snap) => {
+      callback(convertSnap2Object(snap));
+    });
+  }
+
+  addFood(value, callback) {
+    console.log('DbService:: addFood: value: ', value);
+    value.createdAt = { ".sv": "timestamp" };
+    value.lastModifiedAt = value.createdAt;
+    delete value._id;
+    
+    value = pruneObj(value);
+    return this.rootRef.child(`${this.uid()}/foods`).push(value).then(callback);
+  }
+
+  updateFood(value, callback) {
+    console.log('DbService:: updateFood: value: ', value);
+    const ref = this.rootRef.child(`${this.uid()}/foods/${value._id}`);
+
+    value.lastModifiedAt = { ".sv": "timestamp" };
+    delete value._id;
+
+    value = pruneObj(value);
+    return ref.update(value, callback);
+  }
+
+  deleteFood(id) {
+    console.log('DbService:: deleteFood: id: ', id);
+    const ref = this.rootRef.child(`${this.uid()}/foods/${id}`);
     ref.remove();
   }
 }

@@ -8,6 +8,7 @@ import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
 // import { DashboardPage } from '../pages/dashboard/dashboard';
 import { DiaryPage } from '../pages/diary/diary';
+import { FoodPage } from '../pages/food/food';
 import { CalendarPage } from '../pages/calendar/calendar';
 import { WeightPage } from '../pages/weight/weight';
 import { WeightChartPage } from '../pages/weight-chart/weight-chart';
@@ -52,11 +53,12 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Calendar', component: CalendarPage },
-      { title: 'Diary', component: DiaryPage },
+      { title: 'Food', component: FoodPage },
       { title: 'Weight', component: WeightPage },
+      { title: 'TO DO', component: TodoListPage },
+      { title: 'Diary', component: DiaryPage },
       { title: 'Trend', component: WeightChartPage },
-      { title: 'Trend D3', component: WeightChartD3Page },
-      { title: 'TO DO', component: TodoListPage }
+      { title: 'Trend D3', component: WeightChartD3Page }
     ];
   }
 
@@ -97,7 +99,7 @@ export class MyApp {
         let targetPage;
         if (user && !user.isAnonymous) {
           console.log('logged in ');
-          targetPage = DiaryPage;
+          targetPage = FoodPage;
         } else {
           console.log('not logged in ');
           targetPage = LoginPage;
