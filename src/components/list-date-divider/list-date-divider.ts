@@ -43,7 +43,27 @@ export class ListDateDivider {
 
   ngOnInit() {
     this.changeDataFormat(this.data);
-    console.log('this.dateFormat: ', this.dateFormat);
+    this.makeTitle();
+  }
+
+  ngAfterViewInit() {
+    this.initSetting()
+    // this.makeTitle();
+  }
+
+
+  ngOnChanges(changes) {
+    this.makeTitle();
+    // this.changePosition(changes.scrollTop.previousValue, changes.scrollTop.currentValue);
+  }
+
+  changeDataFormat(data) {
+    if (data === undefined || data.date === undefined) return; 
+    this.date = this.dateService.formatString2Date(data.date, data.time);
+  }
+
+  makeTitle() {
+
     let _title = '';
     if (this.dateFormat) {
       if (this.dateFormat === 'YYYY년 MM월 dd일')
@@ -57,7 +77,7 @@ export class ListDateDivider {
     });
   }
 
-  ngAfterViewInit() {
+  initSetting() {
     this.renderer.setElementStyle(this.elem.nativeElement, 'width', '100%');
     this.dividerIndex = this.dividers.length;
     this.renderer.setElementStyle(this.elem.nativeElement, 'z-index', '9990');
@@ -65,19 +85,11 @@ export class ListDateDivider {
       'fixed': (this.dividerIndex === 0) ? true : false,
       'offsetTop': this.elem.nativeElement.offsetTop,
       'year': this.date.year,
-      'month': this.date.month
+      'month': this.date.month,
+      'date': this.date.date,
+      'day': this.date.day
     });
     this.offsetTop = this.elem.nativeElement.offsetTop;
-  }
-
-
-  ngOnChanges(changes) {
-    // this.changePosition(changes.scrollTop.previousValue, changes.scrollTop.currentValue);
-  }
-
-  changeDataFormat(data) {
-    if (!data || data === undefined) return; 
-    this.date = this.dateService.formatString2Date(data.date, data.time);
   }
   
   changePosition(previousTop, currentTop = 0) {

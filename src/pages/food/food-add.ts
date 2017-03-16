@@ -42,14 +42,24 @@ export class FoodAddModal {
   ) {
 
     let d = new Date();
+    let d2 = new Date( d );
+    d2.setMinutes(d2.getMinutes() + 30);
 
     this.data = {
       food: '',
-      photo: null,
+      photo: {
+        fileName: null,
+        url: null
+      },
       date: dateService.formatDate2String(d, true),
       time: dateService.formatDate2TimeString(d, true),
+      time2: dateService.formatDate2TimeString(d2, true),
       dateAt: d.getTime(),
       orderAt: 0,
+      full: {
+        start: 0,
+        end: 5
+      },
       estimations: [
         { question: '몸이 배고플 때 먹음', answer:false },
         { question: '조용한 환경에서 먹음', answer:false },
@@ -62,12 +72,10 @@ export class FoodAddModal {
       ]
     };
 
-    // console.log('FoodAddModal: params1: ', this.params);
-
     this.data = _.assign(this.data, this.params.get('params'));
-    this.displayPhoto = this.params.get('photo') || null;
+    this.displayPhoto = this.data.photo.url || null;
 
-    // console.log('FoodAddModal: data: ', this.data);
+    console.log('FoodAddModal: data: ', this.data);
 
     if (this.data._id !== undefined) {
       this.isEdit = true;
@@ -86,6 +94,14 @@ export class FoodAddModal {
     }
   }
 
+  dateTimeChaged() {
+    console.log('dateTimeChaged');
+    let d = this.dateService.formatString2Date(this.data.date, this.data.time);
+    let tmpDate = d.dateObj;
+    tmpDate.setMinutes(tmpDate.getMinutes() + 30);
+    this.data.time2 = this.dateService.formatDate2TimeString(tmpDate, true);
+  }
+
   showActionSheet(event) {
     event.stopPropagation();
     this.utilService.showPhotoActionSheet()
@@ -102,14 +118,12 @@ export class FoodAddModal {
     console.log('FoodAddModal:: afterTakePicture: imageData: ', imageData !== undefined);
     if (imageData) {
       this.newPhoto = imageData;
-      this.data.photo = null;
       this.displayPhoto = 'data:image/jpeg;base64,' + imageData;
     }
   }
 
   saveData() {
-    console.log('DiaryAddModal:: addData: data', this.data);
-    
+    console.log('FoodAddModal:: addData: data', this.data);
     if (this.data.food === '') {
       return;
     }
@@ -117,6 +131,9 @@ export class FoodAddModal {
     let d = this.dateService.formatString2Date(this.data.date, this.data.time);
     this.data.dateAt = d.dateObj.getTime();
     this.data.orderAt = this.utilService.getOrderTimeDesc(d.dateObj);
+
+    this.data.full.start = Number(this.data.full.start);
+    this.data.full.end = Number(this.data.full.end);
 
     if (!this.isEdit) {
       this.addData(this.data);
@@ -128,34 +145,44 @@ export class FoodAddModal {
   addData(data) {
     console.log('FoodAddModal:: addData: data', data);
     this.completeLoading = this.viewService.showLoading();
-    this.db.addFood(data, (result) => {
-      this.uploadPhoto(result.key);
-    });
+    this.db.addFood(data)
+      .then(result => {
+        this.uploadPhoto(result.key);
+      });
   }
 
   updateData(data) {
-    console.log('FoodAddModal:: updateData: data', data);
     this.completeLoading = this.viewService.showLoading();
-    this.db.updateFood(data, () => {
-      this.uploadPhoto(data._id);
-    });
+    this.db.updateFood(data)
+      .then(result => {  
+        console.log('FoodAddModal:: updateData: result: ', result);
+        this.uploadPhoto(data._id);
+      })
+      .catch(error => {
+        console.log('FoodAddModal:: updateData: error: ', error.message);
+      });
   }
 
   uploadPhoto(key) {
-    console.log('key: ', key);
 
     if(this.newPhoto === null) {
       this.completeLoading();
       this.dismiss();
     }
-    this.storage.addFoodPhotos(key, this.newPhoto, () => {
-      this.completeLoading();
-      this.dismiss();
-    });
+    this.storage.addFoodPhotos(key, this.newPhoto, this.data.photo.fileName)
+      .then(() => {
+        this.completeLoading();
+        this.dismiss();
+      })
+      .catch(error => {
+        console.log('FoodAddModal:: uploadPhoto: error: ', error.message);
+        this.completeLoading();
+        this.dismiss();
+      });
   }
 
   dismiss() {
     console.log('FoodAddModal:: dismiss');
-    this.viewCtrl.dismiss(); 
+    this.viewCtrl.dismiss().catch((error) => console.log(error.message));
   }
 }

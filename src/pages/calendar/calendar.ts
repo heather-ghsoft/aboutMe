@@ -36,6 +36,9 @@ export class CalendarPage {
         return this.getFoodData(startDate, endDate, dataArr);
       })
       .then(dataArr => {
+        return this.calcFoodsScore(dataArr);
+      })
+      .then(dataArr => {
         callback(dataArr);
       });
   }
@@ -58,6 +61,7 @@ export class CalendarPage {
     });
   }
 
+  // 소식관리 리스트 가지고 오기
   getFoodData(startDate, endDate, dataArr) {
     return new Promise(resolve => {
       console.log('CalendarPage:: getCalendarData');
@@ -67,7 +71,9 @@ export class CalendarPage {
           dataArr[d.date] = dataArr[d.date] || [];
           dataArr[d.date].push({
             type: 'food',
-            value: d.food
+            value: d.food,
+            full: d.full,
+            estimations: d.estimations
           });
         });
         // console.log('CalendarPage:: getWeight: dataArr: ', dataArr);
@@ -75,8 +81,72 @@ export class CalendarPage {
       });
     });
   }
+
+  // 소식관리 리스트로 소식 점수 계산 
+  calcFoodsScore(dataArr) {
+    return new Promise(resolve => {
+      console.log('CalendarPage:: calcFoodStore dataArr: ', dataArr);
+
+      for ( let dateStr in dataArr ) {
+        // 날짜별 데이터 리스트
+        let rows = dataArr[dateStr];
+
+        let foodList = [];
+        let otherList = [];
+
+        rows.forEach((_row) => {
+          const _type = _row['type'];
+          if (_type === 'food') {
+            foodList.push(_row);
+          } else {
+            otherList.push(_row);
+          }
+        });
+
+        if ( !foodList.length ) continue;
+        
+        let result = {
+          type: 'score', 
+          value: this.calcFoodScoreOfDay(foodList)
+        };
+
+        dataArr[dateStr] = otherList.concat([result], foodList);
+      }
+      resolve(dataArr);
+    });
+  }
+
+  calcFoodScoreOfDay(dayData) {
+
+    // 한 건에 대한 점수 계산
+    let totalScore = 0;
+
+    dayData.forEach((row) => {
+    
+      if ( row['type'] !== 'food' ) return;
+
+      // 소식 점수 (5점 만점)
+      let fullScore = ( (10 - row.full.start) + (10 - row.full.end) ) / 2 / 2;
+      
+      // 마인드이팅 점수 (5점 만점)
+      let estiCount = 0;
+      row.estimations.forEach((item) => {
+        estiCount += item['answer'];
+      });
+      
+      let estiScore = estiCount / row.estimations.length * 10 / 2;
+      
+      // 총 점수
+      totalScore += fullScore + estiScore;
+
+    });
+    
+    // 하루 평균 점수 (100점 만점)
+    let evgScore = Math.ceil( ( totalScore / dayData.length ) * 10 );
+    return evgScore;
+  }
   
-  selectDate(dayDate) {
+  selectRow(dayDate) {
     // console.log('selectDate: ', dayDate);
     // let index = dayDate.getDate();
     // let params = {

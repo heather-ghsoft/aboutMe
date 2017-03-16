@@ -1,21 +1,51 @@
 <div class="card_box">
-  <div class="card_date">
-    {{date.year}}년 {{date.month}}월 {{date.date}}일 ({{date.day}}) {{date.hour}}시 {{date.minute}}분
-  </div> 
-  <div class="card_image" item-right *ngIf=" data.photo !== undefined && data.photo !== null ">
-    <img [src]="data.photo">
+  <div class="card_top">
+    <div class="card_date">
+      {{date.month}}월 {{date.date}}일 ({{date.day}}) {{date.hour}}시 {{date.minute}}분
+    </div>
+    <div class="card_buttons">
+      <button ion-button clear item-left color="mint" (click)=" moreMenu() ">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </div>
+  </div>
+  <div class="div_line" style="border-bottom-color: #efefef"></div>
+  <div class="card_image" 
+    [style.background-image]=" 'url(' + data.photo.url + ')' "
+    [style.height]=" (data.photo && data.photo.url !== null) ? '100vw': '0px' "
+    *ngIf=" data.photo !== undefined && data.photo !== null "
+    >
+    <!-- <img [src]="data.photo.url"> -->
   </div>
   <div class="card_content">
     <div class="card_content_left">
       <div class="card_title">
+        <!-- <p> -->
         {{data.food}}
+        <!-- </p> -->
       </div>
     </div>
     <div class="card_content_right">
-      <div class="card_buttons">
-        <button ion-button clear item-left color="mint" (click)=" moreMenu() ">
-          <ion-icon name="more"></ion-icon>
-        </button>
+      <div class="card_score">
+        <span class="div_full_label">
+          마인드풀 이팅 
+        </span>
+        <div class="div_full_value">
+          {{estmTrueArr.length}}
+          <span class="txt_gray">/</span>
+          {{estimations.length}}
+        </div>
+      </div>
+      <div class="div_line_col"></div>
+      <div class="card_score">
+        <span class="div_full_label">
+          배고픔 정도
+        </span>
+        <div class="div_full_value">
+          {{data.full.start}} 
+          <ion-icon name="arrow-round-forward" color="text" style="opacity: 0.6"></ion-icon> 
+          {{data.full.end}}
+        </div>
       </div>
     </div>
   </div>

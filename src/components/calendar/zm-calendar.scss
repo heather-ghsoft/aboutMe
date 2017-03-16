@@ -14,6 +14,13 @@ zm-calendar {
     justify-content: center;
   }
   .p_date {font-size: 18px; color: map-get($colors, dark); }
+
+  .div_buttons {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+
   .div_day_labels {
     width: 100%; 
     height: 20px; 
@@ -21,6 +28,7 @@ zm-calendar {
     flex-flow: row wrap; 
     border-bottom: 1px solid;
     border-bottom-color: #888;
+    /*transition: border-bottom 1s ease;*/
   }
 
   .div_day_labels .day_label {
@@ -37,19 +45,38 @@ zm-calendar {
     opacity: 0.5; 
   }
 
+  .div_calendar {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    position: relative;
+  }
+
   .calendar {
     width: 100%;
     height: 100%;
     display: flex;
     flex-flow: row wrap;
-    align-items: stretch;
     justify-content: center;
+    transition: margin-top 0.2s ease-in;
   }
 
   .calendar-box  {
     width: calc(100% / 7);
+    overflow: hidden;
     border-bottom: 1px solid; 
     border-bottom-color: map-get($colors, gray);
+  }
+
+  .row_5 .calendar-box {
+    height: calc(100% / 5);
+  }
+
+  .row_6 .calendar-box {
+    height: calc(100% / 6);
   }
 
   .calendar-box.empty {
@@ -62,10 +89,10 @@ zm-calendar {
     width: 100%;
     height: 100%;
     padding: 3px 1px 1px 1px;
+    overflow: hidden;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    overflow: hidden;
   }
 
   .calendar-box.extra {
@@ -74,23 +101,37 @@ zm-calendar {
 
   .calendar-box .row-date {
     padding: 1px 5px 1px 5px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
   }
 
   .calendar-box .row{
     width: 100%;
-    border-radius: 8px;
+    height: 14px;
+    border-radius: 7px;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
+    justify-content: space-around;
     margin-bottom: 1px;
   }
+
   .calendar-box .center {
     align-items: center;
   }
+
+  .calendar-box .row-data {
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    margin-top: 2px;
+  }
+
   .calendar-box .left {
     align-items: left;
   }
   .calendar-box .date {
+    text-align: center;
     color: map-get($colors, text);
   }
 
@@ -102,11 +143,69 @@ zm-calendar {
   }
   
   .calendar-box .row-value {
-    padding-left: 6px;
-    padding-bottom: 2px;
+    padding: 1px 5px 1px 5px;
+    margin: 0;
     color: map-get($colors, text);
     font-size: 10px;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
     box-sizing: border-box;
+  }
+
+  .div_content.dayMode .div_day_labels {
+    border-bottom: initial;
+  }
+
+  .div_content.dayMode .row.row-date {
+    height: 30px;
+  }
+
+  .div_content.dayMode .row .date {
+    width: 24px;
+    height: 24px;
+    padding-top: 3px;
+    border-radius: 12px;
+  }
+
+  .div_content.dayMode .day-box.listMode .row .date {
+    color: #fff;
+    background: map-get($colors, mint);
+  }
+
+
+  .div_content.dayMode .calendar-box .day-box.listMode .row-data {
+    display: block;
+  }
+
+  .div_content.dayMode .calendar-box .day-box .row-data {
+    display: none;
+  }
+
+  .calendar-box .day-box.listMode .row-data {
+    border-top: 1px solid #888;
+    position: absolute;
+    background: #fff;
+    top: 30px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 10px 10px 10px 10px;
+    transition: all 0.2s ease-in 0s;
+  }
+
+  .calendar-box .day-box.listMode .row-data .row{
+    width: 100%;
+    height: 28px;
+    border-radius: 15px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin-bottom: 3px;
+  }
+
+  .calendar-box .day-box.listMode .row-data .row-value{
+    padding-left: 12px;
+    font-size: 20px;
   }
 }

@@ -6,7 +6,7 @@ import firebase from 'firebase';
 // import { IntroPage } from '../pages/intro/intro';
 import { LoginPage } from '../pages/login/login';
 import { TodoListPage } from '../pages/todo-list/todo-list';
-// import { DashboardPage } from '../pages/dashboard/dashboard';
+import { DashboardPage } from '../pages/dashboard/dashboard';
 import { DiaryPage } from '../pages/diary/diary';
 import { FoodPage } from '../pages/food/food';
 import { CalendarPage } from '../pages/calendar/calendar';
@@ -52,11 +52,12 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'Calendar', component: CalendarPage },
-      { title: 'Food', component: FoodPage },
-      { title: 'Weight', component: WeightPage },
+      { title: '대시보드', component: DashboardPage },
+      { title: '캘린더', component: CalendarPage },
+      { title: '소식관리', component: FoodPage },
+      { title: '체중기록', component: WeightPage },
       { title: 'TO DO', component: TodoListPage },
-      { title: 'Diary', component: DiaryPage },
+      { title: '다이어리', component: DiaryPage },
       { title: 'Trend', component: WeightChartPage },
       { title: 'Trend D3', component: WeightChartD3Page }
     ];
@@ -99,7 +100,7 @@ export class MyApp {
         let targetPage;
         if (user && !user.isAnonymous) {
           console.log('logged in ');
-          targetPage = FoodPage;
+          targetPage = CalendarPage;
         } else {
           console.log('not logged in ');
           targetPage = LoginPage;

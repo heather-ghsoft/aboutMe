@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-// import _ from "lodash";
+import _ from "lodash";
 import { UtilService } from '../utils/util.service';
 // import { Http } from '@angular/http';
 // import { Observable, Subscriber } from 'rxjs';
@@ -7,6 +7,7 @@ import { UtilService } from '../utils/util.service';
 import 'rxjs/add/operator/toPromise';
 import firebase from 'firebase';
 import { Weight } from '../../vo/weight';
+import { StorageService } from './firebase.storage.service';
 // import { User } from './vo/user';
 // import { Log } from './vo/log';
 // import { Info } from './vo/info';
@@ -19,7 +20,8 @@ export class DbService {
   rootRef;
 
   constructor(
-    private util: UtilService
+    private util: UtilService,
+    private storageService: StorageService
   ) {
     setTimeout(() => {
       console.log('DbService:: constructor');
@@ -120,25 +122,22 @@ export class DbService {
       });
   }
 
-  addWeight(value, callback) {
+  addWeight(value): firebase.Promise<any> {
     console.log('DbService:: addWeight: value: ', value);
     value.createdAt = { ".sv": "timestamp" };
     value.lastModifiedAt = value.createdAt;
     delete value._id;
     
     value = pruneObj(value);
-    return this.rootRef.child(`${this.uid()}/weights`).push(value).then(callback);
+    return this.rootRef.child(`${this.uid()}/weights`).push(value);
   }
 
-  updateWeight(value, callback) {
+  updateWeight(value): firebase.Promise<any> {
     console.log('DbService:: updateWeight: value: ', value);
     const ref = this.rootRef.child(`${this.uid()}/weights/${value._id}`);
 
-    value.lastModifiedAt = { ".sv": "timestamp" };
-    delete value._id;
-
     value = pruneObj(value);
-    return ref.update(value, callback);
+   return ref.update(value);
   }
 
   deleteWeight(id) {
@@ -229,7 +228,7 @@ export class DbService {
     const ref = this.rootRef.child(`${this.uid()}/foods`);
     const descCol = isDesc ? 'orderAt': 'dateAt';
 
-    ref.orderByChild(descCol).on('value', (snap) => {
+    return ref.orderByChild(descCol).on('value', (snap) => {
       
       let dataArr = [];
 
@@ -253,7 +252,7 @@ export class DbService {
       
         let dataArr = [];
 
-        console.log('DbService: getFoodList_calendar: onValue');
+        console.log('DbService: getFoodList_calendar: dataArr: ', dataArr);
 
         snap.forEach((child) => {
           dataArr.push(convertSnap2Object(child));
@@ -271,31 +270,35 @@ export class DbService {
     });
   }
 
-  addFood(value, callback) {
+  addFood(value): firebase.Promise<any> {
     console.log('DbService:: addFood: value: ', value);
     value.createdAt = { ".sv": "timestamp" };
     value.lastModifiedAt = value.createdAt;
     delete value._id;
     
     value = pruneObj(value);
-    return this.rootRef.child(`${this.uid()}/foods`).push(value).then(callback);
+    return this.rootRef.child(`${this.uid()}/foods`).push(value);
   }
 
-  updateFood(value, callback) {
-    console.log('DbService:: updateFood: value: ', value);
-    const ref = this.rootRef.child(`${this.uid()}/foods/${value._id}`);
+  updateFood(data): firebase.Promise<any> {
+    console.log('DbService:: updateFood: data: ', data);
 
-    value.lastModifiedAt = { ".sv": "timestamp" };
-    delete value._id;
+    let _data = _.clone(data);
+    const ref = this.rootRef.child(`${this.uid()}/foods/${_data._id}`);
 
-    value = pruneObj(value);
-    return ref.update(value, callback);
+    _data = pruneObj(_data);
+    return ref.update(_data);
   }
 
-  deleteFood(id) {
-    console.log('DbService:: deleteFood: id: ', id);
-    const ref = this.rootRef.child(`${this.uid()}/foods/${id}`);
-    ref.remove();
+  deleteFood(data): firebase.Promise<any> {
+    console.log('DbService:: deleteFood: id: ', data._id);
+    const ref = this.rootRef.child(`${this.uid()}/foods/${data._id}`);
+    return ref.remove()
+      .then(() => {
+        if (data.photo && data.photo.fileName) {
+          this.storageService.deleteFoodPhotos(data._id, data.photo.fileName);
+        }
+      });
   }
 }
 
@@ -307,10 +310,15 @@ const convertSnap2Object = (child) => {
 }
 
 const pruneObj = (obj) => {
+  
+  delete obj._id;
+  obj.lastModifiedAt = { ".sv": "timestamp" };
+  
   Object.keys(obj).forEach(key => {
     if (typeof obj[key] === 'undefined') {
       obj[key] = 'MISSING';
     }
   });
+  
   return obj;
 }

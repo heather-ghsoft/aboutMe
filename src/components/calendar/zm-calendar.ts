@@ -12,7 +12,7 @@ export class ZmCalendar {
   // @Input() data: any;
   @Input() types: any;
   @Output() getData: EventEmitter<any> = new EventEmitter();
-  @Output() dayClickEvent: EventEmitter<any> = new EventEmitter();
+  @Output() rowClickEvent: EventEmitter<any> = new EventEmitter();
 
   todayDate;
   currDate;
@@ -30,6 +30,10 @@ export class ZmCalendar {
   days: any[] = [];
 
   dayLabels: string[] = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
+
+  selectedDate = null;
+  rowNum = 5;
+  calendarTop = '0px';
 
   constructor(
     private dateService: DateService,
@@ -65,7 +69,7 @@ export class ZmCalendar {
 
     this.getData.next([_cal.firstDate, _cal.lastDate, (calData) => {
 
-      console.log('ZmCalendar:: calcData: getData: ', calData);
+      // console.log('ZmCalendar:: calcData: getData: ', calData);
 
       let allDays = (_cal.lastDate - _cal.firstDate)/1000/60/60/24;
 
@@ -81,7 +85,7 @@ export class ZmCalendar {
         _fullDateStr = this.dateService.formatDate2String(_date, true);
         _day = {
           date: _date,
-          data: calData[_fullDateStr] || {} //this.getDateData()
+          data: calData[_fullDateStr] || {} 
         }
 
         if ( _date < _cal.startDate ) {
@@ -101,18 +105,17 @@ export class ZmCalendar {
     }]);
   }
 
-  getDateData() {
-    // console.log(this.data);
-    return [
-      // {type: 'weight', value: 45},
-      // {type: 'food', value: '안녕하세요안녕하세요'},
-      // {type: 'food', value: '카레'},
-      // {type: 'score', value: 8}
-    ];
+  // 해당 날짜 데이터 전체 리스트 보기
+  selectDate(top, date) {
+    this.calendarTop = '-' + top + 'px';
+    console.log('ZmCalendar:: selectDate: ', top, date);
+    this.selectedDate = date;
   }
 
-  selectDate(data) {
-    this.dayClickEvent.next(data);
+  // 해당 데이터 상세보기
+  selectRow(data) {
+    console.log('ZmCalendar:: selectRow: ', data);
+    this.rowClickEvent.next(data);
   }
 
   calcCalendarDate(_currDate) {
@@ -147,6 +150,8 @@ export class ZmCalendar {
     // 이번 달의 마지막날 (마지막주 토요일)
     _lastDate = _.cloneDeep(_endDate);
     _lastDate.setDate( _lastDate.getDate() + 6 - _lastDate.getDay() );
+
+    this.rowNum = Math.ceil((_lastDate.getTime() - _firstDate.getTime()) / 60 / 60 / 24 / 1000 / 7);
 
     _result = {
       startDate: _startDate,

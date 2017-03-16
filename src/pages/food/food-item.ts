@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ActionSheetController } from 'ionic-angular';
+import { ActionSheetController, AlertController } from 'ionic-angular';
 import { DateService } from '../../services/utils/date.service';
 
 @Component({
@@ -19,12 +19,14 @@ export class FoodItem {
 
   title;
   date;
+  estmTrueArr = [];
+  estimations = [];
 
   constructor(
     private dateService: DateService,
-    private actionSheetCtrl: ActionSheetController
-  ) {
-  }
+    private actionSheetCtrl: ActionSheetController,
+    private alertCtrl: AlertController
+  ) {}
 
   ngOnInit() {
     // console.log('WeightItem:: ngOnInit: this.data: ', this.data);
@@ -34,6 +36,10 @@ export class FoodItem {
   changeDataFormat(data) {
     if (!data) return; 
     this.date = this.dateService.formatString2Date(data.date, data.time);
+    this.estimations = this.data.estimations;
+    this.estmTrueArr = this.estimations.filter((item) => {
+      return item.answer;
+    });
   }
 
   moreMenu() {
@@ -66,7 +72,26 @@ export class FoodItem {
   }
 
   deleteData() {
-    this.onDelete.next(this.data._id);
+    let alert = this.alertCtrl.create({
+      title: '삭제하기',
+      message: '삭제하시겠습니까?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.onDelete.next(this.data);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   editData() {

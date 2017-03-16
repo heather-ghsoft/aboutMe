@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { dummyData } from '../../const/dummyData';
+import { Component, NgZone } from '@angular/core';
+import { AuthService } from '../../services/firebase/firebase.auth.service';
+import { DbService } from '../../services/firebase/firebase.db.service';
+import { DateService } from '../../services/utils/date.service';
 
 @Component({
   selector: 'page-dashboard',
@@ -9,76 +10,128 @@ import { dummyData } from '../../const/dummyData';
 
 export class DashboardPage {
 
-  currentTabButton: string;
-  hospitalHistory: any;
-  hospitalCurrent: any;
   user: any;
-  timeline: any;
-  tabChangingIn: boolean;
-  tabChangingOut: boolean;
+  todayFoodArr: any[] = [];
+  currDate: any = new Date();
+  tarDate: any = {
+    startDate: null,
+    endDate: null,
+    year: 0,
+    month: 0,
+    date: 0,
+    day: ''
+  };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  colXDomain: any[] = [];
+  colYDomain: any[] = [];
 
-    this.currentTabButton = '1';
-    this.hospitalHistory = [{
-        name: 'MLC 치과'
-    }];
-    this.hospitalCurrent = this.hospitalHistory[0];
+  constructor(
+    private zone: NgZone,
+    public authService: AuthService,
+    private db: DbService,
+    private dateService: DateService
+  ) {
 
-    var data = dummyData.data;
-    this.user = data.user;
-    this.timeline = data.timeline;
+    this.currDate = new Date();
+    this.tarDate = this.calcCalendarDate(this.currDate);
 
-    this.tabChangingIn = false;
-    this.tabChangingOut = false;
+    this.getData();
+    this.makeChartData();
   }
 
-  onClick() {
+  ngOnInit() {
+    let user = this.authService.getCurrentUser();
+    console.log('user: ', user);
+    this.user = user;
   }
 
-  manageTabPanelMove() {
-    // var tabPanel = $('.main-panel-tab');
+  getData() {
+
+    this.db.getFoodList_calendar(this.tarDate.startDate, this.tarDate.endDate, (dataArr) => {
+      this.zone.run(() => {
+        this.changeFormatData(dataArr);
+      });
+      console.log('FoodPage:: getDiaries');
+    });
   }
 
-  changeTab(tab) {
+  changeFormatData(dataArr) {
 
-      if (this.tabChangingIn || this.tabChangingOut) return;
+    this.todayFoodArr = [];
 
-      this.tabChangingIn = true;
-      this.tabChangingOut = true;
+    if(!dataArr.length) return;
 
-      var beforeAnimate = '';
-      var nextAnimate = '';
+    for( let d of dataArr ) {
+      let time = d.time.split(':');
+      let time2 = !d.time2 ? time : d.time2.split(':');
+      let timeNum = Number(time[0]) + (Math.ceil(Number(time[1]) / 6) / 10 || 0);
+      let timeNum2 = Number(time2[0]) + (Math.ceil(Number(time2[1]) / 6) / 10 || 0);
+      this.todayFoodArr.push({ time: timeNum, value: d.full.start, label: d.food, _id: d._id, type: d.food });
+      this.todayFoodArr.push({ time: timeNum2, value: d.full.end, label: d.food, _id: d._id, type: d.food });
+    }
 
-      var beforeTab = Object.assign({}, this.currentTabButton);
-      this.currentTabButton = tab;
-
-      if (this.currentTabButton === beforeTab) {
-          this.tabChangingIn = false;
-          this.tabChangingOut = false;
-          return;
+    if ( this.todayFoodArr[0].time > 6 ) {
+      this.todayFoodArr.splice( 0, 0, { time: 6, value: 0 } );
+    } else {
+      for ( let i = 0; i < this.todayFoodArr.length; i++ ) {
+        let d = this.todayFoodArr[ i ];
+        let d2 = this.todayFoodArr[ i + 1 ] || { time: 24 };
+        if ( (d.time2 || d.time) < 6 && 6 <= d2.time ) {
+          this.todayFoodArr.splice( i + 1, 0, { time: 6, value: 0 });
+          break;
+        }
       }
+    }
+    console.log('DashboardPage:: changeFormatData: this.todayFoodArr: ', this.todayFoodArr);
+  }
 
-      if (beforeTab < tab) {
-          nextAnimate = 'fadeInRight';
-          beforeAnimate = 'fadeOutLeft';
-      } else {
-          nextAnimate = 'fadeInLeft';
-          beforeAnimate = 'fadeOutRight';
-      }
+  makeChartData() {
+    this.colXDomain = [0, 24];
+    this.colYDomain = [0, 10];
+  }
 
-      // $("#container").stop().animate({ scrollTop: 0 }, '2000', 'swing', function() {
-      //     $('#container .tab-panel[tabIndex=' + tab + ']').eq(0).animateCss(nextAnimate, false, false, function() {
-              // if (this.currentTabButton === beforeTab) return;
-              // $('#container .tab-panel[tabIndex=' + tab + ']').eq(0).css('opacity', 1);
-              this.tabChangingIn = false;
-      //     });
+  dateDec() {
+    this.currDate.setDate(this.currDate.getDate() - 1);
+    this.tarDate = this.calcCalendarDate(this.currDate);
+    this.getData();
+  }
 
-      //     $('#container .tab-panel[tabIndex=' + beforeTab + ']').eq(0).animateCss(beforeAnimate, false, false, function() {
-              // if (this.currentTabButton === beforeTab) return;
-              // $('#container .tab-panel[tabIndex=' + beforeTab + ']').eq(0).css('opacity', 0);
-              this.tabChangingOut = false;
-      //     });
-      // });
+  dateInc() {
+    this.currDate.setDate(this.currDate.getDate() + 1);
+    this.tarDate = this.calcCalendarDate(this.currDate);
+    this.getData();
+  }
+
+  calcCalendarDate(_currDate) {
+
+    let _startDate: Date = null;
+    let _endDate: Date = null;
+    let _firstDate: Date = null;
+    let _lastDate: Date = null;
+
+    let _result: any = null;
+
+    // 오늘의 시작 시간
+    _startDate = new Date(_currDate.getFullYear(), _currDate.getMonth(), _currDate.getDate());
+
+    console.log('_startDate: ', _startDate);
+
+    // 오늘의 마지막 시간
+    _endDate = new Date( _startDate.getTime() );
+    _endDate.setDate( _endDate.getDate() + 1 );
+    _endDate.setSeconds( _endDate.getSeconds() - 1 );
+
+    console.log('_endDate: ', _endDate);
+
+    _result = {
+      startDate: _startDate,
+      endDate: _endDate,
+      year: _startDate.getFullYear(),
+      month: _startDate.getMonth(),
+      date: _startDate.getDate(),
+      day: this.dateService.getDayName(_startDate.getDay())
+    }
+
+    return _result;
   }
 }

@@ -27,10 +27,27 @@ input {
 .space_h-30 {width: 100%; height: 30px;}
 .space_h-50 {width: 100%; height: 50px;}
 
-.div_line {border-bottom: 1px solid map-get($colors, primary); width: 100%; height: 1px; }
+.div_line {border-bottom: 1px solid map-get($colors, light); height: 1px; margin: 0px 15px 0px 15px;}
+.div_line_col {border-left: 1px solid map-get($colors, light); width: 1px; height: 100%; margin: 15px 10px 15px 10px; box-sizing: initial;}
+
+
+.div_image {
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/aboutme-39281.appspot.com/o/assets%2Fimg%2Fno-image.png?alt=media&token=90cf2c63-b350-4f96-bcb2-37df22af1a64');
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
+  
+}
+.div_full_image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .div_full_image img {
-  -webkit-transition: height 0.3s;
-          transition: height 0.3s;
+  width: 100vw;
+  height: 100vw;
 }
 ion-nav.menu-content-open .ion-page {
   opacity: 0.5;

@@ -59,8 +59,8 @@ export class UtilService {
       destinationType : Camera.DestinationType.DATA_URL,
       allowEdit : true,
       encodingType: Camera.EncodingType.PNG,
-      targetWidth: 500,
-      targetHeight: 500,
+      targetWidth: 400,
+      targetHeight: 400,
       saveToPhotoAlbum: false 
     };
    

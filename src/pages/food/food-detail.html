@@ -3,12 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title color="primary">Diary</ion-title>
+    <ion-title color="primary">소식기록</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div class="div_content">
+  <div>
     <div class="div_detail_date">
       <span>
         {{date.year}}년 {{date.month}}월 {{date.date}}일 ({{date.day}})
@@ -17,20 +17,33 @@
         {{date.hour}}시 {{date.minute}}분
       </span>
     </div>
-    <div class="div_full_image" style="width: 100%; height: auto;" *ngIf=" data.photo !== undefined && data.photo !== null ">
-      <img [src]="data.photo" style="height: 0px;" onload="this.style.height='auto';" onError="this.src='https://firebasestorage.googleapis.com/v0/b/aboutme-39281.appspot.com/o/assets%2Fimg%2Fno-image.png?alt=media&token=90cf2c63-b350-4f96-bcb2-37df22af1a64';">
+    <div class="div_line"></div>
+    <div class="div_full_image div_image" 
+      [style.background-image]=" 'url(' + data.photo.url + ')' "
+      [style.height]=" (data.photo && data.photo.url !== null) ? '100vw': '0px' "
+      *ngIf=" data.photo !== undefined && data.photo !== null "
+      >
+      <!-- <img [src]="data.photo.url"> -->
     </div>
-    <ion-item no-lines>
-      <ion-label color="primary" floating> 먹은 음식! </ion-label>
-      <ion-input 
-        readonly
-        color="primary" 
-        text-left
-        [(ngModel)]="data.food" >
-      </ion-input>
-    </ion-item>
+    <div class="div_content">
+      <div class="div_content_left">
+        <div class="div_title">
+          {{data.food}}
+        </div>
+      </div>
+      <div class="div_content_right">
+        <span class="div_full_label">
+          배고픔 정도
+        </span>
+        <div class="div_full_value">
+          {{data.full.start}} 
+          <ion-icon name="arrow-round-forward" color="text" style="opacity: 0.6"></ion-icon> 
+          {{data.full.end}}
+        </div>
+      </div>
+    </div>
     <ion-item-divider color="primary" style="font-size: inherit;">
-      어떻게 먹었게? 
+      마인드풀 이팅 
     </ion-item-divider>
     <ion-item class="div_estimation" *ngFor=" let estimation of data.estimations; let i = index ">
       <ion-icon item-left name="heart" color="primary" *ngIf="estimation.answer"></ion-icon>

@@ -1,12 +1,13 @@
-<div class="day-box" (click)="onClick()">
+<div class="day-box" (click)="onClick()" [ngClass]="{'listMode': selectedDate === date}">
   <div class="row row-date center">
     <span class="date" [ngClass]="{'holiday': isHoliday}">{{dateStr}}</span>
   </div>
-  <div class="row left" 
-    [ngStyle]="{'background': row.background}" 
-    *ngFor=" let row of rows; let i = index ">
-    <!-- <div> -->
-    <div class="row-value">{{row.value}}</div>
-    <div>
+  <div class="row-data">
+    <div class="row left" 
+      [ngStyle]="{'background': row.background}" 
+      *ngFor=" let row of rows; let i = index ">
+      <!-- <div> -->
+      <p class="row-value">{{row.value}}</p>
+    </div>
   </div>
 </div>

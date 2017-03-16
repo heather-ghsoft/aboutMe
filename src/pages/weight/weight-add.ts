@@ -77,19 +77,21 @@ export class WeightAddModal {
   addData(data) {
     console.log('WeightAddModal:: addData: data', data);
     const completeLoading = this.viewService.showLoading();
-    this.db.addWeight(data, () => {
-      completeLoading();
-      this.dismiss();
-    });
+    this.db.addWeight(data)
+      .then(() => {
+        completeLoading();
+        this.dismiss();
+      });
   }
 
   updateData(data) {
     console.log('WeightAddModal:: updateData: data', data);
     const completeLoading = this.viewService.showLoading();
-    this.db.updateWeight(data, () => {
-      completeLoading();
-      this.dismiss();
-    });
+    this.db.updateWeight(data)
+      .then(() => {
+        completeLoading();
+        this.dismiss();
+      });
   } 
 
   dismiss() {

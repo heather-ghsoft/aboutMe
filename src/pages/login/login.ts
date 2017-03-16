@@ -89,7 +89,7 @@ export class LoginPage {
     }
     return promise.then(data => {
       completeLoading();
-      console.log('login success! setRoot to TabsPage');
+      console.log('login success! data: ', data);
       this.goToMain();
     }).catch(err => {
       completeLoading();

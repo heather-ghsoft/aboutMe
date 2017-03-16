@@ -1,4 +1,4 @@
-<div class="div_content" (swipe)="swipeEvent($event)">
+<div class="div_content" (swipe)="swipeEvent($event)" [ngClass]="{'dayMode': selectedDate !== null}">
   <div class="header">
     <button ion-button icon-only clear (click)="monthDec()">
       <ion-icon name="arrow-dropleft-circle"></ion-icon>
@@ -8,14 +8,36 @@
       <ion-icon name="arrow-dropright-circle"></ion-icon>
     </button>
   </div>
+  <div class="div_buttons" [ngStyle]="{'display': selectedDate !== null ? 'block': 'none'}">
+    <button ion-button icon-only clear (click)="selectedDate = null; calendarTop = 0;">
+      <ion-icon name="close"></ion-icon>
+    </button>
+  </div>
   <div class="div_day_labels">
     <div class="day_label" *ngFor=" let label of dayLabels">
       <span>{{label}}</span>
     </div>
   </div>
-  <div class="calendar">
-    <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of startEmptyDay "> </zm-calendar-day>
-    <zm-calendar-day class="calendar-box" [data]="day.data" [date]="day.date" [types]="types" (dayClickEvent)=" selectDate($event) " *ngFor=" let day of days "></zm-calendar-day>
-    <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of endEmptyDay "> </zm-calendar-day>
+  <div class="div_calendar">
+    <div class="calendar" 
+      [ngClass]="{'row_5': rowNum === 5, 'row_6': rowNum === 6}"
+      [style.margin-top]="calendarTop"
+    >
+      <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of startEmptyDay "> </zm-calendar-day>
+      <zm-calendar-day 
+        class="calendar-box" 
+        [data]="day.data" 
+        [date]="day.date" 
+        [types]="types"
+        [selectedDate]="selectedDate"
+        (dayClickEvent)="selectDate($event[0], $event[1])" 
+        (rowClickEvent)="selectRow($event)" 
+        *ngFor=" let day of days "
+      >
+      </zm-calendar-day>
+      <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of endEmptyDay "> </zm-calendar-day>
+    </div>
   </div>
+  <!-- <div class="div_dayDetail"> -->
+  <!-- </div> -->
 </div>

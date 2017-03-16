@@ -3,65 +3,50 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title color="primary">My First List</ion-title>
+    <ion-title color="primary">대시보드</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-
-  <!-- <div class="div_content">
-        <img src="assets/img/avatar-ts-jessie.png">
-  </div> -->
-  <div class="top_wrap">
-        <div class="main-profile">
-            <img class="img-profile" src="assets/img/avatar-ts-jessie.png" />
+    <div class="div_content">
+        <div class="div_top">
+            <div class="div_image img-profile" [style.background-image]="'url(' + user.photoURL + ')'"> </div>
+            <div class="div_top_right">
+                <span class="div_user_name">{{user.displayName}}</span>
+            </div>
         </div>
-        <div class="main-top">
-            <div class="main-panel">
-                <div class="main-panel-info">
-                    <span class="small-title">
-                        최근진료기록
-                    </span>
-                    <span class="middle-text">
-                        {{hospitalCurrent.name}}
-                    </span>
-                </div>
-                <div class="main-panel-info main-panel-side-border">
-                    <span class="big-title">
-                        {{user.name}}
-                    </span>
-                    <span class="small-text">
-                        {{user.birthDay.year}}.{{user.birthDay.month}}.{{user.birthDay.day}}
-                    </span>
-                </div>
-                <div class="main-panel-info">
-                    <span class="small-title">
-                        최근진료병원
-                    </span>
-                    <span class="middle-text">
-                        예약하기
-                    </span>
-                </div>
-                <div class="clearfix"></div>
+        <div>
+          <div class="div_middle">
+            <div class="div_date">
+              <button ion-button icon-only clear (click)="dateDec()">
+                <ion-icon name="arrow-dropleft-circle"></ion-icon>
+              </button>
+              <p class="p_date">
+                {{tarDate.year + '.' + 
+                ((tarDate.month + 1) < 10 ? '0' : '') + (tarDate.month + 1) + '.' + 
+                ((tarDate.date + 1) < 10 ? '0' : '') + (tarDate.date) + 
+                '(' + tarDate.day + ')'}}
+              </p>
+              <button ion-button icon-only clear (click)="dateInc()">
+                <ion-icon name="arrow-dropright-circle"></ion-icon>
+              </button>
             </div>
-            <div class="main-panel-tab">
-                <div class="btn_tab" [ngClass]="currentTabButton === '1' ? 'on' : ''" (click)="changeTab('1')">
-                    <div class="img timeline" [ngClass]="currentTabButton === '1' ? 'on' : ''"></div> 타임라인
-                </div>
-                <div class="btn_tab" [ngClass]="currentTabButton === '2' ? 'on' : ''" (click)="changeTab('2')">
-                    <div class="img chart" [ngClass]="currentTabButton === '2' ? 'on' : ''"></div> 마이챠트
-                </div>
-                <div class="btn_tab" [ngClass]="currentTabButton === '3' ? 'on' : ''" (click)="changeTab('3')">
-                    <div class="img note" [ngClass]="currentTabButton === '3' ? 'on' : ''"></div> 진료수첩
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div> 
-  </div>
-    <!--
-    <div class="main-bottom">
-        <div id="cd-timeline" class="tab-panel cd-container" tabIndex="1" style="opacity: 1" timeline-data="timeline" timeline></div>
-        <div id="tab-mychart" class="tab-panel" style="opacity: 0" tabIndex="2"></div>
-        <div id="tab-note" class="tab-panel" style="opacity: 0" tabIndex="3"></div>
-    </div> -->
+          </div>
+          <div class="div_graph">
+              <div zm-line-chart
+                class="zm-line-chart"
+                style="width: 100%; height: 300px"
+                colX="time"
+                colY="value"
+                [colXDomain]="colXDomain"
+                colXName="시간" 
+                colXType="linear"
+                colXFormat="%H"
+                colYName="배고픔정도"
+                [colYDomain]="colYDomain"
+                [bindData]="todayFoodArr" >
+              </div>
+          </div>
+        </div>
+    </div>
 </ion-content>

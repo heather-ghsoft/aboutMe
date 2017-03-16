@@ -61,28 +61,38 @@ export class StorageService {
     }
   }
 
-  addFoodPhotos(id, newPhoto, callback) {
+  addFoodPhotos(id, newPhoto, beforeFileName): firebase.Promise<any> {
 
-    if (newPhoto !== null) {
-
-      console.log('Storage:: addFoodPhotos: newPhoto: ', newPhoto);
-      let fileName = this.createFileName('');
-      this.storageRef.child(`${this.uid()}/foods/${id}/${fileName}.png`)
-        .putString(newPhoto, firebase.storage.StringFormat.BASE64, {contentType: 'image/png'})
-        .then((savedPhoto) => {
-          console.log('Storage:: addFoodPhotos: downloadURL: ', savedPhoto.downloadURL);
-          this.dataRef.child(`${this.uid()}/foods/${id}/photo`)
-            .set(savedPhoto.downloadURL);
-        })
-        .then((result) => {
-          callback();
-        })
-        .catch((err) => {
-          console.log('Storage:: addDiaryPhotos: err: ', err);
-          callback();
-        }); 
+    // 새 사진이 없으면 이전 사진을 지운다.
+    if (newPhoto === null) {
+      console.log('Storage:: addFoodPhotos: beforeFileName: ', beforeFileName);
+      return this.deleteFoodPhotos(id, beforeFileName);
     }
+
+    // 저장할 사진이 있으면 같은 파일에 엎어친다. 동일이름으로 저장 
+    console.log('Storage:: addFoodPhotos: newPhoto: ', newPhoto);
+    
+    let fileName = `food.png`; // `${this.createFileName('')}.png`;
+
+    return this.storageRef.child(`${this.uid()}/foods/${id}/${fileName}`)
+      .putString(newPhoto, firebase.storage.StringFormat.BASE64, {contentType: 'image/png'})
+      .then((savedPhoto) => {
+        console.log('Storage:: addFoodPhotos: downloadURL: ', savedPhoto.downloadURL);
+        this.dataRef.child(`${this.uid()}/foods/${id}/photo`)
+          .set({
+            fileName: fileName,
+            url: savedPhoto.downloadURL
+          });
+      }); 
   }
+
+  deleteFoodPhotos(id, fileName): firebase.Promise<any> {
+    console.log('Storage:: deleteFoodPhotos: id:', id);
+    return this.storageRef.child(`${this.uid()}/foods/${id}/${fileName}`).delete()
+      .catch(error => console.log('Storage:: deleteFoodPhotos: id: error: ', error.message));
+  }
+
+
   createFileName(tailName) {
     let d = new Date();
     if (tailName.length) {
