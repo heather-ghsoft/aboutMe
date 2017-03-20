@@ -40,6 +40,13 @@ export class FoodItem {
     this.estmTrueArr = this.estimations.filter((item) => {
       return item.answer;
     });
+
+    if (this.data && !this.data.drinking) {
+      this.data.drinking = {
+        'answer': false,
+        'desc': ''
+      }
+    }
   }
 
   moreMenu() {

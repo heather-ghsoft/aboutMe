@@ -19,7 +19,7 @@ food-item {
     align-items: center;
   }
 
-  .card_content {
+  .div_content_main {
     height: 37px;
     margin: 15px 15px 15px 15px;
     display: flex;
@@ -27,7 +27,7 @@ food-item {
     align-items: center;
   }
 
-  .card_content_right {
+  .div_content_right {
     width: 140px;
     height: 100%;
     display: flex;
@@ -36,7 +36,7 @@ food-item {
     align-items: center;
   }
 
-  .card_score {
+  .div_score {
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
@@ -44,7 +44,7 @@ food-item {
     align-items: center;
   }
 
-  .card_title {
+  .div_title {
     width: 170px;
     font-size: 25px;
     color: map-get($colors, text);
@@ -53,12 +53,21 @@ food-item {
     text-overflow: ellipsis;
   }
 
-  .card_date {
+  .div_drinking {
+    width: 170px;
+    font-size: 12px;
+    color: map-get($colors, text);
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .div_date {
     font-size: 12px;
     color: map-get($colors, gray);
   }
 
-  .card_buttons {
+  .div_buttons {
   }
 
   .txt_gray {

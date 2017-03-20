@@ -17,16 +17,19 @@
     >
     <!-- <img [src]="data.photo.url"> -->
   </div>
-  <div class="card_content">
-    <div class="card_content_left">
-      <div class="card_title">
+  <div class="div_content_main">
+    <div class="div_content_left">
+      <div class="div_title">
         <!-- <p> -->
         {{data.food}}
         <!-- </p> -->
       </div>
+      <div class="div_drinking" *ngIf="data.drinking.desc !== ''">
+        {{data.drinking.desc}}
+      </div>
     </div>
-    <div class="card_content_right">
-      <div class="card_score">
+    <div class="div_content_right">
+      <div class="div_score">
         <span class="div_full_label">
           마인드풀 이팅 
         </span>
@@ -37,7 +40,7 @@
         </div>
       </div>
       <div class="div_line_col"></div>
-      <div class="card_score">
+      <div class="div_score">
         <span class="div_full_label">
           배고픔 정도
         </span>

@@ -13,43 +13,91 @@ page-food-detail {
     width: 30px;
     height: 100%;
   }
-  .div_question {
+  .div_desc {
     color: map-get($colors, text);
   }
 
   .div_full_image {
   }
-  .div_content {
-    height: 37px;
-    margin: 15px 15px 15px 15px;
+  
+  .div_content_main {
+    height: 60px;
+    margin: 0px 15px 0px 15px;
+    padding: 15px 0px 15px 0px;
     display: flex;
+    flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
   }
 
   .div_content_right {
+    width: 60px;
+    height: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .div_content_left {
+    height: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .div_score {
     height: 100%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-around;
     align-items: center;
   }
+
   .div_title {
     font-size: 25px;
-    /*font-weight: bold;*/
     color: map-get($colors, text);
+
+    display: flex;
+    align-items: center;
+    /*white-space: nowrap; */
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+  }
+
+  .div_drinking {
+    width: 170px;
+    font-size: 12px;
+    color: map-get($colors, text);
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .div_date {
+    font-size: 12px;
+    color: map-get($colors, gray);
+  }
+
+  .div_buttons {
+  }
+
+  .txt_gray {
+    color: #ccc;
+    margin: 0px 3px 0px 3px;
   }
 
   .div_full_label{
-    font-size: 12px;
+    font-size: 11px;
     color: map-get($colors, primary);
   }
 
   .div_full_value {
-    font-size: 18px;
+    width: 52px;
     height: 24px;
+    font-size: 18px;
     color: map-get($colors, text);
-    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;

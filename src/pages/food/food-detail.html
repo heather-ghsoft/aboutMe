@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title color="primary">소식기록</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)=" moreMenu() ">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -14,7 +19,7 @@
         {{date.year}}년 {{date.month}}월 {{date.date}}일 ({{date.day}})
       </span>
       <span>
-        {{date.hour}}시 {{date.minute}}분
+        {{date.hour}}시 {{date.minute}}분 ~ {{date2.hour}}시 {{date2.minute}}분
       </span>
     </div>
     <div class="div_line"></div>
@@ -25,30 +30,38 @@
       >
       <!-- <img [src]="data.photo.url"> -->
     </div>
-    <div class="div_content">
+    <div class="div_content_main" [ngStyle]="{'border-bottom': data.drinking.answer ? '1px solid #efefef': 'initial'}">
       <div class="div_content_left">
         <div class="div_title">
           {{data.food}}
         </div>
       </div>
       <div class="div_content_right">
-        <span class="div_full_label">
-          배고픔 정도
-        </span>
-        <div class="div_full_value">
-          {{data.full.start}} 
-          <ion-icon name="arrow-round-forward" color="text" style="opacity: 0.6"></ion-icon> 
-          {{data.full.end}}
+        <div class="card_score">
+          <span class="div_full_label">
+            배고픔 정도
+          </span>
+          <div class="div_full_value">
+            {{data.full.start}} 
+            <ion-icon name="arrow-round-forward" color="text" style="opacity: 0.6"></ion-icon> 
+            {{data.full.end}}
+          </div>
         </div>
       </div>
     </div>
+    <ion-item no-lines *ngIf="data.drinking.answer">
+      <ion-icon item-left name="warning" color="primary"></ion-icon> 
+      <div class="div_desc">
+        {{data.drinking.desc || '술'}}
+      </div>
+    </ion-item>
     <ion-item-divider color="primary" style="font-size: inherit;">
-      마인드풀 이팅 
+      마인드풀 이팅 ( {{estmTrueArr.length}} / {{estimations.length}} )
     </ion-item-divider>
     <ion-item class="div_estimation" *ngFor=" let estimation of data.estimations; let i = index ">
       <ion-icon item-left name="heart" color="primary" *ngIf="estimation.answer"></ion-icon>
       <ion-icon item-left name="heart-outline" color="primary" *ngIf="!estimation.answer"></ion-icon>
-      <div class="div_question">
+      <div class="div_desc">
         {{estimation.question}}
       </div>
     </ion-item>
