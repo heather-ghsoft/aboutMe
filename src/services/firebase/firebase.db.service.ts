@@ -265,7 +265,7 @@ export class DbService {
     console.log('DbService: getFood: id: ', id);
     const ref = this.rootRef.child(`${this.uid()}/foods/${id}`);
 
-    ref.once('value', (snap) => {
+    ref.on('value', (snap) => {
       callback(convertSnap2Object(snap));
     });
   }
@@ -296,7 +296,7 @@ export class DbService {
     return ref.remove()
       .then(() => {
         if (data.photo && data.photo.fileName) {
-          this.storageService.deleteFoodPhotos(data._id, data.photo.fileName);
+          this.storageService.deleteFoodPhotos(data._id, data.photo.fileName, false);
         }
       });
   }

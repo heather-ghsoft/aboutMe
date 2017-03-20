@@ -57,6 +57,10 @@ ion-nav .ion-page {
   transition: opacity 0.5s;
 }
 
+ion-nav .toolbar{
+  padding-right: 10px;
+}
+
 .bar_btn_padding {margin: 2px 7px 2px 7px;}
 .toolbar-title {color: map-get($colors, text);}
 .datetime-text {color: map-get($colors, text); }
