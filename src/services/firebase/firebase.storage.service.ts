@@ -61,12 +61,10 @@ export class StorageService {
     }
   }
 
-  addFoodPhotos(id, newPhoto, beforeFileName): firebase.Promise<any> {
+  addFoodPhotos(id, newPhoto): firebase.Promise<any> {
 
-    // 새 사진이 없으면 이전 사진을 지운다.
     if (newPhoto === null) {
-      console.log('Storage:: addFoodPhotos: beforeFileName: ', beforeFileName);
-      return this.deleteFoodPhotos(id, beforeFileName);
+      return;
     }
 
     // 저장할 사진이 있으면 같은 파일에 엎어친다. 동일이름으로 저장 
@@ -86,9 +84,12 @@ export class StorageService {
       }); 
   }
 
-  deleteFoodPhotos(id, fileName): firebase.Promise<any> {
+  deleteFoodPhotos(id, fileName, deleteDb): firebase.Promise<any> {
     console.log('Storage:: deleteFoodPhotos: id:', id);
     return this.storageRef.child(`${this.uid()}/foods/${id}/${fileName}`).delete()
+      .then(() => {
+        if (deleteDb) this.dataRef.child(`${this.uid()}/foods/${id}/photo`).delete();
+      })
       .catch(error => console.log('Storage:: deleteFoodPhotos: id: error: ', error.message));
   }
 
