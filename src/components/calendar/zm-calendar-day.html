@@ -1,13 +1,22 @@
 <div class="day-box" (click)="onClick()" [ngClass]="{'listMode': selectedDate === date}">
-  <div class="row row-date center">
+  <div class="row-date center">
     <span class="date" [ngClass]="{'holiday': isHoliday}">{{dateStr}}</span>
   </div>
   <div class="row-data">
-    <div class="row left" 
-      [ngStyle]="{'background': row.background}" 
+    <div class="row" 
+      [ngStyle]="{'background': row.background}"
+      (click)="onRowClick(row._id, row.type)" 
       *ngFor=" let row of rows; let i = index ">
-      <!-- <div> -->
-      <p class="row-value">{{row.value}}</p>
+      <div class="row-left">
+        <span class="row-value">{{row.value}}</span>
+        <ion-icon class="row-icon" name="warning" [color]="types[row.type]['bool1Color']" *ngIf="row.bool1"></ion-icon>
+      </div>
+      <div class="row-right">
+        <div class="row-image" [style.background-image]=" 'url(' + row.image + ')' "></div>
+        <button ion-button icon-only color="white" clear *ngIf="types[row.type]['hasDetail']">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>

@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title color="primary">Calendar</ion-title>
+    <ion-title color="primary">캘린더</ion-title>
     <ion-buttons end>
       <!-- <button ion-button icon-only (click)=" writeDiary() "> -->
         <!-- <ion-icon name="create"></ion-icon> -->
@@ -13,5 +13,5 @@
 </ion-header>
 
 <ion-content>
-  <zm-calendar [types]="types" (getData)=" getCalendarData($event[0], $event[1], $event[2]) " (rowClickEvent)=" selectRow($event) "></zm-calendar>
+  <zm-calendar [types]="types" (getData)=" getCalendarData($event[0], $event[1], $event[2]) " (rowClickEvent)=" selectRow($event[0], $event[1]) "></zm-calendar>
 </ion-content>

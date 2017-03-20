@@ -9,13 +9,14 @@ import { Component, Input, Output, ElementRef, Renderer, EventEmitter } from '@a
 
 export class ZmCalendarDay {
 
-  @Input() data: any;
   @Input() date: Date;
+  @Input() dayData: any;
   @Input() types: any;
   @Input() selectedDate: Date;
   @Output() dayClickEvent: EventEmitter<any> = new EventEmitter();
   @Output() rowClickEvent: EventEmitter<any> = new EventEmitter();
 
+  data: any;
   dateStr;
   isHoliday;
   rows: any[] = [];
@@ -27,6 +28,9 @@ export class ZmCalendarDay {
   }
 
   ngOnInit() {
+
+    this.data = this.dayData['data'];
+
     if (this.date) {
       this.dateStr = this.date.getDate();
       let day = this.date.getDay();
@@ -42,9 +46,14 @@ export class ZmCalendarDay {
   }
 
   setData() {
+    // 데이터를 캘린더에 필요한 것만 선택
     for(let _data of this.data) {
       let row = {
-        'background': this.types[_data.type].background,
+        _id: _data._id,
+        type: _data.type,
+        image: _data.image,
+        bool1: _data.bool1,
+        background: this.types[_data.type].background,
         value: _data.value + this.types[_data.type].tailStr
       };
       this.rows.push(row);
@@ -52,16 +61,11 @@ export class ZmCalendarDay {
   }
 
   onClick() {
-    console.log('ZmCalendarDay:: onClick', this.elem.nativeElement.offsetTop);
-    // console.log('this.elem: ', this.elem);
-    const calTop = this.elem.nativeElement.parentElement.offsetTop; // 캘린더의 top 위치
+    const calTop = this.elem.nativeElement.parentElement.parentElement.offsetTop; // 캘린더의 top 위치
     const dayTop = this.elem.nativeElement.offsetTop;               // 해당 날짜 component의 top 위치
     const gap = dayTop - calTop;
 
     this.changeStyle2DetailList();
-    console.log('this.data', this.data);
-    console.log('this.date', this.date);
-
     this.dayClickEvent.next([gap, this.date]);
   }
 
@@ -69,7 +73,9 @@ export class ZmCalendarDay {
     this.selectedDate = this.date;
   }
 
-  onRowClick() {
-    this.rowClickEvent.next();
+  onRowClick(id, type) {
+    if (this.selectedDate !== null) {
+      this.rowClickEvent.next([id, type]);
+    }
   }
 }

@@ -1,41 +1,40 @@
 <div class="div_content" (swipe)="swipeEvent($event)" [ngClass]="{'dayMode': selectedDate !== null}">
   <div class="header">
-    <button ion-button icon-only clear (click)="monthDec()">
-      <ion-icon name="arrow-dropleft-circle"></ion-icon>
-    </button>
     <p class="p_date">{{year + '.' + ((month + 1) < 10 ? '0' : '') + (month + 1)}}</p>
-    <button ion-button icon-only clear (click)="monthInc()">
-      <ion-icon name="arrow-dropright-circle"></ion-icon>
+    <button class="btn-back" ion-button icon-only clear (click)="monthDec()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
+    <button class="btn-forward" ion-button icon-only clear (click)="monthInc()">
+      <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </div>
-  <div class="div_buttons" [ngStyle]="{'display': selectedDate !== null ? 'block': 'none'}">
-    <button ion-button icon-only clear (click)="selectedDate = null; calendarTop = 0;">
-      <ion-icon name="close"></ion-icon>
+<!--   <div class="div_buttons" [ngStyle]="{'display': selectedDate !== null ? 'block': 'none'}">
+    <button ion-button icon-only clear (click)="selectedDate = null; calendarTop = 0; ">
+      <ion-icon name="arrow-down"></ion-icon>
     </button>
-  </div>
+  </div> -->
   <div class="div_day_labels">
     <div class="day_label" *ngFor=" let label of dayLabels">
       <span>{{label}}</span>
     </div>
   </div>
   <div class="div_calendar">
-    <div class="calendar" 
-      [ngClass]="{'row_5': rowNum === 5, 'row_6': rowNum === 6}"
-      [style.margin-top]="calendarTop"
-    >
-      <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of startEmptyDay "> </zm-calendar-day>
-      <zm-calendar-day 
-        class="calendar-box" 
-        [data]="day.data" 
-        [date]="day.date" 
-        [types]="types"
-        [selectedDate]="selectedDate"
-        (dayClickEvent)="selectDate($event[0], $event[1])" 
-        (rowClickEvent)="selectRow($event)" 
-        *ngFor=" let day of days "
-      >
-      </zm-calendar-day>
-      <zm-calendar-day class="calendar-box extra" [data]="day.data" [date]="day.date" [types]="types" *ngFor=" let day of endEmptyDay "> </zm-calendar-day>
+    <div class="calendar" [style.margin-top]="calendarTop">
+      <!-- mobile에서 높이가 고정이 안되서 week로 나눔 -->
+      <div class="week" [ngClass]="{'week_5': rowNum === 5, 'week_6': rowNum === 6}" *ngFor=" let week of days ">
+        <zm-calendar-day 
+          class="calendar-box"
+          [ngClass]="{'extra': day.type === 'otherMonth'}"
+          [date]="day.date"
+          [dayData]="day" 
+          [types]="types"
+          [selectedDate]="selectedDate"
+          (dayClickEvent)="selectDate($event[0], $event[1])" 
+          (rowClickEvent)="selectRow($event)" 
+          *ngFor=" let day of week "
+        >
+        </zm-calendar-day>
+      </div>
     </div>
   </div>
   <!-- <div class="div_dayDetail"> -->

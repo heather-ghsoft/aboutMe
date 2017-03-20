@@ -25,8 +25,6 @@ export class ZmCalendar {
   startDay;
   endDay;
 
-  startEmptyDay: any[] = [];
-  endEmptyDay: any[] = [];
   days: any[] = [];
 
   dayLabels: string[] = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
@@ -56,20 +54,14 @@ export class ZmCalendar {
     this.year = currDate.getFullYear();
     this.month = currDate.getMonth();
     
-    this.startEmptyDay = [];
-    this.endEmptyDay = [];
     this.days = [];
 
     // 변수 선언
-    let _startEmptyDay: any[] = [];
-    let _endEmptyDay: any[] = [];
     let _days: any[] = [];
 
     let _cal = this.calcCalendarDate(currDate);
 
     this.getData.next([_cal.firstDate, _cal.lastDate, (calData) => {
-
-      // console.log('ZmCalendar:: calcData: getData: ', calData);
 
       let allDays = (_cal.lastDate - _cal.firstDate)/1000/60/60/24;
 
@@ -88,19 +80,24 @@ export class ZmCalendar {
           data: calData[_fullDateStr] || {} 
         }
 
-        if ( _date < _cal.startDate ) {
-          _startEmptyDay.push(_day);
-        } else if ( _date > _cal.endDate ) {
-          _endEmptyDay.push(_day);
-        } else {
-          _days.push(_day);
+        if (_date.getDay() === 0) {
+          _days.push([]);
         }
+
+
+
+        if ( _date < _cal.startDate || _date > _cal.endDate ) {
+          _day['type'] = "otherMonth";
+        } else {
+          _day['type'] = "currMonth";
+        }
+        // _days.push(_day);
+        _days[_days.length - 1].push(_day);
       }
-        
+       
+      console.log('_days: ', _days); 
       this.zone.run(() => {
         this.days = _days;
-        this.startEmptyDay = _startEmptyDay;
-        this.endEmptyDay = _endEmptyDay;
       });
     }]);
   }
@@ -108,13 +105,12 @@ export class ZmCalendar {
   // 해당 날짜 데이터 전체 리스트 보기
   selectDate(top, date) {
     this.calendarTop = '-' + top + 'px';
-    console.log('ZmCalendar:: selectDate: ', top, date);
     this.selectedDate = date;
   }
 
   // 해당 데이터 상세보기
   selectRow(data) {
-    console.log('ZmCalendar:: selectRow: ', data);
+    console.log('ZmCalendar:: selectRow: data: ', data);
     this.rowClickEvent.next(data);
   }
 
@@ -151,7 +147,7 @@ export class ZmCalendar {
     _lastDate = _.cloneDeep(_endDate);
     _lastDate.setDate( _lastDate.getDate() + 6 - _lastDate.getDay() );
 
-    this.rowNum = Math.ceil((_lastDate.getTime() - _firstDate.getTime()) / 60 / 60 / 24 / 1000 / 7);
+    this.rowNum = 1 + Math.floor((_lastDate.getTime() - _firstDate.getTime()) / 60 / 60 / 24 / 1000 / 7);
 
     _result = {
       startDate: _startDate,
@@ -167,11 +163,23 @@ export class ZmCalendar {
   }
 
   monthDec() {
+
+    if (this.selectedDate !== null) {
+      this.selectedDate = null; 
+      this.calendarTop = '0px';
+      return;
+    } 
     this.currDate.setMonth(this.currDate.getMonth() - 1);
     this.calcData(this.currDate);
   }
 
   monthInc() {
+
+    if (this.selectedDate !== null) {
+      this.selectedDate = null; 
+      this.calendarTop = '0px';
+      return;
+    } 
     this.currDate.setMonth(this.currDate.getMonth() + 1);
     this.calcData(this.currDate);
   }

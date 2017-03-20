@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
+import { FoodDetailPage } from '../food/food-detail';
 // import { ViewService } from '../../services/view/view.service';
 // import { CalendarDayPage } from './calendar-day';
 
@@ -13,9 +14,9 @@ export class CalendarPage {
 
   data = [];
   types: any = { 
-    'weight': { background: 'rgba(255, 90, 95, 0.27)', tailStr: ' kg' },  //'#ffc9e6'
-    'food': { background: 'rgb(224, 255, 252)', tailStr:'' },  //'#ccfdf9'
-    'score': { background: 'rgb(231, 231, 253)', tailStr: ' 점' }  //'#c8c8fd'
+    'weight': { background: 'rgba(255, 90, 95, 0.27)', tailStr: ' kg', hasDetail: false },  //'#ffc9e6'
+    'food': { background: 'rgb(224, 255, 252)', tailStr:'', hasDetail: true, bool1Color: 'green'},  //'#ccfdf9'
+    'score': { background: 'rgb(231, 231, 253)', tailStr: ' 점', hasDetail: false }  //'#c8c8fd'
   }
 
   constructor(
@@ -51,6 +52,7 @@ export class CalendarPage {
         resultArr.forEach((d) => {
           dataArr[d.date] = dataArr[d.date] || [];
           dataArr[d.date].push({
+            _id: d._id,
             type: 'weight',
             value: d.value
           });
@@ -68,10 +70,14 @@ export class CalendarPage {
 
       this.db.getFoodList_calendar(startDate, endDate, (resultArr) => {
         resultArr.forEach((d) => {
+
           dataArr[d.date] = dataArr[d.date] || [];
           dataArr[d.date].push({
+            _id: d._id,
             type: 'food',
             value: d.food,
+            bool1: d.drinking && d.drinking.answer || false,
+            image: d.photo && d.photo.url,
             full: d.full,
             estimations: d.estimations
           });
@@ -146,8 +152,16 @@ export class CalendarPage {
     return evgScore;
   }
   
-  selectRow(dayDate) {
-    // console.log('selectDate: ', dayDate);
+  selectRow(id, type) {
+
+    console.log('CalendarPage:: selectRow: id: ', id);
+    console.log('CalendarPage:: selectRow: type: ', type);
+
+    if (type === 'food') {
+      let params = { id: id }
+      this.navCtrl.push(FoodDetailPage, params);
+    }
+
     // let index = dayDate.getDate();
     // let params = {
     //   date: dayDate,
