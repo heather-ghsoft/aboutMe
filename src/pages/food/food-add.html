@@ -38,7 +38,7 @@
       <span *ngIf="displayPhoto === undefined || displayPhoto === null">Photo Add</span>
       <span *ngIf="displayPhoto !== undefined && displayPhoto !== null">Photo Edit</span>
     </button>
-    <ion-item no-lines>
+    <ion-item>
       <ion-label color="primary" stacked> 뭐 먹었어? </ion-label>
       <ion-input 
         color="text" 
@@ -46,6 +46,17 @@
         placeholder="된장찌개, 밥 ..."
         [(ngModel)]="data.food" >
       </ion-input>
+    </ion-item>
+    <ion-item no-lines>
+      <ion-label color="primary" stacked> 술 </ion-label>
+      <ion-input 
+        color="text" 
+        text-left
+        placeholder="맥주 500cc 2잔"
+        (change)="changeDrinkingDesc()"
+        [(ngModel)]="data.drinking.desc" >
+      </ion-input>
+      <ion-toggle [(ngModel)]="data.drinking.answer"></ion-toggle>
     </ion-item>
     <ion-item-divider color="primary" style="font-size: inherit;">
       배고픔의 정도는? (살빼려면 0 ~ 5 가 좋아요!)

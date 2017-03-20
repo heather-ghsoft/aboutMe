@@ -47,6 +47,10 @@ export class FoodAddModal {
 
     this.data = {
       food: '',
+      drinking: {
+        answer: false,
+        desc: ''
+      },
       photo: {
         fileName: null,
         url: null
@@ -102,6 +106,13 @@ export class FoodAddModal {
     this.data.time2 = this.dateService.formatDate2TimeString(tmpDate, true);
   }
 
+  changeDrinkingDesc() {
+    console.log('desc: ', this.data.drinking.desc);
+    if (this.data.drinking.desc !== '') {
+      this.data.drinking.answer = true;
+    }
+  }
+
   showActionSheet(event) {
     event.stopPropagation();
     this.utilService.showPhotoActionSheet()
@@ -155,7 +166,6 @@ export class FoodAddModal {
     this.completeLoading = this.viewService.showLoading();
     this.db.updateFood(data)
       .then(result => {  
-        console.log('FoodAddModal:: updateData: result: ', result);
         this.uploadPhoto(data._id);
       })
       .catch(error => {
@@ -163,13 +173,25 @@ export class FoodAddModal {
       });
   }
 
-  uploadPhoto(key) {
+  uploadPhoto(id) {
 
-    if(this.newPhoto === null) {
+    // 사진 삭제
+    if (this.data.photo && this.displayPhoto === null) {
+      return this.storage.deleteFoodPhotos(id, this.data.photo.fileName, true)
+        .then(() => {
+          this.completeLoading();
+          this.dismiss();
+        })
+    }
+
+    // 새로운 사진이 없으면 중단 
+    if (this.newPhoto === null) {
       this.completeLoading();
       this.dismiss();
+      return;
     }
-    this.storage.addFoodPhotos(key, this.newPhoto, this.data.photo.fileName)
+
+    this.storage.addFoodPhotos(id, this.newPhoto)
       .then(() => {
         this.completeLoading();
         this.dismiss();
