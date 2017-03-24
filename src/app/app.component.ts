@@ -100,7 +100,7 @@ export class MyApp {
         let targetPage;
         if (user && !user.isAnonymous) {
           console.log('logged in ');
-          targetPage = CalendarPage;
+          targetPage = DashboardPage;
         } else {
           console.log('not logged in ');
           targetPage = LoginPage;

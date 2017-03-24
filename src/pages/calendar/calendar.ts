@@ -136,14 +136,15 @@ export class CalendarPage {
       
       // 마인드이팅 점수 (5점 만점)
       let estiCount = 0;
-      row.estimations.forEach((item) => {
-        estiCount += item['answer'];
-      });
+      // row.estimations.forEach((item) => {
+      //   estiCount += item['answer'];
+      // });
       
-      let estiScore = estiCount / row.estimations.length * 10 / 2;
+      // let estiScore = estiCount / row.estimations.length * 10 / 2;
       
       // 총 점수
-      totalScore += fullScore + estiScore;
+      // totalScore += fullScore + estiScore;
+      totalScore += fullScore * 2;
 
     });
     
