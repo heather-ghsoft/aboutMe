@@ -36,7 +36,7 @@ export class DashboardPage {
     this.tarDate = this.calcCalendarDate(this.currDate);
 
     this.getData();
-    this.makeChartData();
+    // this.makeChartData();
   }
 
   ngOnInit() {
@@ -57,6 +57,8 @@ export class DashboardPage {
 
   changeFormatData(dataArr) {
 
+    this.makeChartData();
+
     this.todayFoodArr = [];
 
     if(!dataArr.length) return;
@@ -64,29 +66,32 @@ export class DashboardPage {
     for( let d of dataArr ) {
       let time = d.time.split(':');
       let time2 = !d.time2 ? time : d.time2.split(':');
-      let timeNum = Number(time[0]) + (Math.ceil(Number(time[1]) / 6) / 10 || 0);
-      let timeNum2 = Number(time2[0]) + (Math.ceil(Number(time2[1]) / 6) / 10 || 0);
+      // let timeNum = Number(time[0]) + (Math.ceil(Number(time[1]) / 6) / 10 || 0);
+      // let timeNum2 = Number(time2[0]) + (Math.ceil(Number(time2[1]) / 6) / 10 || 0);
+      let timeNum = this.dateService.formatString2Date(d.date, d.time).dateObj;
+      let timeNum2 = this.dateService.formatString2Date(d.date, d.time2).dateObj;
       this.todayFoodArr.push({ time: timeNum, value: d.full.start, label: d.food, _id: d._id, type: d.food });
       this.todayFoodArr.push({ time: timeNum2, value: d.full.end, label: d.food, _id: d._id, type: d.food });
     }
 
-    if ( this.todayFoodArr[0].time > 6 ) {
-      this.todayFoodArr.splice( 0, 0, { time: 6, value: 0 } );
-    } else {
-      for ( let i = 0; i < this.todayFoodArr.length; i++ ) {
-        let d = this.todayFoodArr[ i ];
-        let d2 = this.todayFoodArr[ i + 1 ] || { time: 24 };
-        if ( (d.time2 || d.time) < 6 && 6 <= d2.time ) {
-          this.todayFoodArr.splice( i + 1, 0, { time: 6, value: 0 });
-          break;
-        }
-      }
-    }
+    // if ( this.todayFoodArr[0].time > 6 ) {
+    //   this.todayFoodArr.splice( 0, 0, { time: 6, value: 0 } );
+    // } else {
+    //   for ( let i = 0; i < this.todayFoodArr.length; i++ ) {
+    //     let d = this.todayFoodArr[ i ];
+    //     let d2 = this.todayFoodArr[ i + 1 ] || { time: 24 };
+    //     if ( (d.time2 || d.time) < 6 && 6 <= d2.time ) {
+    //       this.todayFoodArr.splice( i + 1, 0, { time: 6, value: 0 });
+    //       break;
+    //     }
+    //   }
+    // }
     console.log('DashboardPage:: changeFormatData: this.todayFoodArr: ', this.todayFoodArr);
   }
 
   makeChartData() {
-    this.colXDomain = [0, 24];
+    // this.colXDomain = [0, 24];
+    this.colXDomain = [this.tarDate.startDate, this.tarDate.endDate];
     this.colYDomain = [0, 10];
   }
 
@@ -112,7 +117,7 @@ export class DashboardPage {
     let _result: any = null;
 
     // 오늘의 시작 시간
-    _startDate = new Date(_currDate.getFullYear(), _currDate.getMonth(), _currDate.getDate());
+    _startDate = new Date(_currDate.getFullYear(), _currDate.getMonth(), _currDate.getDate(), 4);
 
     console.log('_startDate: ', _startDate);
 

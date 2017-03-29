@@ -21,7 +21,8 @@
     </ion-item-divider> -->
     <ion-item>
       <ion-label color="primary">날짜</ion-label>
-      <ion-datetime color="text" displayFormat="YYYY년 MM월 DD일" pickerFormat="YYYY-MM-DD" [(ngModel)]="data.date"></ion-datetime>
+      <ion-datetime color="text" displayFormat="YYYY년 MM월 DD일 (DDD)" pickerFormat="YYYY-MM-DD" [(ngModel)]="data.date" 
+      dayShortNames="일, 월, 화, 수, 목, 금, 토"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label color="primary">시작</ion-label>
