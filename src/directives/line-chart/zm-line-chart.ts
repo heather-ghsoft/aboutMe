@@ -12,7 +12,7 @@ export class ZmLineChart implements OnChanges{
   @Input() height: string;
   @Input() colX: string;
   @Input() colY: string;
-  @Input() colXType: string;
+  @Input() colXType: string;  //date, string
   @Input() colYType: string;
   @Input() colXFormat: string;
   @Input() bindData: Array<ChartVo>;
@@ -31,6 +31,8 @@ export class ZmLineChart implements OnChanges{
   x: any;
   y: any;
   line: any;
+
+  margin:any = {top: 20, right: 20, bottom: 30, left: 40};
   
   constructor(
     private elem: ElementRef
@@ -66,12 +68,12 @@ export class ZmLineChart implements OnChanges{
 
   getColXData(x) {
 
-    var parseTime = d3.timeParse(this.colXFormat);
-    if (this.colXType === 'date') {
-      return parseTime(x);
-    } else {
+    // var parseTime = d3.timeParse(this.colXFormat);
+    // if (this.colXType === 'date') {
+      // return parseTime(x);
+    // } else {
       return x;
-    }
+    // }
   }
 
   getColYData(y) {
@@ -89,7 +91,8 @@ export class ZmLineChart implements OnChanges{
     console.log('ZmLineChart:: drawGraph');
 
     const el:any = this.elem.nativeElement;
-    const margin = {top: 20, right: 20, bottom: 30, left: 40};
+  
+    const margin = this.margin;
 
     // 디렉티브 div
     const divW = el.offsetWidth;
@@ -98,7 +101,6 @@ export class ZmLineChart implements OnChanges{
     // svg를 감싸고 있는 div
     const wrapW = divW;  
     const wrapH = divH;
-
 
     // chart 내 x축 y축 기준
     const chtW = divW - margin.left - ( this.bigSize ? 0 : margin.right );
@@ -129,8 +131,15 @@ export class ZmLineChart implements OnChanges{
       .attr('width', svgW)
       .attr('height', svgH);
     
-    const g_yaxis = svg_yaxis.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    const g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // y축 및 가로 보조라인 그리드 영역
+    const g_yaxis = svg_yaxis.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // x축과 세로 보조라인 그리드 및 그래프 데이터 영역
+    const g = svg.append("g")
+      .attr('class', 'graph-area')
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
     let x = null;
     let y = d3.scaleLinear().rangeRound([chtH, 0]);
 
@@ -140,10 +149,12 @@ export class ZmLineChart implements OnChanges{
       x = d3.scaleLinear().rangeRound([0, this.bigSize ? (svgW - 80) : chtW]);
     }
 
+    // 그래프 라인 
     const line = d3.line()
       .x( d => x(d['x']) )
       .y( d => y(d['y']) );
 
+    // 그래프 면적
     const area = d3.area()
       .x( d => x(d['x']) )
       .y0( d => y(d['y']) )
@@ -172,6 +183,7 @@ export class ZmLineChart implements OnChanges{
     const xAxis = d3.axisBottom(x);
     const yAxis = d3.axisLeft(y);
 
+    // x 축
     g.append("g")
         .attr("transform", "translate(0," + chtH + ")")
         .call(xAxis)
@@ -187,6 +199,7 @@ export class ZmLineChart implements OnChanges{
         // .select(".domain")
         // .remove();
 
+    // y 축
     g_yaxis.append("g")
         .call(yAxis)
         .attr('class', 'y axis')
@@ -199,19 +212,32 @@ export class ZmLineChart implements OnChanges{
         .attr("text-anchor", "end")
         .text(this.colYName || '');
 
-    // x축 tick 설정 
+    // 축 공통 설정
+    d3.selectAll("g.axis path")
+      .attr('stroke', '#565A5B');
+
+    // 축 tick 공통 설정 - 폰트 
+    d3.selectAll("g.axis g.tick text")
+      .attr('fill', '#565A5B')
+      .style('font-size', '10pt');
+
+    // 축 tick 공통 설정 - 보조라인   
+    d3.selectAll("g.axis g.tick line")
+      .attr('stroke', '#efefef');
+
+    // y 축 보조라인 설정
     d3.selectAll("g.y.axis g.tick line")
-      .attr('stroke', '#efefef')
       .attr('x1', 1)
       .attr("x2", function(d: number){
          if ( !(d % 1) ) return chtW;
       });
 
+    // x 축 보조라인 설정
     d3.selectAll("g.x.axis g.tick line")
       .attr('stroke', (d: number) => {
         if(d === 0) {
           // x축 tick 중에 0번째는 다른색으로
-          return '#000';
+          return 'none';
         }
         return '#efefef';
       })
@@ -220,32 +246,50 @@ export class ZmLineChart implements OnChanges{
          if ( !(d % 1) ) return 0;
       });
 
-
     // 그래프 영역
     // 그래프 데이터 면적 
-    g.append("path")
-        .datum(_graphData)
-        .attr("fill", "#ffced0")
-        .attr("opacity", "0.6")
-        .attr("stroke", "none")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
-        .attr("d", area);
+    // g.append("path")
+    //     .datum(_graphData)
+    //     .attr("fill", "#ffced0")
+    //     .attr("stroke", "none")
+    //     .attr("opacity", "0.6")
+    //     .attr("d", area);
 
     // 그래프 데이터 선 
     g.append("path")
+        .attr('class', 'graph-line')
         .datum(_graphData)
         .attr("fill", "none")
-        .attr("opacity", "0.6")
         .attr("stroke", "#ff5a5f")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
+        .attr("opacity", "0.6")
+        // .attr("stroke-linejoin", "round")
+        // .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1.2)
         .attr("d", line)
         .append('text')
         .text((d) => d['label'] || '');
 
+    g.selectAll("dot")
+        .data(_graphData)
+    .enter().append("circle")
+        .attr("r", 3)
+        .attr("fill", "white")
+        .attr("stroke", "#ff5a5f")
+        .attr("stroke-width", 1)
+        .attr("cx", function(d) { return x(d['x'])})
+        .attr("cy", function(d) { return y(d['y'])});
+
+    // const t = d3.transition()
+    //   .duration(2000)
+    //   .ease(d3.easeLinear);
+
+    // d3.selectAll("g.x.axis .graph-area circle")
+    //   .transition()
+    //   .duration(2000)
+    //   .ease(d3.easeLinear)
+    //   .style("stroke", "blue")
+    //   .attr("cx", function(d) { return x(d['x'])})
+    //   .attr("cy", function(d) { return y(d['y'])});
 
     this.drawing = false;
   }

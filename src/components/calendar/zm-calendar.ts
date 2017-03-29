@@ -11,6 +11,7 @@ export class ZmCalendar {
 
   // @Input() data: any;
   @Input() types: any;
+  @Input() calData: any;
   @Output() getData: EventEmitter<any> = new EventEmitter();
   @Output() rowClickEvent: EventEmitter<any> = new EventEmitter();
 
@@ -20,6 +21,7 @@ export class ZmCalendar {
   date;
   year;
   month;
+  cal: any = null;
   pickerDate;
 
   startDay;
@@ -37,69 +39,30 @@ export class ZmCalendar {
     private dateService: DateService,
     private zone: NgZone
   ) {
+    console.log('ZmCalendar:: constructor');
     this.todayDate = new Date();
     this.currDate = new Date();
     this.currDate.setDate(1);
-  }
 
-  ngOnInit() {
     this.calcData(this.currDate);
   }
 
+  ngOnInit() {
+    this.getData.next([this.cal.firstDate, this.cal.lastDate, this.bindData.bind(this)]);
+  }
+
+  ngOnChanges(changes){
+    this.bindData();
+  }
+
   calcData(currDate) {
-
-    console.log('ZmCalendar: calcData');
-
+    console.log('ZmCalendar:: calcData');
     // 초기화
     this.year = currDate.getFullYear();
     this.month = currDate.getMonth();
     
     this.days = [];
-
-    // 변수 선언
-    let _days: any[] = [];
-
-    let _cal = this.calcCalendarDate(currDate);
-
-    this.getData.next([_cal.firstDate, _cal.lastDate, (calData) => {
-
-      let allDays = (_cal.lastDate - _cal.firstDate)/1000/60/60/24;
-
-      for(let i = 0; i < allDays + 1; i++) {
-
-        let _date: any;
-        let _fullDateStr: string;
-        let _day: any;
-        
-        _date = _.cloneDeep(_cal.firstDate);
-        _date.setDate(_date.getDate() + i);
-
-        _fullDateStr = this.dateService.formatDate2String(_date, true);
-        _day = {
-          date: _date,
-          data: calData[_fullDateStr] || {} 
-        }
-
-        if (_date.getDay() === 0) {
-          _days.push([]);
-        }
-
-
-
-        if ( _date < _cal.startDate || _date > _cal.endDate ) {
-          _day['type'] = "otherMonth";
-        } else {
-          _day['type'] = "currMonth";
-        }
-        // _days.push(_day);
-        _days[_days.length - 1].push(_day);
-      }
-       
-      console.log('_days: ', _days); 
-      this.zone.run(() => {
-        this.days = _days;
-      });
-    }]);
+    this.cal = this.calcCalendarDate(currDate);
   }
 
   // 해당 날짜 데이터 전체 리스트 보기
@@ -171,6 +134,7 @@ export class ZmCalendar {
     } 
     this.currDate.setMonth(this.currDate.getMonth() - 1);
     this.calcData(this.currDate);
+    this.getData.next([this.cal.firstDate, this.cal.lastDate, this.bindData.bind(this)]);
   }
 
   monthInc() {
@@ -182,6 +146,44 @@ export class ZmCalendar {
     } 
     this.currDate.setMonth(this.currDate.getMonth() + 1);
     this.calcData(this.currDate);
+    this.getData.next([this.cal.firstDate, this.cal.lastDate, this.bindData.bind(this)]);
+  }
+
+  bindData() {
+    // 변수 선언
+    let _days: any[] = [];
+    let allDays = (this.cal.lastDate - this.cal.firstDate)/1000/60/60/24;
+
+    for(let i = 0; i < allDays + 1; i++) {
+
+      let _date: any;
+      let _fullDateStr: string;
+      let _day: any;
+      
+      _date = _.cloneDeep(this.cal.firstDate);
+      _date.setDate(_date.getDate() + i);
+
+      _fullDateStr = this.dateService.formatDate2String(_date, true);
+      _day = {
+        date: _date,
+        data: this.calData[_fullDateStr] || {} 
+      }
+
+      if (_date.getDay() === 0) {
+        _days.push([]);
+      }
+
+      if ( _date < this.cal.startDate || _date > this.cal.endDate ) {
+        _day['type'] = "otherMonth";
+      } else {
+        _day['type'] = "currMonth";
+      }
+      // _days.push(_day);
+      _days[_days.length - 1].push(_day);
+    }
+    this.zone.run(() => {
+      this.days = _days;
+    });
   }
 
   swipeEvent(event) {

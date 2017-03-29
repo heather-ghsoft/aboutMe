@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { DbService } from '../../services/firebase/firebase.db.service';
 import { FoodDetailPage } from '../food/food-detail';
@@ -19,9 +19,12 @@ export class CalendarPage {
     'score': { background: 'rgb(231, 231, 253)', tailStr: ' 점', hasDetail: false }  //'#c8c8fd'
   }
 
+  calData = {};
+
   constructor(
     private navCtrl: NavController,
-    private db: DbService
+    private db: DbService,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -29,97 +32,105 @@ export class CalendarPage {
   }
 
   getCalendarData(startDate, endDate, callback) {
-    
     console.log('CalendarPage:: getCalendarData');
-
-    this.getWeightData(startDate, endDate, {})
-      .then(dataArr => {
-        return this.getFoodData(startDate, endDate, dataArr);
-      })
-      .then(dataArr => {
-        return this.calcFoodsScore(dataArr);
-      })
-      .then(dataArr => {
-        callback(dataArr);
-      });
+    this.getWeightData(startDate, endDate, callback);
+    this.getFoodData(startDate, endDate, callback);
   }
 
-  getWeightData(startDate, endDate, dataArr) {
-    return new Promise(resolve => {
-      console.log('CalendarPage:: getCalendarData');
+  getWeightData(startDate, endDate, callback) {
+    this.db.getWeights_calendar(startDate, endDate, (resultArr) => {
+      
+      let _calData = this.calData;
 
-      this.db.getWeights_calendar(startDate, endDate, (resultArr) => {
-        resultArr.forEach((d) => {
-          dataArr[d.date] = dataArr[d.date] || [];
-          dataArr[d.date].push({
-            _id: d._id,
-            type: 'weight',
-            value: d.value
-          });
+      for ( let dateStr in _calData ) {
+        _calData[dateStr] = _calData[dateStr].filter((item) => {
+          return item.type !== 'weight';
         });
-        // console.log('CalendarPage:: getWeight: dataArr: ', dataArr);
-        resolve(dataArr); 
+      }
+
+      resultArr.forEach((d) => {
+        _calData[d.date] = _calData[d.date] || [];
+        let _d = {
+          _id: d._id,
+          type: 'weight',
+          value: d.value
+        };
+        _calData[d.date] = [_d].concat(_calData[d.date]);
       });
+
+
+      
+      setTimeout(function() {
+        this.zone.run(() => {
+          this.calData = _calData;
+          callback();
+        });
+      }.bind(this), 0);  
     });
   }
 
   // 소식관리 리스트 가지고 오기
-  getFoodData(startDate, endDate, dataArr) {
-    return new Promise(resolve => {
-      console.log('CalendarPage:: getCalendarData');
+  getFoodData(startDate, endDate, callback) {
+    this.db.getFoodList_calendar(startDate, endDate, (resultArr) => {
+      console.log('CalendarPage:: getFoodData');
+      let _calData = this.calData;
 
-      this.db.getFoodList_calendar(startDate, endDate, (resultArr) => {
-        resultArr.forEach((d) => {
-
-          dataArr[d.date] = dataArr[d.date] || [];
-          dataArr[d.date].push({
-            _id: d._id,
-            type: 'food',
-            value: d.food,
-            bool1: d.drinking && d.drinking.answer || false,
-            image: d.photo && d.photo.url,
-            full: d.full,
-            estimations: d.estimations
-          });
+      for ( let dateStr in _calData ) {
+        _calData[dateStr] = _calData[dateStr].filter((item) => {
+          return item.type !== 'food' && item.type !== 'score';
         });
-        // console.log('CalendarPage:: getWeight: dataArr: ', dataArr);
-        resolve(dataArr); 
+      }
+
+      resultArr.forEach((d) => {
+
+        _calData[d.date] = _calData[d.date] || [];
+        _calData[d.date].push({
+          _id: d._id,
+          type: 'food',
+          value: d.food,
+          bool1: d.drinking && d.drinking.answer || false,
+          image: d.photo && d.photo.url,
+          full: d.full,
+          estimations: d.estimations
+        });
       });
+      this.calcFoodsScore(_calData, callback);
     });
   }
 
   // 소식관리 리스트로 소식 점수 계산 
-  calcFoodsScore(dataArr) {
-    return new Promise(resolve => {
-      console.log('CalendarPage:: calcFoodStore dataArr: ', dataArr);
+  calcFoodsScore(_calData, callback) {
+    for ( let dateStr in _calData ) {
+      // 날짜별 데이터 리스트
+      let rows = _calData[dateStr];
 
-      for ( let dateStr in dataArr ) {
-        // 날짜별 데이터 리스트
-        let rows = dataArr[dateStr];
+      let foodList = [];
+      let otherList = [];
 
-        let foodList = [];
-        let otherList = [];
+      rows.forEach((_row) => {
+        const _type = _row['type'];
+        if (_type === 'food') {
+          foodList.push(_row);
+        } else {
+          otherList.push(_row);
+        }
+      });
 
-        rows.forEach((_row) => {
-          const _type = _row['type'];
-          if (_type === 'food') {
-            foodList.push(_row);
-          } else {
-            otherList.push(_row);
-          }
-        });
+      if ( !foodList.length ) continue;
+      
+      let result = {
+        type: 'score', 
+        value: this.calcFoodScoreOfDay(foodList)
+      };
 
-        if ( !foodList.length ) continue;
-        
-        let result = {
-          type: 'score', 
-          value: this.calcFoodScoreOfDay(foodList)
-        };
-
-        dataArr[dateStr] = otherList.concat([result], foodList);
-      }
-      resolve(dataArr);
-    });
+      _calData[dateStr] = otherList.concat([result], foodList);
+    }
+    setTimeout(function() {
+      this.zone.run(() => {
+        this.calData = _calData;
+        callback();
+      });
+    }.bind(this), 0);  
   }
 
   calcFoodScoreOfDay(dayData) {
@@ -154,20 +165,9 @@ export class CalendarPage {
   }
   
   selectRow(id, type) {
-
-    console.log('CalendarPage:: selectRow: id: ', id);
-    console.log('CalendarPage:: selectRow: type: ', type);
-
     if (type === 'food') {
       let params = { id: id }
       this.navCtrl.push(FoodDetailPage, params);
     }
-
-    // let index = dayDate.getDate();
-    // let params = {
-    //   date: dayDate,
-    //   data: this.data[index] || {}
-    // }
-    // this.navCtrl.push(CalendarDayPage, params);
   }
 }
