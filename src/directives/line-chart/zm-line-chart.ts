@@ -68,12 +68,12 @@ export class ZmLineChart implements OnChanges{
 
   getColXData(x) {
 
-    // var parseTime = d3.timeParse(this.colXFormat);
-    // if (this.colXType === 'date') {
-      // return parseTime(x);
-    // } else {
+    var parseTime = d3.timeParse(this.colXFormat);
+    if (this.colXType === 'timeString') {
+      return parseTime(x);
+    } else {
       return x;
-    // }
+    }
   }
 
   getColYData(y) {
@@ -180,7 +180,7 @@ export class ZmLineChart implements OnChanges{
     x.domain(xDomain);
     y.domain(yDomain);
 
-    const xAxis = d3.axisBottom(x);
+    const xAxis = d3.axisBottom(x); //.tickFormat(d3.timeFormat("%Y-%m-%d"));
     const yAxis = d3.axisLeft(y);
 
     // x 축
@@ -212,6 +212,8 @@ export class ZmLineChart implements OnChanges{
         .attr("text-anchor", "end")
         .text(this.colYName || '');
 
+    x.ticks(d3.timeMinute.every(300));
+
     // 축 공통 설정
     d3.selectAll("g.axis path")
       .attr('stroke', '#565A5B');
@@ -219,7 +221,7 @@ export class ZmLineChart implements OnChanges{
     // 축 tick 공통 설정 - 폰트 
     d3.selectAll("g.axis g.tick text")
       .attr('fill', '#565A5B')
-      .style('font-size', '10pt');
+      .style('font-size', '9pt');
 
     // 축 tick 공통 설정 - 보조라인   
     d3.selectAll("g.axis g.tick line")
@@ -227,6 +229,14 @@ export class ZmLineChart implements OnChanges{
 
     // y 축 보조라인 설정
     d3.selectAll("g.y.axis g.tick line")
+      .attr('stroke', (d: number) => {
+
+        if(d % 5 === 0) {
+          // x축 tick 중에 0번째는 다른색으로
+          return '#ddd';
+        }
+        return '#efefef';
+      })
       .attr('x1', 1)
       .attr("x2", function(d: number){
          if ( !(d % 1) ) return chtW;
@@ -234,10 +244,14 @@ export class ZmLineChart implements OnChanges{
 
     // x 축 보조라인 설정
     d3.selectAll("g.x.axis g.tick line")
-      .attr('stroke', (d: number) => {
-        if(d === 0) {
-          // x축 tick 중에 0번째는 다른색으로
-          return 'none';
+      .attr('stroke', (d) => {
+
+        if (this.colXType === 'date') {
+          const _d = new Date(d.toString());
+          if(_d.getHours() % 6 === 0) {
+            // x축 tick 중에 0번째는 다른색으로
+            return '#ddd';
+          }
         }
         return '#efefef';
       })
@@ -256,18 +270,39 @@ export class ZmLineChart implements OnChanges{
     //     .attr("d", area);
 
     // 그래프 데이터 선 
-    g.append("path")
+    // g.append("path")
+    //     .attr('class', 'graph-line')
+    //     .datum(_graphData)
+    //     .attr("fill", "none")
+    //     .attr("stroke", "#ff5a5f")
+    //     .attr("opacity", "0.6")
+    //     .attr("stroke-width", 1.2)
+    //     .attr("d", line)
+    //     .append('text')
+    //     .text((d) => d['label'] || '');
+
+    // 그래프 라인 
+    g.selectAll("dot")
+        .data(_graphData)
+    .enter().append("line")
         .attr('class', 'graph-line')
-        .datum(_graphData)
-        .attr("fill", "none")
+        .attr("fill", "white")
         .attr("stroke", "#ff5a5f")
-        .attr("opacity", "0.6")
-        // .attr("stroke-linejoin", "round")
-        // .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.2)
-        .attr("d", line)
-        .append('text')
-        .text((d) => d['label'] || '');
+        .attr("stroke-width", 1)
+        .attr("opacity", "0.2")
+        .attr('value', (d) => d['y'])
+        .attr("x1", (d, i, lines) => {
+          const _x = x(d['x']);
+          if (i > 0) {
+            d3.select(lines[i-1]).attr('x2', _x);
+            if (i === _graphData.length-1) {
+              d3.select(lines[i]).attr('x2', _x);
+            }
+          }
+          return _x;
+        })
+        .attr("y1", chtH)
+        .attr("y2", chtH);
 
     g.selectAll("dot")
         .data(_graphData)
@@ -276,20 +311,36 @@ export class ZmLineChart implements OnChanges{
         .attr("fill", "white")
         .attr("stroke", "#ff5a5f")
         .attr("stroke-width", 1)
+        .attr("opacity", "0.2") 
         .attr("cx", function(d) { return x(d['x'])})
-        .attr("cy", function(d) { return y(d['y'])});
+        .attr("cy", chtH);
 
-    // const t = d3.transition()
-    //   .duration(2000)
-    //   .ease(d3.easeLinear);
+    g.selectAll(".graph-line")
+      .transition()
+      .duration(700)
+      .ease(d3.easeCubicOut)
+      .attr("opacity", "1") 
+      .attr("y1", (d, i, lines) => y(d['y']) )
+      .attr("y2", (d, i, lines) => {
+        let _y = y(d['y']);
+        if (i < lines.length - 1) {
+          _y = y(Number(d3.select(lines[i+1]).attr('value')));
+        };
+        return _y;
+      });
 
-    // d3.selectAll("g.x.axis .graph-area circle")
-    //   .transition()
-    //   .duration(2000)
-    //   .ease(d3.easeLinear)
-    //   .style("stroke", "blue")
-    //   .attr("cx", function(d) { return x(d['x'])})
-    //   .attr("cy", function(d) { return y(d['y'])});
+    g.selectAll("circle")
+      .transition()
+      .duration(700)
+      .ease(d3.easeCubicOut)
+      .attr("opacity", "1") 
+      .attr("transform", function(d) {
+        return "translate(" + [0, -1 * ( chtH - y(d['y'])) ] + ")";
+      });
+      // .style("fill", "blue")
+      // .style("stroke", "blue");
+
+
 
     this.drawing = false;
   }
