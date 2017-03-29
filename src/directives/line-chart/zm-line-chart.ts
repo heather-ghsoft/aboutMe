@@ -34,6 +34,9 @@ export class ZmLineChart implements OnChanges{
 
   margin:any = {top: 20, right: 20, bottom: 30, left: 40};
   
+  isFirstLoad = true;
+  chtH = 0;
+
   constructor(
     private elem: ElementRef
   ){
@@ -50,9 +53,35 @@ export class ZmLineChart implements OnChanges{
   }
 
   ngOnChanges(changes) {
-    console.log(changes);
     this.getGraphData();
-    this.drawGraph();
+    console.log('this.isFirstLoad: ', this.isFirstLoad);
+    if (!this.isFirstLoad) {
+      this.beforeChangeGraph();
+      setTimeout(function() {
+        this.drawGraph();  
+      }.bind(this), 700);
+    } else {
+      this.isFirstLoad = false;
+      this.drawGraph();
+    }
+  }
+
+  beforeChangeGraph() {
+    d3.selectAll(".graph-line")
+      .transition()
+      .duration(500)
+      .ease(d3.easeCubicIn)
+      .attr("opacity", "0") 
+      .attr("y1", this.chtH)
+      .attr("y2", this.chtH);
+
+    d3.selectAll(".graph-area circle")
+      .transition()
+      .duration(500)
+      .ease(d3.easeCubicIn)
+      .attr("opacity", "0") 
+      .attr("cy", this.chtH);
+
   }
 
   getGraphData() {
@@ -105,6 +134,7 @@ export class ZmLineChart implements OnChanges{
     // chart 내 x축 y축 기준
     const chtW = divW - margin.left - ( this.bigSize ? 0 : margin.right );
     const chtH = divH - margin.top - margin.bottom;   
+    this.chtH = chtH;
 
     const svgW = ( this.bigSize ? 30 * _graphData.length : divW );
     const svgH = divH - 10;
@@ -289,7 +319,7 @@ export class ZmLineChart implements OnChanges{
         .attr("fill", "white")
         .attr("stroke", "#ff5a5f")
         .attr("stroke-width", 1)
-        .attr("opacity", "0.2")
+        .attr("opacity", "0")
         .attr('value', (d) => d['y'])
         .attr("x1", (d, i, lines) => {
           const _x = x(d['x']);
@@ -311,7 +341,7 @@ export class ZmLineChart implements OnChanges{
         .attr("fill", "white")
         .attr("stroke", "#ff5a5f")
         .attr("stroke-width", 1)
-        .attr("opacity", "0.2") 
+        .attr("opacity", "0") 
         .attr("cx", function(d) { return x(d['x'])})
         .attr("cy", chtH);
 
@@ -334,13 +364,7 @@ export class ZmLineChart implements OnChanges{
       .duration(700)
       .ease(d3.easeCubicOut)
       .attr("opacity", "1") 
-      .attr("transform", function(d) {
-        return "translate(" + [0, -1 * ( chtH - y(d['y'])) ] + ")";
-      });
-      // .style("fill", "blue")
-      // .style("stroke", "blue");
-
-
+      .attr("cy", (d) => y(d['y']));
 
     this.drawing = false;
   }
